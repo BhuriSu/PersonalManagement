@@ -1,1 +1,1 @@
-export const APP_NAME = 'Safe Zone';
+export const APP_NAME = 'Collection Zone';

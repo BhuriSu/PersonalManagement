@@ -39,7 +39,7 @@ export function Navigation() {
       {
         label: 'User',
         icon: (props: any) => <AccountBoxOutlined {...props} />,
-        description: 'User management',
+        description: 'Connection management',
         items: [
           {
             path: routes.userAccount,
@@ -47,7 +47,7 @@ export function Navigation() {
           },
           {
             path: routes.userProfile,
-            label: 'Profile',
+            label: 'Profile List',
           },
           {
             path: routes.userList,
