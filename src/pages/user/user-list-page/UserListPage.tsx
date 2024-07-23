@@ -1,95 +1,299 @@
-import { PageHeader } from '../../../components/page-header/PageHeader';
-import { DataGrid, GridColDef, GridRowSelectionModel } from '@mui/x-data-grid';
-import { Container, Button, Stack, IconButton, Box, Paper } from '@mui/material';
-import { Add, DeleteOutline, Edit } from '@mui/icons-material';
-import { useCallback, useState } from 'react';
-import { DeleteDialog } from './components/delete-dialog/DeleteDialog';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  GridRowModel,
+  GridRowEditStopReasons,
+  GridSlots,
+} from '@mui/x-data-grid';
+import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 
-const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 70 },
-  { field: 'firstName', headerName: 'First name', width: 130 },
-  { field: 'lastName', headerName: 'Last name', width: 130 },
+const deals = ['Selling Software', 'Buying diamond', 'Buying luxury watches'];
+
+const randomRole = () => {
+  return randomArrayItem(deals);
+};
+
+function generateRandomTimeDuration() {
+  const days = Math.floor(Math.random() * 30) + 1;
+  const hours = Math.floor(Math.random() * 24);
+  let timeDuration = '';
+  if (days > 0) {
+    timeDuration += `${days} days `;
+  }
+  if (hours > 0) {
+    timeDuration += `${hours} hours `;
+  }
+  return timeDuration.trim();
+}
+
+function generateRandomMoney() {
+  const minAmount = 1000000;
+  const maxAmount = 10000000;
+  const randomAmount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
+  const formattedAmount = randomAmount.toLocaleString();
+  return formattedAmount;
+}
+
+function generateRandomPlace() {
+  const places = [
+    'Paris',
+    'London',
+    'New York',
+    'Tokyo',
+    'Sydney',
+    'Rome',
+    'Moscow',
+    'Dubai',
+    'Bangkok',
+    'Cape Town',
+    'Bali',
+    'Barcelona',
+    'Los Angeles',
+    'Berlin',
+    'Toronto',
+  ];
+
+  const randomPlace = randomArrayItem(places);
+  return randomPlace;
+}
+
+const initialRows: GridRowsProp = [
   {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 90,
+    id: randomId(),
+    name: randomTraderName(),
+    joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
+    deal: randomRole(),
+    time: generateRandomTimeDuration(),
+    money: generateRandomMoney(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
+    deal: randomRole(),
+    time: generateRandomTimeDuration(),
+    money: generateRandomMoney(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
+    deal: randomRole(),
+    time: generateRandomTimeDuration(),
+    money: generateRandomMoney(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
+    deal: randomRole(),
+    time: generateRandomTimeDuration(),
+    money: generateRandomMoney(),
+  },
+  {
+    id: randomId(),
+    name: randomTraderName(),
+    joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
+    deal: randomRole(),
+    time: generateRandomTimeDuration(),
+    money: generateRandomMoney(),
   },
 ];
 
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: null, age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-];
+interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+}
 
-// TODO: refactor data
+function EditToolbar(props: EditToolbarProps) {
+  const { setRows, setRowModesModel } = props;
 
-export default function UserListPage() {
-  const [showEditBar, setShowEditBar] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [selectedRows, setSelectedRows] = useState<GridRowSelectionModel>([]);
-
-  const isSingleRowSelected = selectedRows.length === 1;
-
-  const handleSelectionChange = useCallback((model: GridRowSelectionModel) => {
-    const isSelectionEmpty = model.length === 0;
-
-    setSelectedRows(model);
-    setShowEditBar(!isSelectionEmpty);
-  }, []);
-
-  const handleDeleteDialogOpen = () => setDeleteDialogOpen(true);
-  const handleDeleteDialogClose = () => setDeleteDialogOpen(false);
-
-  const handleDeleteItems = useCallback(() => {
-    console.log('delete items');
-  }, []);
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
+  };
 
   return (
-    <Container maxWidth={'lg'}>
-      <PageHeader
-        title={'Users list'}
-        breadcrumbs={['Users', 'List']}
-        renderRight={
-          <Button variant={'contained'} startIcon={<Add />}>
-            Add user
-          </Button>
+    <GridToolbarContainer>
+      <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
+        Add record
+      </Button>
+    </GridToolbarContainer>
+  );
+}
+
+export default function FullFeaturedCrudGrid() {
+  const [rows, setRows] = React.useState(initialRows);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id: GridRowId) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow!.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const columns: GridColDef[] = [
+    { field: 'name', headerName: 'Name', width: 200, editable: true },
+    {
+      field: 'joinDate',
+      headerName: 'Date you met',
+      type: 'date',
+      width: 100,
+      editable: true,
+    },
+    {
+      field: 'place',
+      headerName: 'Place',
+      width: 120,
+      editable: true,
+    },
+    {
+      field: 'deal',
+      headerName: 'What kind of deal',
+      width: 220,
+      editable: true,
+    },
+    {
+      field: 'time',
+      headerName: 'How long to close the deal',
+      width: 180,
+      editable: true,
+    },
+    {
+      field: 'money',
+      headerName: 'Money',
+      width: 180,
+      editable: true,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label='Save'
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label='Cancel'
+              className='textPrimary'
+              onClick={handleCancelClick(id)}
+              color='inherit'
+            />,
+          ];
         }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label='Edit'
+            className='textPrimary'
+            onClick={handleEditClick(id)}
+            color='inherit'
+          />,
+          <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        height: 700,
+        width: '100%',
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode='row'
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar as GridSlots['toolbar'],
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
       />
-      {showEditBar ? (
-        <Stack
-          direction={'row'}
-          spacing={1}
-          sx={{ backgroundColor: 'primary.main', borderRadius: '4px', mb: 1, px: 1, py: 0.5 }}
-        >
-          {isSingleRowSelected ? (
-            <IconButton color={'secondary'}>
-              <Edit />
-            </IconButton>
-          ) : null}
-
-          <IconButton color={'secondary'} onClick={handleDeleteDialogOpen}>
-            <DeleteOutline />
-          </IconButton>
-
-          <DeleteDialog
-            open={deleteDialogOpen}
-            onClose={handleDeleteDialogClose}
-            onDeleteItems={handleDeleteItems}
-            itemsLength={selectedRows.length}
-          />
-        </Stack>
-      ) : null}
-      <Box sx={{ height: 400, width: '100%', p: 0, borderRadius: 1, overflow: 'hidden' }} component={Paper}>
-        <DataGrid rows={rows} columns={columns} checkboxSelection onRowSelectionModelChange={handleSelectionChange} />
-      </Box>
-    </Container>
+    </Box>
   );
 }

@@ -51,7 +51,7 @@ export function Navigation() {
           },
           {
             path: routes.userList,
-            label: 'List',
+            label: 'Deal List',
           },
           {
             path: routes.userEdit,

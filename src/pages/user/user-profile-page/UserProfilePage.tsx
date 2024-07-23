@@ -23,9 +23,49 @@ import {
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 
 const roles = ['Business Owner', 'Politician', 'High-Ranking Official'];
+
 const randomRole = () => {
   return randomArrayItem(roles);
 };
+
+function generateRandomPhoneNumber() {
+  const phoneNumber = Math.floor(Math.random() * 9000000000) + 1000000000;
+  const formattedPhoneNumber = phoneNumber.toString().replace(/(\d{3})(\d{3})(\d{4})/, '$1-$2-$3');
+  return formattedPhoneNumber;
+}
+
+function generateRandomEmail() {
+  const domains = ['gmail.com', 'yahoo.com', 'hotmail.com', 'outlook.com', 'example.com'];
+  const emailProviders = ['john', 'jane', 'emma', 'alex', 'mike', 'sarah'];
+  const randomProvider = randomArrayItem(emailProviders);
+  const randomDomain = randomArrayItem(domains);
+  const randomNumber = Math.floor(Math.random() * 1000);
+  const emailAddress = `${randomProvider}${randomNumber}@${randomDomain}`;
+  return emailAddress;
+}
+
+function generateRandomPlace() {
+  const places = [
+    'Paris',
+    'London',
+    'New York',
+    'Tokyo',
+    'Sydney',
+    'Rome',
+    'Moscow',
+    'Dubai',
+    'Bangkok',
+    'Cape Town',
+    'Bali',
+    'Barcelona',
+    'Los Angeles',
+    'Berlin',
+    'Toronto',
+  ];
+
+  const randomPlace = randomArrayItem(places);
+  return randomPlace;
+}
 
 const initialRows: GridRowsProp = [
   {
@@ -33,35 +73,50 @@ const initialRows: GridRowsProp = [
     name: randomTraderName(),
     age: 45,
     joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
     role: randomRole(),
+    phone: generateRandomPhoneNumber(),
+    mail: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 36,
     joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
     role: randomRole(),
+    phone: generateRandomPhoneNumber(),
+    mail: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 49,
     joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
     role: randomRole(),
+    phone: generateRandomPhoneNumber(),
+    mail: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 38,
     joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
     role: randomRole(),
+    phone: generateRandomPhoneNumber(),
+    mail: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 30,
     joinDate: randomCreatedDate(),
+    place: generateRandomPlace(),
     role: randomRole(),
+    phone: generateRandomPhoneNumber(),
+    mail: generateRandomEmail(),
   },
 ];
 
@@ -141,16 +196,22 @@ export default function FullFeaturedCrudGrid() {
       field: 'age',
       headerName: 'Age',
       type: 'number',
-      width: 80,
+      width: 50,
       align: 'left',
       headerAlign: 'left',
       editable: true,
     },
     {
       field: 'joinDate',
-      headerName: 'Meet at',
+      headerName: 'Date you met',
       type: 'date',
-      width: 180,
+      width: 100,
+      editable: true,
+    },
+    {
+      field: 'place',
+      headerName: 'Place',
+      width: 120,
       editable: true,
     },
     {
@@ -158,8 +219,18 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Their career',
       width: 220,
       editable: true,
-      type: 'singleSelect',
-      valueOptions: ['Business Owner', 'Politician', 'High-Ranking Official'],
+    },
+    {
+      field: 'phone',
+      headerName: 'Mobile Phone',
+      width: 100,
+      editable: true,
+    },
+    {
+      field: 'mail',
+      headerName: 'E-Mail',
+      width: 180,
+      editable: true,
     },
     {
       field: 'actions',
