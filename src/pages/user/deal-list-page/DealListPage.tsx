@@ -22,7 +22,7 @@ import {
 } from '@mui/x-data-grid';
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 
-const deals = ['Selling Software', 'Buying diamond', 'Buying luxury watches'];
+const deals = ['Selling Software', 'Buying Hotel Company', 'Selling Rare Material'];
 
 const randomRole = () => {
   return randomArrayItem(deals);

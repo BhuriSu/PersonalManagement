@@ -73,8 +73,8 @@ export default function UserAccountPage() {
       <Box sx={{ width: '100%' }}>
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label='basic tabs example'>
-            <Tab {...tabProps} icon={<Person />} label='General' {...a11yProps(0)} />
-            <Tab {...tabProps} icon={<Share />} label='Social links' {...a11yProps(1)} />
+            <Tab {...tabProps} icon={<Person />} label='Goal' {...a11yProps(0)} />
+            <Tab {...tabProps} icon={<Share />} label='Lesson of Mistakes' {...a11yProps(1)} />
             <Tab {...tabProps} icon={<Settings />} label='Settings' {...a11yProps(2)} />
           </Tabs>
         </Box>

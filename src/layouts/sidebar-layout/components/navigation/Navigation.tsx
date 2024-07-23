@@ -55,18 +55,18 @@ export function Navigation() {
           },
           {
             path: routes.userEdit,
-            label: 'Edit',
+            label: 'Graph Relationship',
           },
           {
             path: routes.userCreate,
-            label: 'Create',
+            label: 'Target',
           },
         ],
       },
       {
-        label: 'Blog',
+        label: 'Media',
         icon: (props: any) => <Notes {...props} />,
-        description: 'Blog management',
+        description: 'Social Media management',
         items: [
           {
             path: routes.blog,
@@ -87,9 +87,9 @@ export function Navigation() {
         ],
       },
       {
-        label: 'Orders',
+        label: 'Health Check',
         icon: (props: any) => <Abc {...props} />,
-        description: 'Order management',
+        description: 'Health management',
         items: [
           {
             path: routes.ordersList,
@@ -102,9 +102,9 @@ export function Navigation() {
         ],
       },
       {
-        label: 'Jobs',
+        label: 'Flight',
         icon: (props: any) => <Abc {...props} />,
-        description: 'Job management',
+        description: 'Flight management',
         items: [
           {
             path: routes.jobsCreate,
@@ -125,9 +125,9 @@ export function Navigation() {
         ],
       },
       {
-        label: 'System',
+        label: 'Urgency',
         icon: (props: any) => <SystemUpdate {...props} />,
-        description: 'System pages',
+        description: 'Urgent pages',
         items: [
           {
             path: routes.notFound,
