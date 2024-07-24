@@ -12,10 +12,10 @@ import { SidebarLayout } from './layouts/sidebar-layout/SidebarLayout.tsx';
 
 const Dashboard = React.lazy(() => import('./pages/dashboard/Dashboard'));
 const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/UserAccountPage'));
-const UserProfilePage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage.tsx'));
-const UserListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage.tsx'));
-const UserEditPage = React.lazy(() => import('./pages/user/target-page/UserEditPage.tsx'));
-const UserCreatePage = React.lazy(() => import('./pages/user/graph-relationship-page/UserCreatePage.tsx'));
+const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage.tsx'));
+const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage.tsx'));
+const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage.tsx'));
+const TargetPage = React.lazy(() => import('./pages/user/target-page/TargetPage.tsx'));
 const BlogPage = React.lazy(() => import('./pages/blog/blog-page/BlogPage'));
 const BlogPostPage = React.lazy(() => import('./pages/blog/blog-post-page/BlogPostPage'));
 const CreatePostBlogPage = React.lazy(() => import('./pages/blog/create-post-blog-page/CreatePostBlogPage'));
@@ -63,19 +63,19 @@ const router = createBrowserRouter([
       },
       {
         path: routes.userProfile,
-        element: <UserProfilePage />,
+        element: <ProfileListPage />,
       },
       {
         path: routes.userList,
-        element: <UserListPage />,
+        element: <DealListPage />,
       },
       {
         path: routes.userEdit,
-        element: <UserEditPage />,
+        element: <GraphPage />,
       },
       {
         path: routes.userCreate,
-        element: <UserCreatePage />,
+        element: <TargetPage />,
       },
       {
         path: routes.blog,

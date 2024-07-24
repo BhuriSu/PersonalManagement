@@ -21,6 +21,7 @@ import {
   GridSlots,
 } from '@mui/x-data-grid';
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { PageHeader } from '../../../components/page-header/PageHeader';
 
 const deals = ['Selling Software', 'Buying Hotel Company', 'Selling Rare Material'];
 
@@ -279,6 +280,7 @@ export default function FullFeaturedCrudGrid() {
         },
       }}
     >
+      <PageHeader title={'Deal List'} breadcrumbs={['Deal', 'List']} />
       <DataGrid
         rows={rows}
         columns={columns}
