@@ -2,7 +2,7 @@ import { Box, Container, Tab, TabProps, Tabs } from '@mui/material';
 import { PageHeader } from '../../../components/page-header/PageHeader';
 import React from 'react';
 import { Person, Settings, Share } from '@mui/icons-material';
-import { SocialLinksForm } from '../components/social-links-form/SocialLinksForm';
+import MistakeList from '../components/social-links-form/MistakeList';
 import { AccountSettingsForm } from '../components/account-settings-form/AccountSettingsForm';
 import { UserForm } from '../components/user-form/UserForm';
 import { useCurrentUser } from '../../../hooks/api/use-current-user/useCurrentUser';
@@ -82,7 +82,7 @@ export default function UserAccountPage() {
           <UserForm defaultValues={defaultValues} />
         </TabPanel>
         <TabPanel value={value} index={1}>
-          <SocialLinksForm />
+          <MistakeList />
         </TabPanel>
         <TabPanel value={value} index={2}>
           <AccountSettingsForm />
