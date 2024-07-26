@@ -2,9 +2,9 @@ import { Box, Container, Tab, TabProps, Tabs } from '@mui/material';
 import { PageHeader } from '../../../components/page-header/PageHeader';
 import React from 'react';
 import { Person, Settings, Share } from '@mui/icons-material';
-import MistakeList from '../components/social-links-form/MistakeList';
+import MistakeList from '../components/mistake-list/MistakeList';
 import { AccountSettingsForm } from '../components/account-settings-form/AccountSettingsForm';
-import { UserForm } from '../components/user-form/UserForm';
+import GoalListPage from '../components/goal-list/goal';
 import { useCurrentUser } from '../../../hooks/api/use-current-user/useCurrentUser';
 import { Loader } from '../../../components/loader/Loader';
 
@@ -52,19 +52,6 @@ export default function UserAccountPage() {
 
   console.log(user);
 
-  const defaultValues = user
-    ? {
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        phone: user.phone,
-        username: user.username,
-        image: user.image,
-        age: user.age,
-        birthDate: user.birthDate,
-      }
-    : undefined;
-
   if (isLoading || !user) return <Loader />;
 
   return (
@@ -79,7 +66,7 @@ export default function UserAccountPage() {
           </Tabs>
         </Box>
         <TabPanel value={value} index={0}>
-          <UserForm defaultValues={defaultValues} />
+          <GoalListPage />
         </TabPanel>
         <TabPanel value={value} index={1}>
           <MistakeList />

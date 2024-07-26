@@ -21,7 +21,6 @@ import {
   GridSlots,
 } from '@mui/x-data-grid';
 import { randomCreatedDate, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
-import { PageHeader } from '../../../../components/page-header/PageHeader';
 
 const places = [
   'University',
@@ -174,7 +173,7 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const columns: GridColDef[] = [
-    { field: 'mistake', headerName: 'Mistake that I make', width: 200, editable: true },
+    { field: 'mistake', headerName: 'Mistake that I make', width: 280, editable: true },
     {
       field: 'cost',
       headerName: 'Cost',
@@ -185,13 +184,13 @@ export default function FullFeaturedCrudGrid() {
       field: 'date',
       headerName: 'Date',
       type: 'date',
-      width: 150,
+      width: 120,
       editable: true,
     },
     {
       field: 'place',
       headerName: 'Place',
-      width: 150,
+      width: 120,
       editable: true,
     },
     {
@@ -256,7 +255,6 @@ export default function FullFeaturedCrudGrid() {
         },
       }}
     >
-      <PageHeader title={'Record List'} breadcrumbs={['Record', 'List']} />
       <DataGrid
         rows={rows}
         columns={columns}
