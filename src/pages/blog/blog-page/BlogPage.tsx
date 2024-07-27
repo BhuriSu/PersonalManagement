@@ -2,12 +2,7 @@ import {
   Button,
   ButtonGroup,
   Container,
-  FormControl,
   InputAdornment,
-  InputLabel,
-  MenuItem,
-  Select,
-  SelectChangeEvent,
   Stack,
   TextField,
   Typography,
@@ -24,13 +19,8 @@ import { useBlogPosts } from '../../../hooks/api/use-blog-posts';
 
 export default function BlogPage() {
   const { isLoading, data } = useBlogPosts();
-  const [sort, setSort] = useState('newest');
   const [view, setView] = useState<BlogView>(BlogView.GRID);
   const navigate = useNavigate();
-
-  const handleChange = (event: SelectChangeEvent) => {
-    setSort(event.target.value as string);
-  };
 
   const handleViewChange = useCallback((view: BlogView) => {
     setView(view);
@@ -63,21 +53,6 @@ export default function BlogPage() {
           placeholder={'Search posts...'}
         />
         <Stack direction={'row'} spacing={2}>
-          <FormControl>
-            <InputLabel id='sort-select-label'>Sort</InputLabel>
-            <Select
-              labelId='sort-select-label'
-              id='sort-select'
-              value={sort}
-              label='Sort'
-              size={'small'}
-              onChange={handleChange}
-            >
-              <MenuItem value={'newest'}>Newest</MenuItem>
-              <MenuItem value={'most-popular'}>Most popular</MenuItem>
-              <MenuItem value={'recommended'}>Recommended</MenuItem>
-            </Select>
-          </FormControl>
 
           <ButtonGroup variant={'outlined'} color={'primary'}>
             <Button
@@ -98,13 +73,10 @@ export default function BlogPage() {
         </Stack>
       </Stack>
       <Stack mt={4} mb={4} spacing={2}>
-        <Typography variant={'h4'}>Read latest articles</Typography>
+        <Typography variant={'h4'}>Social Media Blog</Typography>
         <Typography variant={'body1'} color={'text.secondary'}>
-          Aenean euismod imperdiet tortor, at euismod dolor. Pellentesque mollis lorem lacus, eu suscipit leo hendrerit
-          sed. Proin neque ante, malesuada at sagittis sit amet, dignissim sit amet ex. Vivamus consequat ante sed
-          laoreet sollicitudin. Donec fermentum enim sit amet leo consectetur, a euismod nunc posuere. Curabitur ipsum
-          massa, pellentesque id arcu vitae, finibus accumsan ex. Morbi vel lobortis ligula. Etiam porttitor vel purus
-          eu commodo.
+          When You have a lot of social media or article to read, you can use our service to manage simultaneously in
+          realtime. 
         </Typography>
       </Stack>
       {isLoading && <Loader />}

@@ -15,11 +15,9 @@ const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/
 const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage.tsx'));
 const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage.tsx'));
 const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage.tsx'));
-const TargetPage = React.lazy(() => import('./pages/user/target-page/TargetPage.tsx'));
+
 const BlogPage = React.lazy(() => import('./pages/blog/blog-page/BlogPage'));
 const BlogPostPage = React.lazy(() => import('./pages/blog/blog-post-page/BlogPostPage'));
-const CreatePostBlogPage = React.lazy(() => import('./pages/blog/create-post-blog-page/CreatePostBlogPage'));
-const EditPostBlogPage = React.lazy(() => import('./pages/blog/edit-post-blog-page/EditPostBlogPage'));
 const ColorsPage = React.lazy(() => import('./docs/pages/colors-page/ColorsPage'));
 const TypographyPage = React.lazy(() => import('./docs/pages/typography-page/TypographyPage'));
 const ButtonPage = React.lazy(() => import('./docs/pages/button-page/ButtonPage'));
@@ -74,24 +72,12 @@ const router = createBrowserRouter([
         element: <GraphPage />,
       },
       {
-        path: routes.userCreate,
-        element: <TargetPage />,
-      },
-      {
         path: routes.blog,
         element: <BlogPage />,
       },
       {
         path: routes.blogPost,
         element: <BlogPostPage />,
-      },
-      {
-        path: routes.blogCreatePost,
-        element: <CreatePostBlogPage />,
-      },
-      {
-        path: routes.blogEditPost,
-        element: <EditPostBlogPage />,
       },
       {
         path: routes.themeColors,

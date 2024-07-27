@@ -6,6 +6,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import SaveIcon from '@mui/icons-material/Save';
 import CancelIcon from '@mui/icons-material/Close';
+import { Search } from '@mui/icons-material';
+import { TextField } from '@mui/material';
 import {
   GridRowsProp,
   GridRowModesModel,
@@ -139,11 +141,20 @@ function EditToolbar(props: EditToolbarProps) {
   };
 
   return (
-    <GridToolbarContainer>
-      <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
-      </Button>
-    </GridToolbarContainer>
+    <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
+      Add record
+    </Button>
+    <TextField
+      variant={'outlined'}
+      size={'small'}
+      placeholder={'Search...'}
+      InputProps={{
+        endAdornment: <Search sx={{ color: 'grey.500' }} />,
+      }}
+      sx={{ ml: 'auto' }}
+    />
+  </GridToolbarContainer>
   );
 }
 

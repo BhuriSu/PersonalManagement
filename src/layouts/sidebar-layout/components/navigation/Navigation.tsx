@@ -57,10 +57,6 @@ export function Navigation() {
             path: routes.userEdit,
             label: 'Graph Relationship',
           },
-          {
-            path: routes.userCreate,
-            label: 'Target',
-          },
         ],
       },
       {
@@ -75,14 +71,6 @@ export function Navigation() {
           {
             path: routes.blogPost,
             label: 'Details',
-          },
-          {
-            path: routes.blogEditPost,
-            label: 'Edit',
-          },
-          {
-            path: routes.blogCreatePost,
-            label: 'Create',
           },
         ],
       },

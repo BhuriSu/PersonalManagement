@@ -34,71 +34,58 @@ const places = [
   'Shopping Mall',
   'Public Transit',
 ];
-const mistakes = [
-  'broke the deal',
-  'forgot to close refrigerator',
-  'broke the things that is not belong to mine',
-  'underperformed',
-  'no discipline',
-  'broke the law',
+const goal = [
+  'Meet New friend',
+  'Practice new skill',
+  'Make money 100k usd per month',
+  'Become millionaire',
+  'Become Billionaire',
+  'Disrupt the whole world',
 ];
-const cost = [
-  'lose opportunity',
-  'almost get throwing in jail',
-  'got terminated',
-  'waste too much electricity cost',
-  'waste too much time',
-  'got charges a lot',
-];
-const solutions = [
-  'dealing more professional',
-  'follow the rules strictly',
-  'upskills',
-  'check 2 times',
-  'practice discipline',
-  'beware when traveling',
+const how = [
+  'go to new place and start conversation',
+  'take course online',
+  'negotiate and make a deal',
+  'start business and exit',
+  'gain knowledge and set vision to execute',
+  'make client happy',
 ];
 
 const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
+    goal: randomArrayItem(goal),
+    how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
   },
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
+    goal: randomArrayItem(goal),
+    how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
   },
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
+    goal: randomArrayItem(goal),
+    how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
   },
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
+    goal: randomArrayItem(goal),
+    how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
   },
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
+    goal: randomArrayItem(goal),
+    how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
   },
 ];
 
@@ -175,8 +162,8 @@ export default function FullFeaturedCrudGrid() {
   const columns: GridColDef[] = [
     { field: 'goal', headerName: 'Goal', width: 300, editable: true },
     {
-      field: 'opportunity',
-      headerName: 'Opportunity',
+      field: 'how',
+      headerName: 'how',
       width: 300,
       editable: true,
     },
@@ -254,6 +241,7 @@ export default function FullFeaturedCrudGrid() {
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
+        checkboxSelection
         onRowModesModelChange={handleRowModesModelChange}
         onRowEditStop={handleRowEditStop}
         processRowUpdate={processRowUpdate}
