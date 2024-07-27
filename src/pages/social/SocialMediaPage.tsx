@@ -9,8 +9,6 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { PageHeader } from '../../components/page-header/PageHeader';
-import { Loader } from '../../components/loader/Loader';
-import { useBlogPosts } from '../../hooks/api/use-blog-posts';
 import './SocialMediaBlockPage.css';
 
 export const SocialMediaBlock: React.FC = () => {
@@ -24,7 +22,6 @@ export const SocialMediaBlock: React.FC = () => {
 };
 
 export default function SocialMediaPage() {
-  const { isLoading } = useBlogPosts();
   const [blocks, setBlocks] = useState<number[]>([]);
   const addBlock = () => {
     setBlocks((prev) => [...prev, prev.length]);
@@ -48,7 +45,6 @@ export default function SocialMediaPage() {
           in realtime.
         </Typography>
       </Stack>
-      {isLoading && <Loader />}
       <Box
         sx={{
           display: 'grid',
