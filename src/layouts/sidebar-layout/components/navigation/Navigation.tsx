@@ -7,7 +7,6 @@ import {
   CalendarMonthOutlined,
   DashboardOutlined,
   DesignServicesOutlined,
-  ListAltOutlined,
   Login,
   Notes,
   ShapeLineOutlined,
@@ -30,7 +29,7 @@ export function Navigation() {
         icon: (props: any) => <DashboardOutlined {...props} />,
       },
       {
-        header: 'Pages',
+        header: 'Main pages',
       },
       {
         label: 'User',
@@ -101,17 +100,12 @@ export function Navigation() {
         ],
       },
       {
-        header: 'Apps',
+        header: 'Calendar',
       },
       {
         path: routes.calendar,
         label: 'Calendar',
         icon: (props: any) => <CalendarMonthOutlined {...props} />,
-      },
-      {
-        path: routes.todoList,
-        label: 'Tasks',
-        icon: (props: any) => <ListAltOutlined {...props} />,
       },
       {
         header: 'Documentation',

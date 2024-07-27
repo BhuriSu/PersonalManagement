@@ -20,7 +20,6 @@ const ColorsPage = React.lazy(() => import('./docs/pages/colors-page/ColorsPage'
 const TypographyPage = React.lazy(() => import('./docs/pages/typography-page/TypographyPage'));
 const ButtonPage = React.lazy(() => import('./docs/pages/button-page/ButtonPage'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
-const TodoList = React.lazy(() => import('./pages/todo-list/TodoList'));
 const UrgencyPage = React.lazy(() => import('./pages/urgency/UrgencyPage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
 const RegisterPage = React.lazy(() => import('./pages/register/RegisterPage'));
@@ -85,10 +84,6 @@ const router = createBrowserRouter([
       {
         path: routes.calendar,
         element: <CalendarPage />,
-      },
-      {
-        path: routes.todoList,
-        element: <TodoList />,
       },
     ],
   },

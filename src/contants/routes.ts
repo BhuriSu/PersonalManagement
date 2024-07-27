@@ -16,7 +16,6 @@ export const routes = {
   themeColors: `${themePrefix}/colors`,
   componentsButton: `${componentPrefix}/button`,
   calendar: `/calendar`,
-  todoList: '/todo-list',
   login: '/login',
   register: '/register',
   resetPassword: '/reset-password',

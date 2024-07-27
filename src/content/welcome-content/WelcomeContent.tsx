@@ -6,9 +6,9 @@ export const WelcomeContent = () => {
     <Stack spacing={2} sx={{ minWidth: '60%' }} alignItems={'center'}>
       <Logo invertImage />
       <Typography variant={'h3'} component={'h1'}>
-        Welcome to YourOwnData
+        Welcome to Your Connection
       </Typography>
-      <Typography variant={'body1'}>All In One Data that you want to have</Typography>
+      <Typography variant={'body1'}>All In One Connection Platform</Typography>
     </Stack>
   );
 };
