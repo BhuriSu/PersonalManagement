@@ -4,7 +4,7 @@ import { CenterLayout } from '../../layouts/center-layout/CenterLayout';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../contants/routes';
 
-export default function NotFoundPage() {
+export default function UrgencyPage() {
   const navigate = useNavigate();
 
   return (

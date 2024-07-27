@@ -80,11 +80,6 @@ export function Navigation() {
             label: '(404) Page not found',
             icon: (props: any) => <QuestionMarkOutlined {...props} />,
           },
-          {
-            path: routes.maintenance,
-            label: 'Under construction',
-            icon: (props: any) => <ConstructionOutlined {...props} />,
-          },
         ],
       },
       {

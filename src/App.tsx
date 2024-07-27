@@ -12,17 +12,16 @@ import { SidebarLayout } from './layouts/sidebar-layout/SidebarLayout.tsx';
 
 const Dashboard = React.lazy(() => import('./pages/dashboard/Dashboard'));
 const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/UserAccountPage'));
-const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage.tsx'));
-const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage.tsx'));
-const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage.tsx'));
-const SocialMediaPage = React.lazy(() => import('./pages/social-media-page/SocialMediaPage.tsx'));
+const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage'));
+const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage'));
+const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage'));
+const SocialMediaPage = React.lazy(() => import('./pages/social-media-page/SocialMediaPage'));
 const ColorsPage = React.lazy(() => import('./docs/pages/colors-page/ColorsPage'));
 const TypographyPage = React.lazy(() => import('./docs/pages/typography-page/TypographyPage'));
 const ButtonPage = React.lazy(() => import('./docs/pages/button-page/ButtonPage'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
 const TodoList = React.lazy(() => import('./pages/todo-list/TodoList'));
-const NotFoundPage = React.lazy(() => import('./pages/not-found/NotFoundPage'));
-const MaintenancePage = React.lazy(() => import('./pages/maintenance/MaintenancePage'));
+const UrgencyPage = React.lazy(() => import('./pages/urgency/urgencyPage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
 const RegisterPage = React.lazy(() => import('./pages/register/RegisterPage'));
 const ResetPassword = React.lazy(() => import('./pages/reset-password/ResetPassword'));
@@ -93,15 +92,7 @@ const router = createBrowserRouter([
     path: routes.notFound,
     element: (
       <Suspense>
-        <NotFoundPage />
-      </Suspense>
-    ),
-  },
-  {
-    path: routes.maintenance,
-    element: (
-      <Suspense>
-        <MaintenancePage />
+        <UrgencyPage />
       </Suspense>
     ),
   },
