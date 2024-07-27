@@ -16,9 +16,6 @@ const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/
 const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage'));
 const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage'));
 const SocialMediaPage = React.lazy(() => import('./pages/social/SocialMediaPage.tsx'));
-const ColorsPage = React.lazy(() => import('./docs/pages/colors-page/ColorsPage'));
-const TypographyPage = React.lazy(() => import('./docs/pages/typography-page/TypographyPage'));
-const ButtonPage = React.lazy(() => import('./docs/pages/button-page/ButtonPage'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
 const UrgencyPage = React.lazy(() => import('./pages/urgency/UrgencyPage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
@@ -68,18 +65,6 @@ const router = createBrowserRouter([
       {
         path: routes.urgency,
         element: <UrgencyPage />,
-      },
-      {
-        path: routes.themeColors,
-        element: <ColorsPage />,
-      },
-      {
-        path: routes.themeTypography,
-        element: <TypographyPage />,
-      },
-      {
-        path: routes.componentsButton,
-        element: <ButtonPage />,
       },
       {
         path: routes.calendar,

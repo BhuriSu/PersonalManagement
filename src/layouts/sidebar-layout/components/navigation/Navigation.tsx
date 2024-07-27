@@ -6,11 +6,8 @@ import {
   AccountBoxOutlined,
   CalendarMonthOutlined,
   DashboardOutlined,
-  DesignServicesOutlined,
   Login,
   Notes,
-  ShapeLineOutlined,
-  ViewStreamOutlined,
 } from '@mui/icons-material';
 import { useMemo } from 'react';
 import { useNotifications } from '../../../../hooks/api/use-notifications/useNotifications';
@@ -106,88 +103,6 @@ export function Navigation() {
         path: routes.calendar,
         label: 'Calendar',
         icon: (props: any) => <CalendarMonthOutlined {...props} />,
-      },
-      {
-        header: 'Documentation',
-      },
-      {
-        label: 'Theme',
-        icon: (props: any) => <DesignServicesOutlined {...props} />,
-        items: [
-          {
-            path: routes.themeTypography,
-            label: 'Typography',
-          },
-          {
-            path: routes.themeColors,
-            label: 'Colors',
-          },
-        ],
-      },
-      {
-        label: 'Components',
-        icon: (props: any) => <ShapeLineOutlined {...props} />,
-        items: [
-          {
-            path: routes.componentsButton,
-            label: 'Button',
-          },
-        ],
-      },
-      {
-        header: 'Navigation',
-      },
-      {
-        path: '',
-        label: 'Number',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: `${notifications?.notifications?.length}`,
-        badgeColor: 'primary',
-      },
-      {
-        path: '',
-        label: 'Description',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: 'New',
-        badgeColor: 'info',
-        description: 'This is a description',
-      },
-      {
-        path: '',
-        label: 'Disabled',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeColor: 'info',
-        disabled: true,
-        description: 'This is a disabled item',
-      },
-      {
-        path: '',
-        label: 'Color primary',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: 'New',
-        badgeColor: 'primary',
-      },
-      {
-        path: '',
-        label: 'Color secondary',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: 'New',
-        badgeColor: 'secondary',
-      },
-      {
-        path: '',
-        label: 'Color info',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: 'New',
-        badgeColor: 'info',
-      },
-      {
-        path: '',
-        label: 'Very long text as a link text',
-        icon: (props: any) => <ViewStreamOutlined {...props} />,
-        badgeText: 'New',
-        badgeColor: 'info',
-        external: true,
       },
     ],
     [notifications?.notifications?.length],

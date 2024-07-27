@@ -1,7 +1,6 @@
-const themePrefix = '/theme';
+
 const userPrefix = '/user';
 const blogPrefix = '/blog';
-const componentPrefix = `${themePrefix}/component`;
 
 export const routes = {
   dashboard: '/',
@@ -12,9 +11,6 @@ export const routes = {
   graph: `${userPrefix}/graph`,
   social: `${blogPrefix}/social`,
   urgency: `${userPrefix}/urgency`,
-  themeTypography: `${themePrefix}/typography`,
-  themeColors: `${themePrefix}/colors`,
-  componentsButton: `${componentPrefix}/button`,
   calendar: `/calendar`,
   login: '/login',
   register: '/register',

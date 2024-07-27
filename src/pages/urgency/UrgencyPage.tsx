@@ -23,6 +23,7 @@ import {
   GridSlots,
 } from '@mui/x-data-grid';
 import { randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { PageHeader } from '../../components/page-header/PageHeader';
 
 const urgencies = ['Urgent Phone Number in Australia', 'High Credit Law Firm','When your want to get a job at Goldman Sachs'];
 const information = [ '083-312-5831','KirkLand','Call this guy name David solomon 083-123-3122','Go to this place before 5 P.M.']
@@ -205,6 +206,7 @@ export default function FullFeaturedCrudGrid() {
         },
       }}
     >
+      <PageHeader title={'Urgency List'} breadcrumbs={['Urgency', 'List']} />
       <DataGrid
         rows={rows}
         columns={columns}

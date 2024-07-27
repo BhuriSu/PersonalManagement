@@ -8,10 +8,9 @@ import {
 } from './styled';
 import React, { useState } from 'react';
 import { Typography } from '@mui/material';
-import { User } from '../../../../types/user/userTypes';
 import { UserAvatar } from '../../../../components/user-avatar/UserAvatar';
 
-export const UserMenu = ({ user }: { user: User }) => {
+export const UserMenu = ({ user }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
 
