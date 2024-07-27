@@ -3,18 +3,14 @@ import { NavigationItem } from './components/navigation-item/NavigationItem';
 import { NavigationItemType } from './components/navigation-item/types';
 import { routes } from '../../../../contants/routes';
 import {
-  Abc,
   AccountBoxOutlined,
   CalendarMonthOutlined,
-  ConstructionOutlined,
   DashboardOutlined,
   DesignServicesOutlined,
   ListAltOutlined,
   Login,
   Notes,
-  QuestionMarkOutlined,
   ShapeLineOutlined,
-  SystemUpdate,
   ViewStreamOutlined,
 } from '@mui/icons-material';
 import { useMemo } from 'react';
@@ -50,11 +46,11 @@ export function Navigation() {
             label: 'Profile List',
           },
           {
-            path: routes.userList,
+            path: routes.dealList,
             label: 'Deal List',
           },
           {
-            path: routes.userEdit,
+            path: routes.graph,
             label: 'Graph Relationship',
           },
         ],
@@ -65,20 +61,19 @@ export function Navigation() {
         description: 'Social Media management',
         items: [
           {
-            path: routes.blog,
+            path: routes.social,
             label: 'Social Media List',
           },
         ],
       },
       {
         label: 'Urgency',
-        icon: (props: any) => <SystemUpdate {...props} />,
-        description: 'Urgent pages',
+        icon: (props: any) => <AccountBoxOutlined {...props} />,
+        description: 'Urgent page',
         items: [
           {
-            path: routes.notFound,
-            label: '(404) Page not found',
-            icon: (props: any) => <QuestionMarkOutlined {...props} />,
+            path: routes.urgency,
+            label: 'Urgency list',
           },
         ],
       },

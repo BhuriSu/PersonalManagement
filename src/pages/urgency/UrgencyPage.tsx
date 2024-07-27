@@ -1,26 +1,225 @@
-import { FullWidthLayout } from '../../layouts/full-width-layout/FullWidthLayout';
-import { Button, Typography } from '@mui/material';
-import { CenterLayout } from '../../layouts/center-layout/CenterLayout';
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../contants/routes';
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import CancelIcon from '@mui/icons-material/Close';
+import { Search } from '@mui/icons-material';
+import { TextField } from '@mui/material';
+import {
+  GridRowsProp,
+  GridRowModesModel,
+  GridRowModes,
+  DataGrid,
+  GridColDef,
+  GridToolbarContainer,
+  GridActionsCellItem,
+  GridEventListener,
+  GridRowId,
+  GridRowModel,
+  GridRowEditStopReasons,
+  GridSlots,
+} from '@mui/x-data-grid';
+import { randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 
-export default function UrgencyPage() {
-  const navigate = useNavigate();
+const urgencies = ['Urgent Phone Number in Australia', 'High Credit Law Firm','When your want to get a job at Goldman Sachs'];
+const information = [ '083-312-5831','KirkLand','Call this guy name David solomon 083-123-3122','Go to this place before 5 P.M.']
+const randomUrgency = () => {
+  return randomArrayItem(urgencies);
+};
+
+function randomInformation() {
+  return randomArrayItem(information);
+}
+
+const initialRows: GridRowsProp = [
+  {
+    id: randomId(),
+    urgency: randomUrgency(),
+    information: randomInformation(),
+  },
+  {
+    id: randomId(),
+    urgency: randomUrgency(),
+    information: randomInformation(),
+  },
+  {
+    id: randomId(),
+    urgency: randomUrgency(),
+    information: randomInformation(),
+  },
+  {
+    id: randomId(),
+    urgency: randomUrgency(),
+    information: randomInformation(),
+  },
+  {
+    id: randomId(),
+    urgency: randomUrgency(),
+    information: randomInformation(),
+  },
+];
+
+interface EditToolbarProps {
+  setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
+  setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+}
+
+function EditToolbar(props: EditToolbarProps) {
+  const { setRows, setRowModesModel } = props;
+
+  const handleClick = () => {
+    const id = randomId();
+    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
+  };
 
   return (
-    <FullWidthLayout>
-      <CenterLayout>
-        <Typography variant='h1' fontWeight={'fontWeightBold'}>
-          404
-        </Typography>
-        <Typography variant='subtitle1'>Page you are looking for is not found.</Typography>
-        <Typography variant='subtitle1' marginBottom={4}>
-          Check the address and try it again.
-        </Typography>
-        <Button variant={'contained'} size={'large'} onClick={() => navigate(routes.dashboard)}>
-          Go to main page
-        </Button>
-      </CenterLayout>
-    </FullWidthLayout>
+    <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+    <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
+      Add record
+    </Button>
+    <TextField
+      variant={'outlined'}
+      size={'small'}
+      placeholder={'Search...'}
+      InputProps={{
+        endAdornment: <Search sx={{ color: 'grey.500' }} />,
+      }}
+      sx={{ ml: 'auto' }}
+    />
+  </GridToolbarContainer>
+  );
+}
+
+export default function FullFeaturedCrudGrid() {
+  const [rows, setRows] = React.useState(initialRows);
+  const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+
+  const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
+    if (params.reason === GridRowEditStopReasons.rowFocusOut) {
+      event.defaultMuiPrevented = true;
+    }
+  };
+
+  const handleEditClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
+  };
+
+  const handleSaveClick = (id: GridRowId) => () => {
+    setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+  };
+
+  const handleDeleteClick = (id: GridRowId) => () => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const handleCancelClick = (id: GridRowId) => () => {
+    setRowModesModel({
+      ...rowModesModel,
+      [id]: { mode: GridRowModes.View, ignoreModifications: true },
+    });
+
+    const editedRow = rows.find((row) => row.id === id);
+    if (editedRow!.isNew) {
+      setRows(rows.filter((row) => row.id !== id));
+    }
+  };
+
+  const processRowUpdate = (newRow: GridRowModel) => {
+    const updatedRow = { ...newRow, isNew: false };
+    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    return updatedRow;
+  };
+
+  const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
+    setRowModesModel(newRowModesModel);
+  };
+
+  const columns: GridColDef[] = [
+    { field: 'urgency', headerName: 'Urgency', width: 400, editable: true },
+    {
+      field: 'information',
+      headerName: 'Information',
+      width: 400,
+      editable: true,
+    },
+    {
+      field: 'actions',
+      type: 'actions',
+      headerName: 'Actions',
+      width: 100,
+      cellClassName: 'actions',
+      getActions: ({ id }) => {
+        const isInEditMode = rowModesModel[id]?.mode === GridRowModes.Edit;
+
+        if (isInEditMode) {
+          return [
+            <GridActionsCellItem
+              icon={<SaveIcon />}
+              label='Save'
+              sx={{
+                color: 'primary.main',
+              }}
+              onClick={handleSaveClick(id)}
+            />,
+            <GridActionsCellItem
+              icon={<CancelIcon />}
+              label='Cancel'
+              className='textPrimary'
+              onClick={handleCancelClick(id)}
+              color='inherit'
+            />,
+          ];
+        }
+
+        return [
+          <GridActionsCellItem
+            icon={<EditIcon />}
+            label='Edit'
+            className='textPrimary'
+            onClick={handleEditClick(id)}
+            color='inherit'
+          />,
+          <GridActionsCellItem icon={<DeleteIcon />} label='Delete' onClick={handleDeleteClick(id)} color='inherit' />,
+        ];
+      },
+    },
+  ];
+
+  return (
+    <Box
+      sx={{
+        height: 700,
+        width: '100%',
+        '& .actions': {
+          color: 'text.secondary',
+        },
+        '& .textPrimary': {
+          color: 'text.primary',
+        },
+      }}
+    >
+      <DataGrid
+        rows={rows}
+        columns={columns}
+        editMode='row'
+        rowModesModel={rowModesModel}
+        onRowModesModelChange={handleRowModesModelChange}
+        onRowEditStop={handleRowEditStop}
+        processRowUpdate={processRowUpdate}
+        slots={{
+          toolbar: EditToolbar as GridSlots['toolbar'],
+        }}
+        slotProps={{
+          toolbar: { setRows, setRowModesModel },
+        }}
+      />
+    </Box>
   );
 }
