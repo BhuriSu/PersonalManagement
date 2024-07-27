@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import posts from '../../../mocks/blog/blog-posts.json';
-import { BlogPost } from '../../../pages/blog/blog-page/types/blogPost.ts';
+import { BlogPost } from '../../../pages/social-media-page/types/blogPost.ts';
 
 import post1 from '../../../mocks/blog/assets/post1.png';
 import post2 from '../../../mocks/blog/assets/post2.png';

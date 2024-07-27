@@ -66,49 +66,7 @@ export function Navigation() {
         items: [
           {
             path: routes.blog,
-            label: 'List',
-          },
-          {
-            path: routes.blogPost,
-            label: 'Details',
-          },
-        ],
-      },
-      {
-        label: 'Health Check',
-        icon: (props: any) => <Abc {...props} />,
-        description: 'Health management',
-        items: [
-          {
-            path: routes.ordersList,
-            label: 'List',
-          },
-          {
-            path: routes.ordersDetails,
-            label: 'Details',
-          },
-        ],
-      },
-      {
-        label: 'Flight',
-        icon: (props: any) => <Abc {...props} />,
-        description: 'Flight management',
-        items: [
-          {
-            path: routes.jobsCreate,
-            label: 'Create',
-          },
-          {
-            path: routes.jobsEdit,
-            label: 'Edit',
-          },
-          {
-            path: routes.jobsList,
-            label: 'List',
-          },
-          {
-            path: routes.jobsDetails,
-            label: 'Details',
+            label: 'Social Media List',
           },
         ],
       },

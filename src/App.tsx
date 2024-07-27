@@ -15,20 +15,12 @@ const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/
 const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage.tsx'));
 const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage.tsx'));
 const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage.tsx'));
-
-const BlogPage = React.lazy(() => import('./pages/blog/blog-page/BlogPage'));
-const BlogPostPage = React.lazy(() => import('./pages/blog/blog-post-page/BlogPostPage'));
+const SocialMediaPage = React.lazy(() => import('./pages/social-media-page/SocialMediaPage.tsx'));
 const ColorsPage = React.lazy(() => import('./docs/pages/colors-page/ColorsPage'));
 const TypographyPage = React.lazy(() => import('./docs/pages/typography-page/TypographyPage'));
 const ButtonPage = React.lazy(() => import('./docs/pages/button-page/ButtonPage'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
 const TodoList = React.lazy(() => import('./pages/todo-list/TodoList'));
-const OrderList = React.lazy(() => import('./pages/orders/orders-list/OrdersList'));
-const OrderDetails = React.lazy(() => import('./pages/orders/order-details/OrderDetails'));
-const JobsList = React.lazy(() => import('./pages/jobs/jobs-list/JobsListPage'));
-const JobsDetails = React.lazy(() => import('./pages/jobs/jobs-details/JobsDetails'));
-const JobsCreate = React.lazy(() => import('./pages/jobs/jobs-create/JobsCreate'));
-const JobsEdit = React.lazy(() => import('./pages/jobs/jobs-edit/JobsEdit'));
 const NotFoundPage = React.lazy(() => import('./pages/not-found/NotFoundPage'));
 const MaintenancePage = React.lazy(() => import('./pages/maintenance/MaintenancePage'));
 const LoginPage = React.lazy(() => import('./pages/login/LoginPage'));
@@ -73,11 +65,7 @@ const router = createBrowserRouter([
       },
       {
         path: routes.blog,
-        element: <BlogPage />,
-      },
-      {
-        path: routes.blogPost,
-        element: <BlogPostPage />,
+        element: <SocialMediaPage />,
       },
       {
         path: routes.themeColors,
@@ -98,30 +86,6 @@ const router = createBrowserRouter([
       {
         path: routes.todoList,
         element: <TodoList />,
-      },
-      {
-        path: routes.ordersList,
-        element: <OrderList />,
-      },
-      {
-        path: routes.ordersDetails,
-        element: <OrderDetails />,
-      },
-      {
-        path: routes.jobsList,
-        element: <JobsList />,
-      },
-      {
-        path: routes.jobsDetails,
-        element: <JobsDetails />,
-      },
-      {
-        path: routes.jobsCreate,
-        element: <JobsCreate />,
-      },
-      {
-        path: routes.jobsEdit,
-        element: <JobsEdit />,
       },
     ],
   },
