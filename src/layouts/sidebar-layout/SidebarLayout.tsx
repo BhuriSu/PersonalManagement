@@ -1,18 +1,15 @@
 import { Box, Drawer, IconButton, Stack, styled, Toolbar, useTheme } from '@mui/material';
-
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import { ReactNode } from 'react';
 import { Navigation } from './components/navigation/Navigation';
-
 import { ToolbarElements } from './components/toolbar-elements/ToolbarElements';
 import { useAppNavigation } from './components/navigation/hooks/use-app-navigation/useAppNavigation';
 import { Logo } from '../../components/logo/Logo';
 
-const drawerWidth = 280;
-
+const drawerWidth = 285;
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })<{
   open?: boolean;
 }>(({ theme, open }) => ({
@@ -57,7 +54,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(4, 1, 0, 4),
-  // necessary for content to be below app bar
   justifyContent: 'space-between',
 }));
 
@@ -117,7 +113,6 @@ export function SidebarLayout({ children }: Props) {
         <Navigation />
       </Drawer>
       <Main open={isSidebarOpen}>
-        {/*<DrawerHeader />*/}
         {children}
       </Main>
     </Box>

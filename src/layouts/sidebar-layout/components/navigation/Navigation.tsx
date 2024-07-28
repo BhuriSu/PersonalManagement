@@ -1,16 +1,17 @@
+import { useMemo } from 'react';
 import List from '@mui/material/List';
 import { NavigationItem } from './components/navigation-item/NavigationItem';
 import { NavigationItemType } from './components/navigation-item/types';
 import { routes } from '../../../../contants/routes';
-import {
-  AccountBoxOutlined,
-  CalendarMonthOutlined,
-  DashboardOutlined,
-  Login,
-  Notes,
-} from '@mui/icons-material';
-import { useMemo } from 'react';
 import { useNotifications } from '../../../../hooks/api/use-notifications/useNotifications';
+
+// Import the images
+import dashboard from '../../../../assets/dashboard.png';
+import urgency from '../../../../assets/urgency.png';
+import calendar from '../../../../assets/calendar.png';
+import user from '../../../../assets/user.png';
+import social from '../../../../assets/social.png';
+import authentication from '../../../../assets/authentication.png';
 
 export function Navigation() {
   const { data: notifications } = useNotifications();
@@ -23,14 +24,14 @@ export function Navigation() {
       {
         path: routes.dashboard,
         label: 'Dashboard',
-        icon: (props: any) => <DashboardOutlined {...props} />,
+        icon: () => <img src={dashboard} alt="Dashboard" style={{ width: '30px', height: '30px' }} />,
       },
       {
         header: 'Main pages',
       },
       {
         label: 'User',
-        icon: (props: any) => <AccountBoxOutlined {...props} />,
+        icon: () => <img src={user} alt="User" style={{ width: '30px', height: '30px' }} />,
         description: 'Connection management',
         items: [
           {
@@ -53,7 +54,7 @@ export function Navigation() {
       },
       {
         label: 'Media',
-        icon: (props: any) => <Notes {...props} />,
+        icon: () => <img src={social} alt="Media" style={{ width: '30px', height: '30px' }} />,
         description: 'Social Media management',
         items: [
           {
@@ -64,7 +65,7 @@ export function Navigation() {
       },
       {
         label: 'Urgency',
-        icon: (props: any) => <AccountBoxOutlined {...props} />,
+        icon: () => <img src={urgency} alt="Urgency" style={{ width: '30px', height: '30px' }} />,
         description: 'Urgent page',
         items: [
           {
@@ -75,7 +76,7 @@ export function Navigation() {
       },
       {
         label: 'Authentication',
-        icon: (props: any) => <Login {...props} />,
+        icon: () => <img src={authentication} alt="Authentication" style={{ width: '30px', height: '30px' }} />,
         description: 'Authentication pages',
         items: [
           {
@@ -102,7 +103,7 @@ export function Navigation() {
       {
         path: routes.calendar,
         label: 'Calendar',
-        icon: (props: any) => <CalendarMonthOutlined {...props} />,
+        icon: () => <img src={calendar} alt="Calendar" style={{ width: '30px', height: '30px' }} />,
       },
     ],
     [notifications?.notifications?.length],
