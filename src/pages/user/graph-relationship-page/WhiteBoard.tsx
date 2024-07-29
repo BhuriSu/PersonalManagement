@@ -32,9 +32,6 @@ import useAutoFocus from './hooks/useAutoFocus/useAutoFocus';
 import {
   LOCAL_STORAGE_KEY,
   LOCAL_STORAGE_LIBRARY_KEY,
-  BASE_WS_URL,
-  BASE_WS_URL_DEV,
-  IS_PROD,
   LOADING_TEXT,
 } from '@/constants/app';
 import { TOOLS } from './constants/panels';
