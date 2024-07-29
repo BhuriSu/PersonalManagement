@@ -1,165 +1,206 @@
-import React, { useRef, useState, useEffect } from 'react';
-import './WhiteBoard.css';
+import {
+  Suspense,
+  lazy,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
-const Whiteboard: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [tool, setTool] = useState<string>('select');
-  const [history, setHistory] = useState<ImageData[]>([]);
-  const [redoStack, setRedoStack] = useState<ImageData[]>([]);
+import Panels from './components/Panels/Panels';
+import Loader from './components/Elements/Loader/Loader';
+import ContextMenu from './components/ContextMenu/ContextMenu';
+import type { ContextMenuType } from './components/ContextMenu/ContextMenu';
+import { setCursorByToolType } from './components/Canvas/DrawingCanvas/helpers/cursor';
 
-  const handleToolSelect = (selectedTool: string) => {
-    setTool(selectedTool);
-  };
+import { useAppDispatch, useAppStore } from '@/stores/hooks';
+import { historyActions } from './stores/reducers/history';
+import type { HistoryActionKey } from './stores/reducers/history';
 
-  const saveHistory = () => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (ctx) {
-      const imageData = ctx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-      setHistory((prevHistory) => [...prevHistory, imageData]);
-      setRedoStack([]);
-    }
-  };
+import { canvasActions } from '@/services/canvas/slice';
+import { libraryActions } from '@/services/library/slice';
 
-  const handleCanvasClick = (e: React.MouseEvent) => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
+import { storage } from '@/utils/storage';
 
-    const rect = canvasRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
+import { useWebSocket } from './contexts/websocket';
 
-    switch (tool) {
-      case 'draw':
-        saveHistory();
-        ctx.fillStyle = 'black';
-        ctx.fillRect(x, y, 2, 2);
-        break;
-      case 'square':
-        saveHistory();
-        ctx.fillStyle = 'black';
-        ctx.fillRect(x, y, 50, 50);
-        break;
-      case 'circle':
-        saveHistory();
-        ctx.fillStyle = 'black';
-        ctx.beginPath();
-        ctx.arc(x, y, 25, 0, Math.PI * 2);
-        ctx.fill();
-        break;
-      case 'text':
-        saveHistory();
-        const text = prompt('Enter text:');
-        if (text) {
-          ctx.fillStyle = 'black';
-          ctx.fillText(text, x, y);
+import useParam from './hooks/useParam/useParam';
+import useWindowSize from './hooks/useWindowSize/useWindowSize';
+import useFontFaceObserver from './hooks/useFontFaceObserver';
+import useAutoFocus from './hooks/useAutoFocus/useAutoFocus';
+
+import {
+  LOCAL_STORAGE_KEY,
+  LOCAL_STORAGE_LIBRARY_KEY,
+  BASE_WS_URL,
+  BASE_WS_URL_DEV,
+  IS_PROD,
+  LOADING_TEXT,
+} from '@/constants/app';
+import { TOOLS } from './constants/panels';
+import { KEYS } from './constants/keys';
+import { TEXT } from './constants/shape';
+import type { Library, AppState } from '@/constants/app';
+
+import { CONSTANTS } from 'shared';
+
+import * as Styled from './App.styled';
+
+import type Konva from 'konva';
+
+const DrawingCanvas = lazy(
+  () => import('@/components/Canvas/DrawingCanvas/DrawingCanvas'),
+);
+
+const App = () => {
+  const [selectedNodeIds, setSelectedNodeIds] = useState<string[]>([]);
+  const [menuType, setMenuType] = useState<ContextMenuType>('canvas-menu');
+
+  const store = useAppStore();
+  const roomId = useParam(CONSTANTS.COLLAB_ROOM_URL_PARAM);
+  const windowSize = useWindowSize();
+  const ws = useWebSocket();
+  /*
+   * Triggers re-render when font is loaded
+   * to make sure font is loaded before rendering nodes
+   */
+  const { loading } = useFontFaceObserver(TEXT.FONT_FAMILY);
+  const appWrapperRef = useAutoFocus<HTMLDivElement>();
+  const stageRef = useRef<Konva.Stage>(null);
+  const dispatch = useAppDispatch();
+
+  const handleKeyDown = useCallback(
+    (event: React.KeyboardEvent) => {
+      const state = store.getState().canvas.present;
+
+      const { key, shiftKey, ctrlKey } = event;
+      const lowerCaseKey = key.toLowerCase();
+
+      const onCtrlKey = (key: string) => {
+        switch (key) {
+          case KEYS.A: {
+            event.preventDefault();
+            dispatch(canvasActions.selectAllNodes());
+            break;
+          }
+          case KEYS.Z: {
+            if (ws.isConnected) {
+              return;
+            }
+            const actionKey: HistoryActionKey = shiftKey ? 'redo' : 'undo';
+            const action = historyActions[actionKey];
+
+            dispatch(action());
+            break;
+          }
+          case KEYS.D: {
+            event.preventDefault();
+
+            const selectedNodes = state.nodes.filter(
+              (node) => node.nodeProps.id in state.selectedNodeIds,
+            );
+
+            dispatch(
+              canvasActions.addNodes(selectedNodes, {
+                duplicate: true,
+                selectNodes: true,
+              }),
+            );
+            break;
+          }
+          case KEYS.C: {
+            dispatch(canvasActions.copyNodes());
+            break;
+          }
+          case KEYS.V: {
+            dispatch(
+              canvasActions.addNodes(state.copiedNodes, {
+                duplicate: true,
+                selectNodes: true,
+              }),
+            );
+            break;
+          }
         }
-        break;
-      case 'delete':
-        saveHistory();
-        ctx.clearRect(x, y, 50, 50);
-        break;
-      default:
-        break;
-    }
-  };
+      };
 
-  const handleUndo = () => {
-    if (history.length === 0) return;
-    const newHistory = [...history];
-    const lastState = newHistory.pop();
-    if (!lastState || !canvasRef.current) return;
+      if (ctrlKey) {
+        return onCtrlKey(lowerCaseKey);
+      }
 
-    setRedoStack((prevRedoStack) => [...prevRedoStack, lastState]);
-    setHistory(newHistory);
+      if (key === KEYS.DELETE) {
+        dispatch(canvasActions.deleteNodes(Object.keys(state.selectedNodeIds)));
+        return;
+      }
 
-    const ctx = canvasRef.current.getContext('2d');
-    if (ctx) {
-      ctx.putImageData(lastState, 0, 0);
-    }
-  };
+      const toolByKey = TOOLS.find((tool) => tool.key === lowerCaseKey);
 
-  const handleRedo = () => {
-    if (redoStack.length === 0) return;
-    const newRedoStack = [...redoStack];
-    const nextState = newRedoStack.pop();
-    if (!nextState || !canvasRef.current) return;
+      if (toolByKey) {
+        dispatch(canvasActions.setToolType(toolByKey.value));
+        setCursorByToolType(stageRef.current, toolByKey.value);
+      }
+    },
+    [ws, store, dispatch],
+  );
 
-    setHistory((prevHistory) => [...prevHistory, nextState]);
-    setRedoStack(newRedoStack);
+  const handleContextMenuOpen = useCallback(
+    (open: boolean) => {
+      if (!open) {
+        return;
+      }
 
-    const ctx = canvasRef.current.getContext('2d');
-    if (ctx) {
-      ctx.putImageData(nextState, 0, 0);
-    }
-  };
-
-  const handleExport = () => {
-    if (!canvasRef.current) return;
-    const dataURL = canvasRef.current.toDataURL('image/png');
-    const link = document.createElement('a');
-    link.href = dataURL;
-    link.download = 'whiteboard.png';
-    link.click();
-  };
-
-  const handleZoom = (zoomIn: boolean) => {
-    if (!canvasRef.current) return;
-    const ctx = canvasRef.current.getContext('2d');
-    if (!ctx) return;
-
-    saveHistory();
-
-    const scaleFactor = zoomIn ? 1.2 : 0.8;
-    ctx.scale(scaleFactor, scaleFactor);
-    const imageData = ctx.getImageData(0, 0, canvasRef.current.width, canvasRef.current.height);
-    ctx.putImageData(imageData, 0, 0);
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (e.ctrlKey && e.key === 'z') {
-      handleUndo();
-    } else if (e.ctrlKey && e.key === 'y') {
-      handleRedo();
-    }
-  };
+      setMenuType(selectedNodeIds.length ? 'node-menu' : 'canvas-menu');
+    },
+    [selectedNodeIds.length],
+  );
 
   useEffect(() => {
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [history, redoStack]);
+    if (ws.isConnected || ws.isConnecting || roomId) {
+      return;
+    }
+
+    const storedCanvasState = storage.get<AppState>(LOCAL_STORAGE_KEY);
+
+    if (storedCanvasState) {
+      dispatch(canvasActions.set(storedCanvasState.page));
+    }
+  }, [ws, roomId, dispatch]);
+
+  useEffect(() => {
+    const storedLibrary = storage.get<Library>(LOCAL_STORAGE_LIBRARY_KEY);
+
+    if (storedLibrary) {
+      dispatch(libraryActions.set(storedLibrary));
+    }
+  }, [dispatch]);
 
   return (
-    <div className="whiteboard-container">
-      <div className="toolbar">
-        {['arrow', 'square', 'circle', 'draw', 'text', 'hand', 'select', 'delete', 'undo', 'redo', 'zoomIn', 'zoomOut'].map((tool) => (
-          <button
-            key={tool}
-            onClick={() => {
-              if (tool === 'undo') handleUndo();
-              else if (tool === 'redo') handleRedo();
-              else if (tool === 'zoomIn') handleZoom(true);
-              else if (tool === 'zoomOut') handleZoom(false);
-              else if (tool === 'export') handleExport();
-              else handleToolSelect(tool);
-            }}
+    <Styled.AppWrapper
+      ref={appWrapperRef}
+      tabIndex={0}
+      onKeyDown={handleKeyDown}
+    >
+      <Panels selectedNodeIds={selectedNodeIds} />
+      {loading && <Loader fullScreen>{LOADING_TEXT}</Loader>}
+      {!loading && (
+        <Suspense fallback={<Loader fullScreen>{LOADING_TEXT}</Loader>}>
+          <ContextMenu
+            menuType={menuType}
+            onContextMenuOpen={handleContextMenuOpen}
           >
-            {tool}
-          </button>
-        ))}
-      </div>
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        onClick={handleCanvasClick}
-        className="whiteboard-canvas"
-      />
-    </div>
+            <ContextMenu.Trigger>
+              <DrawingCanvas
+                ref={stageRef}
+                width={windowSize.width}
+                height={windowSize.height}
+                onNodesSelect={setSelectedNodeIds}
+              />
+            </ContextMenu.Trigger>
+          </ContextMenu>
+        </Suspense>
+      )}
+    </Styled.AppWrapper>
   );
 };
 
-export default Whiteboard;
+export default App;
