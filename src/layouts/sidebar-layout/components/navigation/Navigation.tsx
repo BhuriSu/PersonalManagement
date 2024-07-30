@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import List from '@mui/material/List';
 import { NavigationItem } from './components/navigation-item/NavigationItem';
 import { NavigationItemType } from './components/navigation-item/types';
-import { routes } from '../../../../contants/routes';
+import { routes } from '../../../../constants/routes';
 import { useNotifications } from '../../../../hooks/api/use-notifications/useNotifications';
 
 // Import the images

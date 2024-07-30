@@ -1,7 +1,7 @@
 import { Box, Typography, useTheme } from '@mui/material';
 
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../contants/routes';
+import { routes } from '../../constants/routes';
 import logo from '../../assets/logo.svg';
 
 interface Params {

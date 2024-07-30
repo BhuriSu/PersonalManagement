@@ -1,6 +1,6 @@
 import { CssBaseline, Fade, ThemeProvider } from '@mui/material';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
-import { routes } from './contants/routes';
+import { routes } from './constants/routes.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useCurrentUser } from './hooks/api/use-current-user/useCurrentUser';
 import { Loader } from './components/loader/Loader';

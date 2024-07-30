@@ -1,6 +1,6 @@
 import { Button, Divider, FormControl, Link, Stack, TextField, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../contants/routes';
+import { routes } from '../../constants/routes';
 import { HalfLayout } from '../../layouts/half-layout/HalfLayout';
 import { WelcomeContent } from '../../content/welcome-content/WelcomeContent';
 

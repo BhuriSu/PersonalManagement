@@ -1,7 +1,7 @@
 import { PageHeaderTitle } from './styled';
 import { Breadcrumbs, Stack, Typography } from '@mui/material';
 import React from 'react';
-import { APP_NAME } from '../../contants/appInfo';
+import { APP_NAME } from '../../constants/appInfo';
 import { Home } from '@mui/icons-material';
 
 interface PageHeaderProps {

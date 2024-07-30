@@ -1,7 +1,7 @@
 import { Button, Divider, FormControl, Link, Stack, TextField, Typography } from '@mui/material';
 import { Facebook, Google } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
-import { routes } from '../../contants/routes';
+import { routes } from '../../constants/routes';
 import { WelcomeContent } from '../../content/welcome-content/WelcomeContent';
 import { HalfLayout } from '../../layouts/half-layout/HalfLayout';
 

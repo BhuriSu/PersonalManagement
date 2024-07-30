@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 import { Button, Dialog, AppBar, Toolbar, IconButton, Typography, List, Slide } from '@mui/material';
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
-import WhiteBoard from './WhiteBoard';
+import { WhiteBoard } from './WhiteBoard';
 import './Graph.css';
-import './WhiteBoard.css';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
@@ -60,7 +59,7 @@ const GraphPage: React.FC = () => {
             </Button>
           </Toolbar>
         </AppBar>
-        <List className="WhiteBoard">
+        <List>
         <WhiteBoard/>
         </List>
       </Dialog>
