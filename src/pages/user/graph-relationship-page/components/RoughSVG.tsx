@@ -6,9 +6,10 @@ import { RoughFactor } from '../models/RoughFactor';
 import { useToolStore } from '../stores/tool-store';
 import { Anchor, CanvasState, ClickPayload, Point } from '../types/type';
 import { useOptionStore } from '../stores/option-store';
-
+import styles from './roughSVG.module.css';
 import rough from 'roughjs';
 import OptionPanel from './OptionPanel';
+import { Drawable } from 'roughjs/bin/core';
 
 const SVGNS = 'http://www.w3.org/2000/svg';
 
@@ -124,7 +125,7 @@ export default function RoughSVG() {
       });
     // Draw the Gizmo for the selected element
     if (currTool === 'select' && ele !== null)
-      ele.getGizmo().forEach((g) => c.appendChild(rsvg.draw(g)));
+      ele.getGizmo().forEach((g: Drawable) => c.appendChild(rsvg.draw(g)));
   }, [svgRef, elements, options]);
 
   const handleMouseDown = (event: React.MouseEvent<SVGSVGElement>) => {

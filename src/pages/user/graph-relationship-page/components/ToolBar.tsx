@@ -13,6 +13,7 @@ import {
   Pencil,
   Type,
 } from 'lucide-react';
+import styles from './toolBar.module.css'; // Import the CSS module
 
 type Tool = {
   value: RoughTool;
@@ -83,7 +84,7 @@ const tools: Tool[] = [
 export function ToolBar() {
   const { currTool, setTool } = useToolStore();
   return (
-    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 bg-white px-4 py-1 rounded-lg shadow-md select-none">
+    <div className={styles.toolbarContainer}>
       <ToggleGroup
         size={'sm'}
         type="single"
@@ -95,16 +96,16 @@ export function ToolBar() {
         }}
       >
         {tools.map((tool) => (
-          <div key={tool.value} className="relative text-gray-400">
+          <div key={tool.value} className={styles.toggleGroupItemContainer}>
             <ToggleGroupItem
-              className="px-3"
+              className={styles.toggleGroupItem}
               value={tool.value}
               aria-label={tool.ariaLabel}
               disabled={tool.disabled}
             >
-              <tool.Icon className="h-3 w-3" />
+              <tool.Icon className={styles.icon} />
               {tool.shortcut && (
-                <span className="absolute text-[0.625rem] bottom-[1px] right-[2px]">
+                <span className={styles.shortcutLabel}>
                   {tool.shortcut}
                 </span>
               )}

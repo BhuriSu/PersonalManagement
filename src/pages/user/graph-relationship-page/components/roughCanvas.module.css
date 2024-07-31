@@ -1,0 +1,8 @@
+.canvas {
+  /* Set canvas specific styles if needed */
+  border: 1px solid #ddd; /* Example border, adjust as needed */
+}
+
+.optionPanelHidden {
+  display: none;
+}

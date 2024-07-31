@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Dialog, AppBar, Toolbar, IconButton, Typography, List, Slide } from '@mui/material';
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
-import { WhiteBoard } from './WhiteBoard';
+import WhiteBoard from './WhiteBoard';
 import './Graph.css';
 
 const Transition = React.forwardRef(function Transition(

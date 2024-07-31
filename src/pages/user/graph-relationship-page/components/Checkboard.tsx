@@ -1,4 +1,5 @@
-import { cn } from '../lib/utils';
+
+import './checkboard.css';
 
 interface CheckboardProps {
   className?: string;
@@ -6,11 +7,6 @@ interface CheckboardProps {
 
 export default function Checkboard({ className }: CheckboardProps) {
   return (
-    <div
-      className={cn(
-        'pattern-rectangles pattern-violet-500 pattern-bg-white pattern-size-3 pattern-opacity-40',
-        className
-      )}
-    />
+    <div className={`pattern-rectangles pattern-bg-white ${className}`} />
   );
 }

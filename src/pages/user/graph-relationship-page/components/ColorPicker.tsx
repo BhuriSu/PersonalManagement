@@ -1,4 +1,6 @@
+
 import { RgbaStringColorPicker } from 'react-colorful';
+import './colorPicker.css';
 
 interface ColorPickerProps {
   colorStr: string;
@@ -7,7 +9,7 @@ interface ColorPickerProps {
 
 export default function ColorPicker({ colorStr, onChange }: ColorPickerProps) {
   return (
-    <div className="fixed left-44 top-[10%] shadow-lg rounded-lg select-none">
+    <div className="color-picker-container">
       <RgbaStringColorPicker color={colorStr} onChange={onChange} />
     </div>
   );

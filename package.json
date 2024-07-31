@@ -47,7 +47,6 @@
     "slate": "^0.103.0",
     "slate-history": "^0.100.0",
     "slate-react": "^0.106.0",
-    "tailwind-merge": "^2.4.0",
     "yup": "^1.4.0",
     "zod": "^3.23.8",
     "zustand": "^4.5.4"

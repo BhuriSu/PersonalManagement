@@ -8,6 +8,8 @@ import { Anchor, CanvasState, ClickPayload, Point } from '../types/type';
 import { useOptionStore } from '../stores/option-store';
 import rough from 'roughjs';
 import OptionPanel from './OptionPanel';
+import styles from './roughCanvas.module.css'; // Import the CSS module
+import { Drawable } from 'roughjs/bin/core';
 
 const cursorFromAnchor = (anchor: Anchor): string => {
   if (anchor === 'inside') return 'move';
@@ -29,21 +31,18 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
   const { currTool, setTool } = useToolStore();
   const { options, setOptions, resetOptions } = useOptionStore();
   const { height, width } = useWindowSize();
-  // Key listener
+
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         console.log('Elements: ', elements);
       }
-      // modifier keys
       if (event.ctrlKey || event.metaKey) {
         if (event.key === 'z') {
-          // ctrl + z or cmd + z
           console.log('Undo');
         }
       }
       if (event.key === 'Backspace' || event.key === 'Delete') {
-        // delete key
         console.log('Delete');
         if (selectPayload.current.ele !== null) {
           const { ele } = selectPayload.current;
@@ -51,12 +50,9 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
           selectPayload.current = { anchor: null, ele: null };
         }
       }
-      // shift key
       if (event.shiftKey) {
-        // shift + any key
         console.log('shift key is pressed');
       }
-      // number keys
       switch (event.key) {
         case '1':
           setTool('select');
@@ -81,45 +77,34 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
     window.addEventListener('keydown', handleKeyDown);
     const handleKeyUp = (event: KeyboardEvent) => {
       if (event.key === 'Shift') {
-        // shift + any key
         console.log('shift key is released');
       }
     };
     window.addEventListener('keyup', handleKeyUp);
-    const handleKeyPress = (event: KeyboardEvent) => {
-      console.log('key pressed');
-    };
-    // window.addEventListener('keypress', handleKeyPress);
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       window.removeEventListener('keyup', handleKeyUp);
-      window.removeEventListener('keypress', handleKeyPress);
     };
-  });
+  }, [elements, setTool]);
 
   useEffect(() => {
     if (!canvasRef.current) return;
     const ctx = canvasRef.current.getContext('2d');
     if (!ctx) return;
-    // resize the canvas
     canvasRef.current.width = width;
     canvasRef.current.height = height;
-    // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
     const rc = rough.canvas(canvasRef.current);
-    // update selected element's options: options updated -> useEffect -> ele update drawable
     const { ele } = selectPayload.current;
     if (currTool === 'select' && ele !== null)
       ele.updateOptions({ ...options });
-    // draw elements
     elements
       .filter((ele) => ele.isDrawable())
       .forEach(({ drawable }) => {
         rc.draw(drawable!);
       });
-    // Draw the Gizmo for the selected element
     if (currTool === 'select' && ele !== null)
-      ele.getGizmo().forEach((g) => rc.draw(g));
-  }, [canvasRef, elements, height, width, options]);
+      ele.getGizmo().forEach((g: Drawable) => rc.draw(g));
+  }, [canvasRef, elements, height, width, options, currTool]);
 
   const handleMouseDown = (event: React.MouseEvent<HTMLCanvasElement>) => {
     const { clientX, clientY } = event;
@@ -128,18 +113,12 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
       const payload = getClickPayload(elements, clientX, clientY);
       if (payload.ele !== null) {
         const { ele, anchor } = payload;
-        // display ele's options to the option panel
         setOptions(ele.options);
-        const { ele: currEle } = selectPayload.current;
-        // update the action state
         if (anchor === 'inside') {
-          ele.onSelect(); // save the snapshot
+          ele.onSelect();
           canvasState.current = 'moving';
-        } // if (ele === currEle)
-        else canvasState.current = 'resize';
-      } // reset the option panel
-      else resetOptions();
-      // set the selected payload
+        } else canvasState.current = 'resize';
+      } else resetOptions();
       selectPayload.current = payload;
     } else {
       canvasState.current = 'drawing';
@@ -148,6 +127,7 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
       setElements([...elements, newEle]);
     }
   };
+
   const handleMouseMove = (event: React.MouseEvent<HTMLCanvasElement>) => {
     if (canvasState.current === 'idle') {
       const { clientX, clientY } = event;
@@ -174,28 +154,21 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
       (event.target as HTMLElement).style.cursor = cursorFromAnchor(anchor);
     }
   };
+
   const handleMouseUp = (event: React.MouseEvent<HTMLCanvasElement>) => {
-    // normalize the element
     if (canvasState.current === 'drawing') {
       const ele = selectPayload.current.ele!;
       if (ele.isDrawable() && ele.isVisible()) {
         ele.onNormalize();
-        // setElements([...elements]); // not be necessary
-        // after drawing, set the tool to select
         setTool('select');
-      } // reset the selected payload
-      else selectPayload.current = { anchor: null, ele: null };
+      } else selectPayload.current = { anchor: null, ele: null };
     } else if (canvasState.current === 'resize') {
       const ele = selectPayload.current.ele!;
       ele.onNormalize();
-      // setElements([...elements]); // not be necessary
     }
-    // Filter out the elements that are not drawable or not visible
     setElements([
       ...elements.filter((ele) => ele.isDrawable() && ele.isVisible()),
     ]);
-
-    // Reset the canvas state
     canvasState.current = 'idle';
   };
 
@@ -204,15 +177,21 @@ const RoughCanvas: FC<RoughCanvasProps> = ({}) => {
     selectPayload.current.ele === null
       ? currTool
       : selectPayload.current.ele.type;
+
   return (
     <>
       <canvas
         ref={canvasRef}
+        className={styles.canvas} // Apply the CSS class
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
       />
-      <OptionPanel height={height} currTool={optPanelType} hidden={hidden} />
+      <OptionPanel
+        height={height}
+        currTool={optPanelType}
+        hidden={hidden}
+      />
     </>
   );
 };

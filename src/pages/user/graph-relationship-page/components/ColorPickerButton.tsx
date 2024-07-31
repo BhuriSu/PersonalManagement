@@ -1,6 +1,8 @@
+
 import { Button } from './ui/button';
 import Checkboard from './Checkboard';
 import { useColorPickerStore } from '../stores/colorpicker-store';
+import './colorPickerButton.css';
 
 const getAlpha = (color: string): number => {
   // alpha should match 0, 1, and 0.xx
@@ -26,7 +28,7 @@ export default function ColorPickerButton({
     <Button
       variant={'ghostViolet'}
       size="icon"
-      className="h-7 w-7 rounded-sm"
+      className="button"
       onClick={(e) => {
         if (active && name === _for) {
           setActive(false);
@@ -41,10 +43,10 @@ export default function ColorPickerButton({
       }}
     >
       {currValue === 'none' || getAlpha(currValue) <= 0.05 ? (
-        <Checkboard className="h-3.5 w-3.5 rounded-[4px]" />
+        <Checkboard className="checkboard" />
       ) : (
         <div
-          className="h-3.5 w-3.5 rounded-[4px]"
+          className="color-div"
           style={{
             backgroundColor: currValue,
           }}

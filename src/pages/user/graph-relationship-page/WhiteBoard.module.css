@@ -1,0 +1,4 @@
+.mainContainer {
+    height: 100vh; /* Tailwind's 'h-screen' */
+    width: 100vw; /* Tailwind's 'w-screen' */
+  }

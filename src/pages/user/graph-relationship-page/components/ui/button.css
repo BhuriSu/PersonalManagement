@@ -1,0 +1,105 @@
+.button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    outline: none;
+    box-shadow: 0 0 0 2px transparent;
+  }
+  
+  .button:focus-visible {
+    box-shadow: 0 0 0 2px var(--ring-color);
+  }
+  
+  .button:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  
+  /* Variants */
+  .button-default {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+  
+  .button-default:hover {
+    background-color: var(--primary-hover);
+  }
+  
+  .button-destructive {
+    background-color: var(--destructive);
+    color: var(--destructive-foreground);
+  }
+  
+  .button-destructive:hover {
+    background-color: var(--destructive-hover);
+  }
+  
+  .button-outline {
+    border: 1px solid var(--input);
+    background-color: var(--background);
+  }
+  
+  .button-outline:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  
+  .button-secondary {
+    background-color: var(--secondary);
+    color: var(--secondary-foreground);
+  }
+  
+  .button-secondary:hover {
+    background-color: var(--secondary-hover);
+  }
+  
+  .button-ghost {
+    background-color: transparent;
+  }
+  
+  .button-ghost:hover {
+    background-color: var(--accent);
+    color: var(--accent-foreground);
+  }
+  
+  .button-link {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 0.25em;
+  }
+  
+  .button-link:hover {
+    text-decoration: underline;
+  }
+  
+  .button-ghostViolet:hover {
+    background-color: var(--violet-100);
+  }
+  
+  /* Sizes */
+  .button-size-default {
+    height: 2.5rem;
+    padding: 0 1rem;
+  }
+  
+  .button-size-sm {
+    height: 2.25rem;
+    border-radius: 0.375rem;
+    padding: 0 0.75rem;
+  }
+  
+  .button-size-lg {
+    height: 2.75rem;
+    border-radius: 0.375rem;
+    padding: 0 2rem;
+  }
+  
+  .button-size-icon {
+    height: 2.5rem;
+    width: 2.5rem;
+  }
