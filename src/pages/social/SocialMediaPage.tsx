@@ -22,7 +22,7 @@ export const SocialMediaBlock: React.FC = () => {
 };
 
 export default function SocialMediaPage() {
-  const [blocks, setBlocks] = useState<number[]>([]);
+  const [blocks, setBlocks] = useState<number[]>([0,1]);
   const addBlock = () => {
     setBlocks((prev) => [...prev, prev.length]);
   };

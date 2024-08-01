@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Button, Dialog, AppBar, Toolbar, IconButton, Typography, List, Slide } from '@mui/material';
+import { Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide } from '@mui/material';
 import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
-import WhiteBoard from './WhiteBoard';
 import './Graph.css';
+import MainWhiteBoard from './MainWhiteBoard';
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
@@ -13,7 +13,7 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const GraphPage: React.FC = () => {
-  const [squares, setSquares] = useState<number[]>([]);
+  const [squares, setSquares] = useState<number[]>([0, 1, 2]);
   const [open, setOpen] = useState<boolean>(false);
 
   const addSquare = () => {
@@ -30,11 +30,9 @@ const GraphPage: React.FC = () => {
 
   return (
     <div className="Graph">
-     
       <Button color="primary" startIcon={<AddIcon />} onClick={addSquare}>
         <h3>Add graph</h3>
       </Button>
-     
       <div className="grid-container">
         {squares.map((square) => (
           <div key={square} className="square" onClick={handleClickOpen}></div>
@@ -58,10 +56,8 @@ const GraphPage: React.FC = () => {
               Save
             </Button>
           </Toolbar>
+          <MainWhiteBoard/>
         </AppBar>
-        <List>
-        <WhiteBoard/>
-        </List>
       </Dialog>
     </div>
   );
