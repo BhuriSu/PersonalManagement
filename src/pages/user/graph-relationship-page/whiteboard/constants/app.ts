@@ -12,15 +12,6 @@ export const IS_PROD = process.env.NODE_ENV === 'production';
 export const LOCAL_STORAGE_KEY = 'drawflux';
 export const LOCAL_STORAGE_THEME_KEY = 'drawflux-theme';
 
-export const WS_THROTTLE_MS = 16;
-
-export const PROJECT_FILE_EXT = 'drawflux';
-export const PROJECT_FILE_NAME = 'project';
-export const PROJECT_PNG_NAME = 'project';
-export const PROJECT_PNG_EXT = 'png';
-
-export const LOADING_TEXT = 'Loading assets...';
-
 export const USER = {
   maxNameLength: 10,
 };
@@ -41,8 +32,6 @@ export const appState = z.object({
     currentNodeStyle: Schemas.Node.shape.style,
   }),
 });
-
-
 
 export type AppState = z.infer<typeof appState>;
 export type ToolType = AppState['page']['toolType'];

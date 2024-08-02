@@ -2,8 +2,6 @@ import type { z } from 'zod';
 import { Node } from '../schemas/node';
 import type {
   GetPageResponse,
-  SharePageRequestBody,
-  SharePageResponse,
   StageConfig,
   UpdatePageBody,
   UpdatePageResponse,
@@ -40,9 +38,6 @@ export type StageConfig = z.infer<typeof StageConfig>;
 export type ThemeColors = typeof defaultTheme['colors'] | typeof darkTheme['colors'];
 export type ThemeColorValue = ThemeColors[keyof ThemeColors]['value'];
 export type ThemeColorKey = keyof ThemeColors;
-
-export type SharePageRequestBody = z.infer<typeof SharePageRequestBody>;
-export type SharePageResponse = z.infer<typeof SharePageResponse>;
 
 export type GetPageResponse = z.infer<typeof GetPageResponse>;
 

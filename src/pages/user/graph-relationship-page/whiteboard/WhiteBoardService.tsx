@@ -18,11 +18,6 @@ import { canvasActions } from './services/canvas/slice';
 
 import useWindowSize from './hooks/useWindowSize/useWindowSize';
 import useAutoFocus from './hooks/useAutoFocus/useAutoFocus';
-
-import {
-
-  LOADING_TEXT,
-} from './constants/app';
 import { TOOLS } from './constants/panels';
 import { KEYS } from './constants/keys';
 

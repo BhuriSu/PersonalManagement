@@ -2,7 +2,6 @@ import { KEYS } from './keys';
 import { Schemas } from '../shared/schemas';
 import type { HistoryActionKey } from '../stores/reducers/history';
 import type { Entity } from '../constants/index';
-import type { ShapesThumbnailStyle } from '../components/Elements/ShapesThumbnail/ShapesThumbnail';
 import type {
   ArrowHead,
   ArrowHeadDirection,

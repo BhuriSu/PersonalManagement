@@ -4,8 +4,6 @@ import {
   StageConfig,
   Page,
   GetPageResponse,
-  SharePageRequestBody,
-  SharePageResponse,
   UpdatePageBody,
   UpdatePageResponse,
 } from './page';
@@ -17,8 +15,6 @@ export const Schemas = {
   StageConfig,
   Page,
   GetPageResponse,
-  SharePageRequestBody,
-  SharePageResponse,
   QRCodeRequestBody,
   QRCodeResponse,
   UpdatePageBody,

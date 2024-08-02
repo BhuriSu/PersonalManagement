@@ -18,16 +18,12 @@ export const Page = z.object({
   }),
 });
 
-export const SharePageRequestBody = Page;
 export const GetPageResponse = z.object({
   page: z.object({
     id: z.string().uuid(),
     stageConfig: StageConfig,
     nodes: Node.array(),
   }),
-});
-export const SharePageResponse = z.object({
-  id: z.string().uuid(),
 });
 export const UpdatePageResponse = z.object({
   id: z.string().uuid(),

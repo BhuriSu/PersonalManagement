@@ -3,8 +3,6 @@ import type {
   GetPageResponse,
   QRCodeRequestBody,
   QRCodeResponse,
-  SharePageRequestBody,
-  SharePageResponse,
   UpdatePageRequestBody,
   UpdatePageResponse,
 } from '../shared/types';
@@ -69,9 +67,6 @@ export default {
   },
   updatePage: (pageId: string, body: UpdatePageRequestBody) => {
     return api.patch<UpdatePageResponse>(`/p/${pageId}`, body);
-  },
-  sharePage: (body: SharePageRequestBody) => {
-    return api.post<SharePageResponse>('/p', body);
   },
   makeQRCode: (body: QRCodeRequestBody) => {
     return api.post<QRCodeResponse>('/qrcode', body);

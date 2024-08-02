@@ -5,6 +5,3 @@ export const DRAWING_CANVAS = {
   CONTAINER_CLASS: 'drawing-canvas',
 } as const;
 
-export const COLLAB_CANVAS = {
-  NAME: 'Collaboration Canvas',
-};
