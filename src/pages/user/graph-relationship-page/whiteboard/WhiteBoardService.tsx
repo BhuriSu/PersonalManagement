@@ -2,7 +2,6 @@ import {
   Suspense,
   lazy,
   useCallback,
-  useEffect,
   useRef,
   useState,
 } from 'react';
@@ -18,20 +17,16 @@ import { historyActions } from './stores/reducers/history';
 
 import { canvasActions } from './services/canvas/slice';
 
-import useParam from './hooks/useParam/useParam';
 import useWindowSize from './hooks/useWindowSize/useWindowSize';
 import useAutoFocus from './hooks/useAutoFocus/useAutoFocus';
 
-import { storage } from './utils/storage';
-
 import {
-  LOCAL_STORAGE_KEY,
+
   LOADING_TEXT,
 } from './constants/app';
-import { CONSTANTS } from 'shared';
 import { TOOLS } from './constants/panels';
 import { KEYS } from './constants/keys';
-import type { AppState } from './constants/app';
+
 import * as Styled from './App.styled';
 import type Konva from 'konva';
 
@@ -44,7 +39,6 @@ const WhiteBoardService = () => {
   const [menuType, setMenuType] = useState<ContextMenuType>('canvas-menu');
 
   const store = useAppStore();
-  const roomId = useParam(CONSTANTS.COLLAB_ROOM_URL_PARAM);
   const windowSize = useWindowSize();
 
   const appWrapperRef = useAutoFocus<HTMLDivElement>();
@@ -133,17 +127,6 @@ const WhiteBoardService = () => {
     },
     [selectedNodeIds.length],
   );
-
-  useEffect(() => {
-    if (roomId) {
-      return;
-    }
-    const storedCanvasState = storage.get<AppState>(LOCAL_STORAGE_KEY);
-
-    if (storedCanvasState) {
-      dispatch(canvasActions.set(storedCanvasState.page));
-    }
-  }, [roomId, dispatch]);
 
   return (
     <Styled.AppWrapper

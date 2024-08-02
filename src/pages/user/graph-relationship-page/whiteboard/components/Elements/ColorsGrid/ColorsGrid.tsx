@@ -25,18 +25,19 @@ const ColorsGrid = ({ withLabel = false, value, onSelect }: Props) => {
       {withLabel && <PanelStyled.Label>Color</PanelStyled.Label>}
       <Styled.Grid>
         {GRID_COLORS.map((color) => {
+          const colorValue = String(color.value); // Ensure value is a string
           return (
             <Styled.Color
-              key={color.value}
-              checked={color.value === value}
-              value={color.value}
+              key={colorValue} // Ensure key is a string
+              checked={colorValue === value}
+              value={colorValue}
               aria-label={`${color.name} color`}
               title={createTitle('Color', color.name)}
               color={
-                color.value === value ? 'secondary-dark' : 'secondary-light'
+                colorValue === value ? 'secondary-dark' : 'secondary-light'
               }
-              style={{ color: `var(--colors-${color.value})` }}
-              data-testid={`${color.value}-color-button`}
+              style={{ color: `var(--colors-${colorValue})` }}
+              data-testid={`${colorValue}-color-button`}
             >
               <ColorCircle />
             </Styled.Color>

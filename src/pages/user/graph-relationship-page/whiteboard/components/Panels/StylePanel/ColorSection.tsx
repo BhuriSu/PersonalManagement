@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type  { NodeColor } from '../../../shared/types';
+import type { NodeColor } from '../../../shared/types';
 import { colors } from '../../../shared/design/theme';
 import ColorsGrid from '../../../components/Elements/ColorsGrid/ColorsGrid';
 import * as Styled from './StylePanel.styled';
@@ -10,17 +10,18 @@ type Props = {
 };
 
 const ColorSection = ({ value, onColorChange }: Props) => {
+  const stringValue = value ? String(value) : undefined;
+
   return (
     <Styled.InnerContainer
-      defaultValue={value}
       aria-label="Color"
       aria-labelledby="shape-color"
       orientation="horizontal"
-      value={value}
+      value={stringValue}
       onValueChange={onColorChange}
     >
       <Styled.Label>Color</Styled.Label>
-      <ColorsGrid value={value || colors.black} onSelect={onColorChange} />
+      <ColorsGrid value={stringValue || colors.black} onSelect={onColorChange} />
     </Styled.InnerContainer>
   );
 };

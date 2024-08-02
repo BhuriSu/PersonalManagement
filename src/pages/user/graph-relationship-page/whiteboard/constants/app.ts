@@ -1,4 +1,4 @@
-import { Schemas } from '../shared/src/schemas';
+import { Schemas } from '../shared/schemas';
 import { z } from 'zod';
 
 export const BASE_URL = 'https://drawflux-api.onrender.com';

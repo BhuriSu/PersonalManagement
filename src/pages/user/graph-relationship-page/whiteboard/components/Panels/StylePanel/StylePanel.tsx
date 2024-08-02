@@ -36,7 +36,6 @@ const getValueIfAllIdentical = <
 const StylePanel = ({ selectedNodes, onStyleChange }: Props) => {
   const mergedStyle = useMemo((): Partial<NodeStyle> => {
     const styles: NodeStyle[] = selectedNodes.map(({ style }) => style);
-
     const colors = new Set(styles.map(({ color }) => color));
     const lines = new Set(styles.map(({ line }) => line));
     const fills = new Set(styles.map(({ fill }) => fill));

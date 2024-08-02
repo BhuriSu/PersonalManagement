@@ -2,10 +2,6 @@ import { styled } from '../../../shared/design/theme';
 import type { ThemeColorKey } from '../../../shared/types'
 import type { TextComponentType } from './Text';
 
-/**
- * temporary solution to passing color prop without creating variables
- * for all colors
- */
 export const Root = (as: TextComponentType, color: ThemeColorKey) =>
   styled(as, {
     display: 'block',
