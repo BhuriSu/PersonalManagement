@@ -128,7 +128,7 @@ const AppRouter = () => {
 };
 
 export function App() {
-  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const [mode, setMode] = React.useState<'light' | 'dark'>('dark');
   const [themeName, setThemeName] = useState<'appTheme' | 'shadTheme'>('shadTheme');
   const colorMode = React.useMemo(
     () => ({

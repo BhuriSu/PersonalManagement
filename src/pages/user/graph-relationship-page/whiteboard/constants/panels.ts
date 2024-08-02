@@ -222,12 +222,6 @@ export const TOOLS: readonly Tool[] = [
     icon: 'text',
     key: KEYS.T,
   },
-  {
-    name: 'Laser',
-    value: 'laser',
-    icon: 'laser',
-    key: KEYS.L,
-  },
 ] as const;
 
 export type ZoomActionKey = 'in' | 'out' | 'reset';

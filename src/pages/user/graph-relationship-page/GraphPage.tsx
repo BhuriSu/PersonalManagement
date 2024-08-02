@@ -49,10 +49,13 @@ const GraphPage: React.FC = () => {
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
               <CloseIcon />
             </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
+            <Typography sx={{ ml: 75, flex: 1 }} variant="h6" component="div">
               Graph Relationship Details
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
+              Back
+            </Button>
+            <Button autoFocus color="inherit" >
               Save
             </Button>
           </Toolbar>

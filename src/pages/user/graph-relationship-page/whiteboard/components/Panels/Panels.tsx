@@ -47,7 +47,7 @@ const Panels = ({ selectedNodeIds }: Props) => {
 
   const isHandTool = toolType === 'hand';
   const showStylePanel =
-    selectedNodeIds.length > 0 && toolType !== 'laser' && !isHandTool;
+    selectedNodeIds.length > 0 && !isHandTool;
 
   const handleToolSelect = useCallback(
     (type: ToolType) => {

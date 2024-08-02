@@ -6,7 +6,6 @@ import {
   useState,
 } from 'react';
 import Panels from './components/Panels/Panels';
-import Loader from './components/Elements/Loader/Loader';
 import ContextMenu from './components/ContextMenu/ContextMenu';
 import { setCursorByToolType } from './components/Canvas/DrawingCanvas/helpers/cursor';
 import type { ContextMenuType } from './components/ContextMenu/ContextMenu';
@@ -135,9 +134,7 @@ const WhiteBoardService = () => {
       onKeyDown={handleKeyDown}
     >
       <Panels selectedNodeIds={selectedNodeIds} />
-      {<Loader fullScreen>{LOADING_TEXT}</Loader>}
       {(
-        <Suspense fallback={<Loader fullScreen>{LOADING_TEXT}</Loader>}>
           <ContextMenu
             menuType={menuType}
             onContextMenuOpen={handleContextMenuOpen}
@@ -151,7 +148,6 @@ const WhiteBoardService = () => {
               />
             </ContextMenu.Trigger>
           </ContextMenu>
-        </Suspense>
       )}
     </Styled.AppWrapper>
   );

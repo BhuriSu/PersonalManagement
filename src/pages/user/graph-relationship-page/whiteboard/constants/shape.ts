@@ -58,11 +58,3 @@ export const SELECT_RECT = {
   OPACITY: 0.1,
 };
 
-export const LASER = {
-  TRIM_COUNT: 2,
-  TRIM_INTERVAL: 24,
-  TRIM_DELAY: 250,
-  MAX_LENGTH: 50,
-  WIDTH: 3.5,
-  COLOR: colors.red500,
-} as const;
