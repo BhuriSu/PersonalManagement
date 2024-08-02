@@ -40,8 +40,6 @@ import Drafts from './Drafts';
 import useSharedRef from '../../../hooks/useSharedRef';
 import { resetCursor, setCursor, setCursorByToolType } from './helpers/cursor';
 import { ARROW_TRANSFORMER, TEXT, TRANSFORMER } from '../../../constants/shape';
-import { safeJSONParse } from '../../../utils/object';
-import { LIBRARY } from '../../../constants/panels';
 import { DRAWING_CANVAS } from '../../../constants/canvas';
 import SnapLineGuides from '../SnapLineGuides/SnapLineGuides';
 import { getLineGuides, snapNodesToEdges } from './helpers/snap';
@@ -51,7 +49,6 @@ import type Konva from 'konva';
 import type { DrawPosition } from './helpers/draw';
 import type { KonvaEventObject } from 'konva/lib/Node';
 import type { NodeObject, NodeType, Point } from '../../../shared/types';
-import type { LibraryItem } from '../../../constants/app';
 
 type Props = {
   width: number;
@@ -107,14 +104,6 @@ const DrawingCanvas = forwardRef<Konva.Stage, Props>(
         event.preventDefault();
 
         if (!event.dataTransfer || !stageRef.current) return;
-
-        const dataJSON = event.dataTransfer.getData(LIBRARY.dataTransferFormat);
-        const libraryItem = safeJSONParse<LibraryItem>(dataJSON);
-
-        if (libraryItem) {
-        
-          dispatch(canvasActions.setToolType('select'));
-        }
       },
       [dispatch],
     );

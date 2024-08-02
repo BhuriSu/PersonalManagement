@@ -1,4 +1,4 @@
-import { useNotifications } from '../../contexts/notifications';
+
 import { useAppDispatch, useAppStore } from '../../stores/hooks';
 import { canvasActions } from '../../services/canvas/slice';
 import type { ContextMenuAction } from './ContextMenu';
@@ -7,8 +7,6 @@ function useActionManager() {
   const store = useAppStore();
 
   const dispatch = useAppDispatch();
-
-  const { addNotification } = useNotifications();
 
   const dispatchAction = (action: ContextMenuAction) => {
     const state = store.getState().canvas.present;
@@ -63,15 +61,6 @@ function useActionManager() {
       }
       case 'copy-nodes': {
         return dispatch(canvasActions.copyNodes());
-      }
-      case 'add-to-library': {
-        const nodesToAdd = state.nodes.filter(
-          (node: { nodeProps: { id: string; }; }) => node.nodeProps.id in state.selectedNodeIds,
-        );
-
-        addNotification({ title: 'Added to library', type: 'info' });
-
-        return dispatch((nodesToAdd));
       }
     }
   };

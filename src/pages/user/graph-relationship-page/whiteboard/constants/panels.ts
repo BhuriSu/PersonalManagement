@@ -40,19 +40,6 @@ export const DELETE_NODES = {
   modifierKeys: [],
 } as const;
 
-export const LIBRARY = {
-  dataTransferFormat: 'json/library-item',
-} as const;
-
-export const LIBRARY_ITEM: { style: Partial<ShapesThumbnailStyle> } = {
-  style: {
-    width: 54,
-    height: 54,
-    padding: 2,
-    shapesScale: 1.5,
-  },
-} as const;
-
 export type MenuPanelActionType = (typeof MENU_PANEL_ACTIONS)[number]['value'];
 
 export const MENU_PANEL_ACTIONS: readonly Entity<

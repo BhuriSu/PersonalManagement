@@ -5,7 +5,6 @@ import * as Styled from './ContextMenu.styled';
 export type NodeMenuAction =
   | 'copy-nodes'
   | 'duplicate-nodes'
-  | 'add-to-library'
   | 'move-nodes-to-end'
   | 'move-nodes-forward'
   | 'move-nodes-backward'
@@ -27,9 +26,6 @@ const NodeMenu = ({ onAction }: Props) => {
         Duplicate <Kbd>Ctrl + D</Kbd>
       </Styled.Item>
       <Divider orientation="horizontal" />
-      <Styled.Item onSelect={() => onAction('add-to-library')}>
-        Add to library
-      </Styled.Item>
       <Divider orientation="horizontal" />
       <Styled.Item onSelect={() => onAction('move-nodes-to-end')}>
         Bring to front
