@@ -6,7 +6,6 @@ import type {
   UpdatePageBody,
   UpdatePageResponse,
 } from '../schemas/page';
-import type { QRCodeRequestBody, QRCodeResponse } from '../schemas/qrcode';
 import type { defaultTheme, darkTheme } from '../design/theme';
 
 const { nodeProps, style, type } = Node.shape;
@@ -44,7 +43,3 @@ export type GetPageResponse = z.infer<typeof GetPageResponse>;
 export type UpdatePageRequestBody = z.infer<typeof UpdatePageBody>;
 export type UpdatePageResponse = z.infer<typeof UpdatePageResponse>;
 
-export type QRCodeRequestBody = z.infer<typeof QRCodeRequestBody>;
-export type QRCodeResponse = z.infer<typeof QRCodeResponse>;
-
-export * from './ws';

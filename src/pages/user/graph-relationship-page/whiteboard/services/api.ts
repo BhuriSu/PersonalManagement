@@ -1,8 +1,6 @@
 import { BASE_URL, BASE_URL_DEV, IS_PROD } from '../constants/app';
 import type {
   GetPageResponse,
-  QRCodeRequestBody,
-  QRCodeResponse,
   UpdatePageRequestBody,
   UpdatePageResponse,
 } from '../shared/types';
@@ -67,8 +65,5 @@ export default {
   },
   updatePage: (pageId: string, body: UpdatePageRequestBody) => {
     return api.patch<UpdatePageResponse>(`/p/${pageId}`, body);
-  },
-  makeQRCode: (body: QRCodeRequestBody) => {
-    return api.post<QRCodeResponse>('/qrcode', body);
   },
 };

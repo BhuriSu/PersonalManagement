@@ -4,15 +4,13 @@ import { useEffect, useRef } from 'react';
 type EventsMap = HTMLElementEventMap &
   WindowEventMap &
   DocumentEventMap &
-  MediaQueryListEventMap &
-  WebSocketEventMap;
+  MediaQueryListEventMap;
 
 type HandlerElements =
   | Document
   | HTMLElement
   | MediaQueryList
-  | Window
-  | WebSocket;
+  | Window;
 
 const defaultTarget = isBrowser ? window : null;
 

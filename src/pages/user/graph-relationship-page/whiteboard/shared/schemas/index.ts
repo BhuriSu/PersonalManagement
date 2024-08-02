@@ -7,7 +7,6 @@ import {
   UpdatePageBody,
   UpdatePageResponse,
 } from './page';
-import { QRCodeRequestBody, QRCodeResponse } from './qrcode';
 
 export const Schemas = {
   Node,
@@ -15,8 +14,6 @@ export const Schemas = {
   StageConfig,
   Page,
   GetPageResponse,
-  QRCodeRequestBody,
-  QRCodeResponse,
   UpdatePageBody,
   UpdatePageResponse,
 };
