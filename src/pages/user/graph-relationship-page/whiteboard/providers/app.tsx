@@ -1,6 +1,5 @@
 import { Provider as StoreProvider } from 'react-redux';
 import { ModalProvider } from '../contexts/modal';
-import { NotificationsProvider } from '../contexts/notifications';
 import { store } from '../stores/store';
 import { ThemeProvider } from '../contexts/theme';
 
@@ -14,7 +13,7 @@ export const AppProvider = ({ children }: Props) => {
    
         <ThemeProvider>
           <ModalProvider>
-            <NotificationsProvider>{children}</NotificationsProvider>
+            {children}
           </ModalProvider>
         </ThemeProvider>
  
