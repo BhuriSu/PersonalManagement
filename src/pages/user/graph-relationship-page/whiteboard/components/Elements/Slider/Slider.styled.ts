@@ -1,5 +1,5 @@
 import * as SliderPrimitive from '@radix-ui/react-slider';
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 
 export const Container = styled(SliderPrimitive.Root, {
   position: 'relative',

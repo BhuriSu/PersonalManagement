@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { colors } from '../design/theme';
+import { colors } from '../../design/theme';
 import { createUnionSchema } from '../utils/zod';
 
 const Type = z.union([

@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { NodeSize } from 'shared';
+import type { NodeSize } from '../../../shared/types';
 import { SIZE } from '../../../constants/panels';
 import { createTitle } from '../../../utils/string';
 import Icon from '../../../components/Elements/Icon/Icon';

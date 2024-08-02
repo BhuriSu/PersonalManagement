@@ -1,4 +1,4 @@
-import { styled } from 'shared';
+import { styled } from '../../../shared/design/theme';
 import ColorCircle from '../../../components/Elements/ColorCircle/ColorCircle';
 import Popover from '../../../components/Elements/Popover/Popover';
 import { Button } from '../../../components/Elements/Button/Button.styled';

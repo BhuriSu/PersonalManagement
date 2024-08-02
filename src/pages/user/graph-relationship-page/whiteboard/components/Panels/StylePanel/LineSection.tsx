@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { NodeLine } from 'shared';
+import type { NodeLine } from '../../../shared/types';
 import { LINE } from '../../../constants/panels';
 import * as Styled from './StylePanel.styled';
 import { createTitle } from '../../../utils/string';

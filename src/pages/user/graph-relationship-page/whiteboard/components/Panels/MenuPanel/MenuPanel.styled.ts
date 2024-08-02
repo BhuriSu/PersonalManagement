@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import DropdownMenu from '../../../components/Elements/DropdownMenu/DropdownMenu';
 
 export const Content = styled(DropdownMenu.Content, {

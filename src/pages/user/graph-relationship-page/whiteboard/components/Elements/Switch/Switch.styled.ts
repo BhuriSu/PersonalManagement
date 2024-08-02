@@ -1,5 +1,5 @@
 import * as Switch from '@radix-ui/react-switch';
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 
 export const Container = styled('div', {
   display: 'flex',

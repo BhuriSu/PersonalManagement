@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { NodeFill } from 'shared';
+import type { NodeFill } from '../../../shared/types';
 import { FILL } from '../../../constants/panels';
 import * as Styled from './StylePanel.styled';
 import { createTitle } from '../../../utils/string';

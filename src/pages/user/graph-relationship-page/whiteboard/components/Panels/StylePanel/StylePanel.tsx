@@ -17,7 +17,7 @@ import type {
   NodeObject,
   NodeSize,
   NodeStyle,
-} from 'shared';
+} from '../../../shared/types';
 import type { ArrowHead } from './ArrowHeadsSection';
 
 type Props = {

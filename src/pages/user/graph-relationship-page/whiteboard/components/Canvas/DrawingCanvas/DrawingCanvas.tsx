@@ -50,7 +50,7 @@ import type { SnapLineGuide } from './helpers/snap';
 import type Konva from 'konva';
 import type { DrawPosition } from './helpers/draw';
 import type { KonvaEventObject } from 'konva/lib/Node';
-import type { NodeObject, NodeType, Point } from '../../../shared/src/types';
+import type { NodeObject, NodeType, Point } from '../../../shared/types';
 import type { LibraryItem } from '../../../constants/app';
 
 type Props = {

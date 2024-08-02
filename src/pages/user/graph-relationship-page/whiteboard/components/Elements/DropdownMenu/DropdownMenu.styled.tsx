@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import * as DropdownPrimitive from '@radix-ui/react-dropdown-menu';
 import { Button } from '../Button/Button.styled';
 

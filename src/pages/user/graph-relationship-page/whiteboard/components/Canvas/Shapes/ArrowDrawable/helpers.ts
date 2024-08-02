@@ -1,7 +1,7 @@
 import { ARROW } from '../../../../constants/shape';
 import { getRatioFromValue } from '../../../../utils/math';
 import type Konva from 'konva';
-import type { NodeObject, Point } from '../../../../shared/src/types';
+import type { NodeObject, Point } from '../../../../shared/types';
 import type { AnchorType } from './ArrowTransformer';
 
 type BendMovement = {

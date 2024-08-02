@@ -1,4 +1,4 @@
-import { styled } from 'shared';
+import { styled } from '../../../shared/design/theme';
 
 export const Container = styled('div', {
   position: 'relative',

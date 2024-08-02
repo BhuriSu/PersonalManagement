@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import * as PopoverPrimitive from '@radix-ui/react-popover';
 
 export const Content = styled(PopoverPrimitive.Content, {

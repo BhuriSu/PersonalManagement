@@ -1,5 +1,5 @@
-import { styled } from '../../../shared/src/design/theme';
-import type { ThemeColorKey } from '../../../shared/src/types'
+import { styled } from '../../../shared/design/theme';
+import type { ThemeColorKey } from '../../../shared/types'
 import type { TextComponentType } from './Text';
 
 /**

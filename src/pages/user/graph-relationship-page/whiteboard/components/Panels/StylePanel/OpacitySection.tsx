@@ -1,5 +1,5 @@
 import { memo } from 'react';
-import type { NodeStyle } from 'shared';
+import type { NodeStyle } from '../../../shared/types';
 import Slider from '../../../components/Elements/Slider/Slider';
 import { OPACITY } from '../../../constants/panels';
 import * as Styled from './StylePanel.styled';

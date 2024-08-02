@@ -7,7 +7,7 @@ import { normalizeTransformerSize } from './helpers';
 import { getNodeSize } from '../Shapes/EditableText/helpers/size';
 import { getRectSize } from '../Shapes/RectDrawable/helpers/calc';
 import type Konva from 'konva';
-import type { NodeObject, Point } from '../../../shared/src/types';
+import type { NodeObject, Point } from '../../../shared/types';
 
 type Props = {
   selectedNodes: NodeObject[];

@@ -1,7 +1,7 @@
 import { Util } from 'konva/lib/Util';
 import type Konva from 'konva';
 import type { IRect } from 'konva/lib/types';
-import type { Point } from '../../../../shared/src/types/index';
+import type { Point } from '../../../../shared/types/index';
 
 const POINTER_SIZE = 1;
 

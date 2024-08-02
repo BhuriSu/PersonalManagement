@@ -1,8 +1,8 @@
 import { memo } from 'react';
 import { Line } from 'react-konva';
-import { defaultTheme } from '../../../shared/src/design/theme';
+import { defaultTheme } from '../../../shared/design/theme';
 import type { SnapLineGuide } from '../DrawingCanvas/helpers/snap';
-import { type StageConfig } from '../../../shared/src/types'
+import { type StageConfig } from '../../../shared/types'
 
 type Props = {
   lineGuide: SnapLineGuide;

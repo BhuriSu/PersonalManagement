@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import Icon from '../Icon/Icon';
 
 export const Root = styled(Icon, {

@@ -1,5 +1,5 @@
 import { TEXT } from '../../../../constants/shape';
-import { styled } from '../../../../shared/src/design/theme';
+import { styled } from '../../../../shared/design/theme';
 
 export const TextArea = styled('textarea', {
   border: 'none',

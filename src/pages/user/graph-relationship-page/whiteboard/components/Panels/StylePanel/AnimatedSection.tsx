@@ -3,7 +3,7 @@ import Toggle from '../../../components/Elements/Toggle/Toggle';
 import { ANIMATED } from '../../../constants/panels';
 import { createTitle } from '../../../utils/string';
 import * as Styled from './StylePanel.styled';
-import type { NodeStyle } from 'shared';
+import type { NodeStyle } from '../../../shared/types';
 
 type Props = {
   value: NodeStyle['animated'];

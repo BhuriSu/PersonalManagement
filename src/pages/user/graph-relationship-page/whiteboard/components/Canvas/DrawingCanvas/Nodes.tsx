@@ -3,7 +3,7 @@ import { useAppSelector } from '../../../stores/hooks';
 import { selectNodes, useSelectNodesById } from '../../../services/canvas/slice';
 import NodesTransformer from '../Transformer/NodesTransformer';
 import Node from '../Node/Node';
-import type { NodeObject } from '../../../shared/src/types';
+import type { NodeObject } from '../../../shared/types';
 import type { NodeComponentProps } from '../Node/Node';
 
 type Props = {

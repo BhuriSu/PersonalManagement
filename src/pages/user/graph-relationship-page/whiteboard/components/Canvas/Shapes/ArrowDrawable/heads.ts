@@ -1,6 +1,6 @@
 import { ARROW } from '../../../../constants/shape';
 import type Konva from 'konva';
-import type { Point } from '../../../../shared/src/types';
+import type { Point } from '../../../../shared/types';
 
 export function drawArrowHead(
   ctx: Konva.Context,

@@ -6,7 +6,7 @@ import {
   createParametricSelectorHook,
   createAppSelector,
 } from '../../stores/hooks';
-import type { NodeObject, NodeStyle } from 'shared';
+import type { NodeObject, NodeStyle } from '../../shared/types';
 import type { AppState } from '../../constants/app';
 import type { RootState } from '../../stores/store';
 import type { PayloadAction } from '@reduxjs/toolkit';

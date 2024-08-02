@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import * as Checkbox from '@radix-ui/react-checkbox';
 
 export const Root = styled(Checkbox.Root, {

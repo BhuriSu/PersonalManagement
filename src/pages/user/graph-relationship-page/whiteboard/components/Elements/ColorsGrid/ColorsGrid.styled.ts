@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import * as ButtonStyled from '../../../components/Elements/Button/Button.styled';
 import RadioGroup from '../RadioGroup/RadioGroup';
 

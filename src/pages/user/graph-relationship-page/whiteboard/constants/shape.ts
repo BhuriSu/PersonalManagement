@@ -1,4 +1,4 @@
-import { colors } from 'shared';
+import { colors } from '../shared/design/theme';
 
 export const TRANSFORMER = {
   NAME: 'transformer',

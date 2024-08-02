@@ -5,7 +5,7 @@ import Popover from '../../../components/Elements/Popover/Popover';
 import Icon from '../../../components/Elements/Icon/Icon';
 import { Button } from '../../../components/Elements/Button/Button.styled';
 import * as Styled from './StylePanel.styled';
-import type { ArrowEndHead, ArrowHeadDirection, ArrowStartHead } from 'shared';
+import type { ArrowEndHead, ArrowHeadDirection, ArrowStartHead } from '../../../shared/types';
 
 export type ArrowHead = NonNullable<ArrowStartHead | ArrowEndHead>;
 export type ArrowHeadEntity = (typeof ARROW_HEADS)[keyof typeof ARROW_HEADS];

@@ -1,5 +1,5 @@
 import * as ContextMenu from '@radix-ui/react-context-menu';
-import { styled } from '../../shared/src/design/theme';
+import { styled } from '../../shared/design/theme';
 import { Button } from '../../components/Elements/Button/Button.styled';
 
 export const Content = styled(ContextMenu.Content, {

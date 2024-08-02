@@ -1,4 +1,4 @@
-import { styled } from 'shared';
+import { styled } from '../../../shared/design/theme';
 import Divider from '../../../components/Elements/Divider/Divider';
 
 export const ToolsDivider = styled(Divider, {

@@ -1,5 +1,6 @@
 import { memo } from 'react';
-import { colors, type NodeColor } from 'shared';
+import type  { NodeColor } from '../../../shared/types';
+import { colors } from '../../../shared/design/theme';
 import ColorsGrid from '../../../components/Elements/ColorsGrid/ColorsGrid';
 import * as Styled from './StylePanel.styled';
 

@@ -1,5 +1,5 @@
 import type { IRect, Vector2d } from 'konva/lib/types';
-import type { NodeObject, Point } from 'shared';
+import type { NodeObject, Point } from '../shared/types';
 import { RECT } from '../constants/shape';
 
 export function getRatioFromValue(value: number, min: number, max: number) {

@@ -1,5 +1,5 @@
 import { KEYS } from './keys';
-import { Schemas } from 'shared';
+import { Schemas } from '../shared/src/schemas';
 import type { HistoryActionKey } from '../stores/reducers/history';
 import type { Entity } from '../constants/index';
 import type { ShapesThumbnailStyle } from '../components/Elements/ShapesThumbnail/ShapesThumbnail';
@@ -10,7 +10,7 @@ import type {
   NodeFill,
   NodeLine,
   NodeSize,
-} from 'shared';
+} from '../shared/types';
 import type { ToolType } from './app';
 
 export type HistoryControlKey = Exclude<HistoryActionKey, 'reset'>;

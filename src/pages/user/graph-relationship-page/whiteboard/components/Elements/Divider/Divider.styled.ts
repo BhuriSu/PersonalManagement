@@ -1,5 +1,5 @@
 import * as Seperator from '@radix-ui/react-separator';
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 
 export const Root = styled(Seperator.Root, {
   backgroundColor: '$secondary',

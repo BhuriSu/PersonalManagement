@@ -3,7 +3,7 @@ import useEvent from '../hooks/useEvent/useEvent';
 import { LOCAL_STORAGE_THEME_KEY } from '../constants/app';
 import { storage } from '../utils/storage';
 import { createContext } from './createContext';
-import { darkTheme } from 'shared';
+import { darkTheme } from '../shared/design/theme';
 
 export type ThemeValue = 'default' | 'dark';
 

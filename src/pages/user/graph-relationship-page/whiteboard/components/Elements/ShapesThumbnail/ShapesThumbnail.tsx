@@ -9,7 +9,7 @@ import {
 import useForceUpdate from '../../../hooks/useForceUpdate/useForceUpdate';
 import useEvent from '../../../hooks/useEvent/useEvent';
 import * as Styled from './ShapesThumbnail.styled';
-import type { NodeObject, ThemeColorValue } from '../../../shared/src/types';
+import type { NodeObject, ThemeColorValue } from '../../../shared/types';
 import type Konva from 'konva';
 
 export type ShapesThumbnailStyle = {

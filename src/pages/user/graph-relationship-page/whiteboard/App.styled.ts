@@ -1,4 +1,4 @@
-import { styled } from "./shared/src/";
+import { styled } from "./shared";
 
 export const AppWrapper = styled('div', {
   position: 'relative',

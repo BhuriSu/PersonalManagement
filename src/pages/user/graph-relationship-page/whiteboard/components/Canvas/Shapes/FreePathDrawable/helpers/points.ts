@@ -1,4 +1,4 @@
-import type { Point } from '../../../../../shared/src/types';
+import type { Point } from '../../../../../shared/types';
 
 export function pairPoints(points: number[]): Point[] {
   if (!points.length) {

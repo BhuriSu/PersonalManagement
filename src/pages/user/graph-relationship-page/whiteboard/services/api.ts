@@ -7,7 +7,7 @@ import type {
   SharePageResponse,
   UpdatePageRequestBody,
   UpdatePageResponse,
-} from 'shared';
+} from '../shared/types';
 
 type QueryReturn<D> = {
   data: D | null;
@@ -30,7 +30,7 @@ const createQuery = (
       const res = await fetch(`${baseUrl}${url}`, { ...baseInit, ...init });
 
       if (!res.ok) {
-        throw new HTTPError(res.statusText, { cause: res });
+        throw new HTTPError(res.statusText);
       }
       
       const data = await res.json();

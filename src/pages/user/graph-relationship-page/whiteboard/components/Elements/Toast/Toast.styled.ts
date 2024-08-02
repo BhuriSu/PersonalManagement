@@ -1,6 +1,6 @@
 import * as ToastPrimitive from '@radix-ui/react-toast';
-import { styled } from '../../../shared/src/design/theme';
-import { hide, slideLeft } from '../../../shared/src/design/keyframes';
+import { styled } from '../../../shared/design/theme';
+import { hide, slideLeft } from '../../../shared/design/keyframes';
 
 export const Container = styled(ToastPrimitive.Root, {
   backgroundColor: '$bg',

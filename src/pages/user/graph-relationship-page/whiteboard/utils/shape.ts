@@ -1,4 +1,4 @@
-import { defaultTheme, darkTheme } from 'shared';
+import { defaultTheme, darkTheme } from '../shared/design/theme';
 import { hexToRGBa } from './string';
 import { getShapeLength } from './math';
 import type {
@@ -7,9 +7,8 @@ import type {
   NodeLine,
   NodeObject,
   NodeSize,
-  ThemeColorValue,
-  ThemeColors,
-} from 'shared';
+} from '../shared/types';
+import type { ThemeColorValue, ThemeColors } from '../shared/types'
 import type { ShapeConfig } from 'konva/lib/Shape';
 
 export function getDashValue(

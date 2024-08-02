@@ -10,7 +10,7 @@ import {
   resetCursor,
   setCursor,
 } from '../../DrawingCanvas/helpers/cursor';
-import type { Point } from '../../../../shared/src/types';
+import type { Point } from '../../../../shared/types';
 import type Konva from 'konva';
 
 export type AnchorType = 'start' | 'control' | 'end';

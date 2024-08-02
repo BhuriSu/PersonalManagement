@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { drawNodeByType } from '../components/Canvas/DrawingCanvas/helpers/draw';
-import type { NodeObject } from 'shared';
+import type { NodeObject } from '../shared/types';
 import type { DrawPosition } from '../components/Canvas/DrawingCanvas/helpers/draw';
 
 type DispatchAction<T extends string, P extends NonNullable<unknown>> = {

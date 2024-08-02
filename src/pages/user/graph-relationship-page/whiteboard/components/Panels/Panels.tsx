@@ -1,8 +1,6 @@
-import { useMemo, lazy, Suspense, useCallback, memo } from 'react';
-import { useModal } from '@/contexts/modal';
-import { useWebSocket } from '@/contexts/websocket';
-import useNetworkState from '@/hooks/useNetworkState/useNetworkState';
-import { useAppDispatch, useAppSelector, useAppStore } from '@/stores/hooks';
+import { useCallback, memo } from 'react';
+import useNetworkState from '../../hooks/useNetworkState/useNetworkState';
+import { useAppDispatch, useAppSelector, useAppStore } from '../../stores/hooks';
 import {
   canvasActions,
   selectConfig,
@@ -10,73 +8,46 @@ import {
   selectPastHistory,
   selectToolType,
   useSelectNodesById,
-} from '@/services/canvas/slice';
-import { collaborationActions } from '@/services/collaboration/slice';
-import { downloadDataUrlAsFile, importProject } from '@/utils/file';
-import MenuPanel, { type MenuKey } from './MenuPanel/MenuPanel';
-import SharePanel from './SharePanel/SharePanel';
+} from '../../services/canvas/slice';
 import StylePanel from './StylePanel/StylePanel';
 import ToolButtons from './ToolButtons/ToolButtons';
 import ZoomButtons from './ZoomButtons';
-import LibraryDrawer from '../Library/LibraryDrawer/LibraryDrawer';
 import HistoryButtons from './HistoryButtons';
 import DeleteButton from './DeleteButton';
-import {
-  LOCAL_STORAGE_COLLAB_KEY,
-  PROJECT_FILE_EXT,
-  PROJECT_FILE_NAME,
-  PROJECT_PNG_EXT,
-} from '@/constants/app';
-import { DRAWING_CANVAS } from '@/constants/canvas';
-import { historyActions } from '@/stores/reducers/history';
-import { selectLibrary } from '@/services/library/slice';
-import { calculateCenterPoint } from '@/utils/position';
+import { DRAWING_CANVAS } from '../../constants/canvas';
+import { historyActions } from '../../stores/reducers/history';
+import { calculateCenterPoint } from '../../utils/position';
 import { calculateStageZoomRelativeToPoint } from '../Canvas/DrawingCanvas/helpers/zoom';
 import * as Styled from './Panels.styled';
-import { shallowEqual } from '@/utils/object';
+import { shallowEqual } from '../../utils/object';
 import { setCursorByToolType } from '../Canvas/DrawingCanvas/helpers/cursor';
-import { findStageByName } from '@/utils/node';
-import { storage } from '@/utils/storage';
-import type { NodeStyle, User } from 'shared';
+import { findStageByName } from '../../utils/node';
+import type { NodeStyle } from '../../shared/types';
 import type {
   HistoryControlKey,
-  MenuPanelActionType,
   ZoomActionKey,
-} from '@/constants/panels';
-import type { StoredCollabState, ToolType } from '@/constants/app';
+} from '../../constants/panels';
+import type { ToolType } from '../../constants/app';
 
 type Props = {
   selectedNodeIds: string[];
 };
 
-const UsersPanel = lazy(() => import('./UsersPanel/UsersPanel'));
-
 const Panels = ({ selectedNodeIds }: Props) => {
   const store = useAppStore();
   const stageConfig = useAppSelector(selectConfig);
   const toolType = useAppSelector(selectToolType);
-  const library = useAppSelector(selectLibrary);
   const past = useAppSelector(selectPastHistory);
   const future = useAppSelector(selectFutureHistory);
 
   const selectedNodes = useSelectNodesById(selectedNodeIds);
-
-  const ws = useWebSocket();
   const { online } = useNetworkState();
-  const { openModal } = useModal();
 
   const dispatch = useAppDispatch();
 
   const isHandTool = toolType === 'hand';
   const showStylePanel =
     selectedNodeIds.length > 0 && toolType !== 'laser' && !isHandTool;
-
-  const disabledMenuItems = useMemo((): MenuKey[] | null => {
-    if (ws.isConnected) {
-      return ['open'];
-    }
-    return null;
-  }, [ws]);
 
   const handleToolSelect = useCallback(
     (type: ToolType) => {
@@ -102,55 +73,6 @@ const Panels = ({ selectedNodeIds }: Props) => {
     dispatch(canvasActions.updateNodes(updatedNodes));
     dispatch(canvasActions.setCurrentNodeStyle(style));
   };
-
-  const handleMenuAction = useCallback(
-    (type: MenuPanelActionType) => {
-      switch (type) {
-        case 'export-as-image': {
-          const stage = findStageByName(DRAWING_CANVAS.NAME);
-          const dataUrl = stage?.toDataURL();
-
-          if (dataUrl) {
-            downloadDataUrlAsFile(dataUrl, PROJECT_FILE_NAME, PROJECT_PNG_EXT);
-          }
-          break;
-        }
-        case 'save': {
-          const state = store.getState().canvas.present;
-
-          const dataUrl = URL.createObjectURL(
-            new Blob([JSON.stringify(state)], {
-              type: 'application/json',
-            }),
-          );
-
-          downloadDataUrlAsFile(dataUrl, PROJECT_FILE_NAME, PROJECT_FILE_EXT);
-          break;
-        }
-        case 'open': {
-          const openProject = async () => {
-            const project = await importProject();
-
-            if (project) {
-              dispatch(canvasActions.set(project));
-
-              const stage = findStageByName(DRAWING_CANVAS.NAME);
-
-              setCursorByToolType(stage, project.toolType ?? 'select');
-            } else {
-              openModal({
-                title: 'Error',
-                description: 'Could not load file',
-              });
-            }
-          };
-
-          openProject();
-        }
-      }
-    },
-    [store, openModal, dispatch],
-  );
 
   const handleZoomChange = useCallback(
     (action: ZoomActionKey) => {
@@ -186,17 +108,6 @@ const Panels = ({ selectedNodeIds }: Props) => {
     [dispatch],
   );
 
-  const handleUserChange = useCallback(
-    (user: User) => {
-      dispatch(collaborationActions.updateUser(user));
-
-      storage.set<StoredCollabState>(LOCAL_STORAGE_COLLAB_KEY, {
-        user: { name: user.name, color: user.color },
-      });
-    },
-    [dispatch],
-  );
-
   const handleNodesDelete = useCallback(() => {
     dispatch(canvasActions.deleteNodes(selectedNodeIds));
   }, [selectedNodeIds, dispatch]);
@@ -207,8 +118,8 @@ const Panels = ({ selectedNodeIds }: Props) => {
         {!isHandTool && (
           <Styled.Panel>
             <HistoryButtons
-              disabledUndo={!past.length || ws.isConnected}
-              disabledRedo={!future.length || ws.isConnected}
+              disabledUndo={!past.length}
+              disabledRedo={!future.length}
               onClick={handleHistoryAction}
             />
             <DeleteButton
@@ -223,18 +134,8 @@ const Panels = ({ selectedNodeIds }: Props) => {
             onStyleChange={handleStyleChange}
           />
         )}
-        {ws.isConnected && (
-          <Suspense>
-            <UsersPanel onUserChange={handleUserChange} />
-          </Suspense>
-        )}
         <Styled.Panel css={{ marginLeft: 'auto' }}>
-          {online && <SharePanel isPageShared={ws.isConnected} />}
-          <LibraryDrawer items={library.items} />
-          <MenuPanel
-            disabledItems={disabledMenuItems}
-            onAction={handleMenuAction}
-          />
+          {online}
         </Styled.Panel>
       </Styled.TopPanels>
       <Styled.BottomPanels direction={{ '@initial': 'column', '@xs': 'row' }}>

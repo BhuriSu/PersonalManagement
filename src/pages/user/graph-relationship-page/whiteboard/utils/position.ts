@@ -1,7 +1,7 @@
 import { calculateMiddlePoint } from './math';
 import type Konva from 'konva';
 import type { IRect } from 'konva/lib/types';
-import type { NodeObject, Point } from 'shared';
+import type { NodeObject, Point } from '../shared/types';
 
 export function getPointsAbsolutePosition<T extends Konva.Node>(
   points: Point[],

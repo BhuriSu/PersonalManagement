@@ -13,7 +13,7 @@ import type {
   NodeObject,
   StageConfig,
   NodeStyle,
-} from 'shared';
+} from '../shared/types';
 
 export const createNode = <T extends NodeType>(
   type: T,

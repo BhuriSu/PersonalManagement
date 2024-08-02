@@ -1,4 +1,4 @@
-import { styled } from 'shared';
+import { styled } from '../../shared/design/theme';
 import * as ButtonStyled from '../../components/Elements/Button/Button.styled';
 
 export const Container = styled('div', {

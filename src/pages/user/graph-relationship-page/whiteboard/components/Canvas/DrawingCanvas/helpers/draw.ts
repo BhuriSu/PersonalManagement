@@ -1,4 +1,4 @@
-import type { DrawableNodeType, NodeObject, Point } from '../../../../shared/src/types';
+import type { DrawableNodeType, NodeObject, Point } from '../../../../shared/types';
 import { RECT } from '../../../../constants/shape';
 import { normalizePoints } from '../../../../utils/draw';
 

@@ -1,5 +1,5 @@
 import * as DialogPrimitive from '@radix-ui/react-dialog';
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 
 export const Overlay = styled(DialogPrimitive.Overlay, {
   backdropFilter: 'blur(4px)',

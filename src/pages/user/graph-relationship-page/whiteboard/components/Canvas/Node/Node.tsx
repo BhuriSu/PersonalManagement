@@ -1,4 +1,4 @@
-import type { NodeObject, NodeType } from '../../../shared/src/types';
+import type { NodeObject, NodeType } from '../../../shared/types';
 import ArrowDrawable from '../../Canvas/Shapes/ArrowDrawable/ArrowDrawable';
 import EllipseDrawable from '../../Canvas/Shapes/EllipseDrawable/EllipseDrawable';
 import FreePathDrawable from '../../Canvas/Shapes/FreePathDrawable/FreePathDrawable';

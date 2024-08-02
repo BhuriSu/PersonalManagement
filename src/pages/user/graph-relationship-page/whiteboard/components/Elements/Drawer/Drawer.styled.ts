@@ -1,4 +1,4 @@
-import { styled } from '../../../shared/src/design/theme';
+import { styled } from '../../../shared/design/theme';
 import { Button } from '../Button/Button.styled';
 import * as Dialog from '@radix-ui/react-dialog';
 

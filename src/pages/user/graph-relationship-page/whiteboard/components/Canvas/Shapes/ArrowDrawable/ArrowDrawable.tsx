@@ -13,7 +13,7 @@ import {
 } from './helpers';
 import { drawArrowHead } from './heads';
 import type Konva from 'konva';
-import type { Point } from '../../../../shared/src/types';
+import type { Point } from '../../../../shared/types';
 import type { NodeComponentProps } from '../../Node/Node';
 
 const ArrowDrawable = ({

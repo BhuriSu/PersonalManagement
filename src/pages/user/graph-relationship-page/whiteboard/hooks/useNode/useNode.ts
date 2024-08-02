@@ -15,7 +15,7 @@ import type {
   NodeObject,
   NodeType,
   ThemeColors,
-} from 'shared';
+} from '../../shared/types';
 
 type Config = Konva.NodeConfig &
   Konva.ShapeConfig & { stroke?: ThemeColorValue };

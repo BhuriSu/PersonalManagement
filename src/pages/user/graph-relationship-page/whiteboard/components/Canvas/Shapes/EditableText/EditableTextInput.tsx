@@ -8,7 +8,7 @@ import useDefaultThemeColors from '../../../../hooks/useThemeColors';
 import useAutoFocus from '../../../../hooks/useAutoFocus/useAutoFocus';
 import useEvent from '../../../../hooks/useEvent/useEvent';
 import * as Styled from './EditableTextInput.styled';
-import type { NodeObject } from '../../../../shared/src/types';
+import type { NodeObject } from '../../../../shared/types';
 import type { OnTextSaveArgs } from './EditableText';
 
 type Props = {

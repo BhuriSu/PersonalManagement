@@ -1,5 +1,5 @@
 import * as Styled from './Text.styled';
-import type { ThemeColorKey } from '../../../shared/src/types';
+import type { ThemeColorKey } from '../../../shared/types';
 import type { ComponentProps } from '@stitches/react';
 
 export type TextComponentType = 'p' | 'span';
