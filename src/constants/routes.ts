@@ -9,7 +9,7 @@ export const routes = {
   userProfile: `${userPrefix}/profile`,
   dealList: `${userPrefix}/deal`,
   graph: `${userPrefix}/graph`,
-  social: `${blogPrefix}/social`,
+  article: `${blogPrefix}/article`,
   urgency: `${userPrefix}/urgency`,
   calendar: `/calendar`,
   login: '/login',

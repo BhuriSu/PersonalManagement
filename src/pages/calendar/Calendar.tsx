@@ -1,6 +1,5 @@
 import { Box, Container, Typography } from '@mui/material';
 import Calendar from 'react-calendar';
-
 import { CalendarStyles } from '../../components/calendar/styled';
 import { useCalendar } from '../../hooks/api/use-calendar/useCalendar';
 import { useState } from 'react';
@@ -8,10 +7,8 @@ import { useState } from 'react';
 export default function CalendarPage() {
   const { data } = useCalendar();
   const [hoveredEvent, setHoveredEvent] = useState<string>('');
-
   const tileContent = ({ date, view }: { date: Date; view: string }) => {
     if (!data) return;
-
     if (view === 'month') {
       const events = data.find((data) => {
         const newDate = new Date(data.date);

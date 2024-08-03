@@ -10,7 +10,7 @@ import dashboard from '../../../../assets/dashboard.png';
 import urgency from '../../../../assets/urgency.png';
 import calendar from '../../../../assets/calendar.png';
 import user from '../../../../assets/user.png';
-import social from '../../../../assets/social.png';
+import article from '../../../../assets/article.png';
 import authentication from '../../../../assets/authentication.png';
 
 export function Navigation() {
@@ -27,12 +27,12 @@ export function Navigation() {
         icon: () => <img src={dashboard} alt="Dashboard" style={{ width: '30px', height: '30px' }} />,
       },
       {
-        header: 'Main pages',
+        header: 'Main Pages',
       },
       {
         label: 'User',
         icon: () => <img src={user} alt="User" style={{ width: '30px', height: '30px' }} />,
-        description: 'Connection management',
+        description: 'Connection Management',
         items: [
           {
             path: routes.userAccount,
@@ -54,30 +54,30 @@ export function Navigation() {
       },
       {
         label: 'Media',
-        icon: () => <img src={social} alt="Media" style={{ width: '30px', height: '30px' }} />,
-        description: 'Social Media management',
+        icon: () => <img src={article} alt="Media" style={{ width: '30px', height: '30px' }} />,
+        description: 'Article Management',
         items: [
           {
-            path: routes.social,
-            label: 'Social Media List',
+            path: routes.article,
+            label: 'Article List',
           },
         ],
       },
       {
         label: 'Urgency',
         icon: () => <img src={urgency} alt="Urgency" style={{ width: '30px', height: '30px' }} />,
-        description: 'Urgent page',
+        description: 'Urgent Page',
         items: [
           {
             path: routes.urgency,
-            label: 'Urgency list',
+            label: 'Urgency List',
           },
         ],
       },
       {
         label: 'Authentication',
         icon: () => <img src={authentication} alt="Authentication" style={{ width: '30px', height: '30px' }} />,
-        description: 'Authentication pages',
+        description: 'Authentication Pages',
         items: [
           {
             path: routes.login,
@@ -89,11 +89,11 @@ export function Navigation() {
           },
           {
             path: routes.resetPassword,
-            label: 'Reset password',
+            label: 'Reset Password',
           },
           {
             path: routes.verifyCode,
-            label: 'Verify code',
+            label: 'Verify Code',
           },
         ],
       },

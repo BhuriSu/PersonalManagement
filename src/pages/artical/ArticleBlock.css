@@ -1,0 +1,21 @@
+.article-block {
+    height: 300px;
+    width: 100%;
+    border-radius: 16px;
+    padding: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative; /* Ensures the iframe can be positioned relative to this container */
+    border: 1px solid #ccc; /* Border definition */
+  }
+  
+.article-block iframe {
+    position: absolute; /* Positions the iframe absolutely within the container */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none; /* Removes the default border of the iframe */
+    border-radius: 16px; /* Maintains the border radius of the container */
+  }
