@@ -1,30 +1,20 @@
-import React, { useState } from 'react';
-import {
-  Button,
-  Container,
-  Stack,
-  Typography,
-  Paper,
-  Box,
-} from '@mui/material';
+import { useState } from 'react';
+import { Button, Container, Stack, Typography, Box } from '@mui/material';
 import { Add } from '@mui/icons-material';
 import { PageHeader } from '../../components/page-header/PageHeader';
+import SocialMediaBlock from './SocialMediaBlock';
 import './SocialMediaBlockPage.css';
 
-export const SocialMediaBlock: React.FC = () => {
-  return (
-    <Paper elevation={8} className="social-media-block">
-      <Stack spacing={2} alignItems="center" justifyContent="center" height="100%">
-        <Typography variant="h6">Social Media Block</Typography>
-      </Stack>
-    </Paper>
-  );
-};
-
 export default function SocialMediaPage() {
-  const [blocks, setBlocks] = useState<number[]>([0,1]);
+  const [blocks, setBlocks] = useState<number[]>([0]);
+  const [, setSocialMediaLogin] = useState<{ [key: number]: string }>({});
+
   const addBlock = () => {
     setBlocks((prev) => [...prev, prev.length]);
+  };
+
+  const handleLogin = (index: number, name: string) => {
+    setSocialMediaLogin((prev) => ({ ...prev, [index]: name }));
   };
 
   return (
@@ -55,7 +45,7 @@ export default function SocialMediaPage() {
         }}
       >
         {blocks.map((index) => (
-          <SocialMediaBlock key={index} />
+          <SocialMediaBlock key={index} index={index} onLogin={handleLogin} />
         ))}
       </Box>
     </Container>
