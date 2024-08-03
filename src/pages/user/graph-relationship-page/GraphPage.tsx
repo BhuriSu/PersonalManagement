@@ -4,6 +4,7 @@ import { Add as AddIcon, Close as CloseIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
 import './Graph.css';
 import MainWhiteBoard from './MainWhiteBoard';
+import NameModal from './NameModal'; // Import the NameModal component
 
 const Transition = React.forwardRef(function Transition(
   props: TransitionProps & { children: React.ReactElement },
@@ -13,31 +14,45 @@ const Transition = React.forwardRef(function Transition(
 });
 
 const GraphPage: React.FC = () => {
-  const [squares, setSquares] = useState<number[]>([0, 1, 2]);
+  const [squares, setSquares] = useState<{ id: number; name: string }[]>([]);
   const [open, setOpen] = useState<boolean>(false);
-
-  const addSquare = () => {
-    setSquares((prev) => [...prev, prev.length]);
-  };
+  const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
+    setNameModalOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
   };
 
+  const handleNameModalClose = () => {
+    setNameModalOpen(false);
+  };
+
+  const handleSaveName = (name: string) => {
+    setSquares((prev) => [...prev, { id: prev.length, name }]);
+    setNameModalOpen(false);
+    setOpen(true); // Open the dialog for the whiteboard after saving the name
+  };
+
   return (
     <div className="Graph">
-      <Button color="primary" startIcon={<AddIcon />} onClick={addSquare}>
+      <Button color="primary" startIcon={<AddIcon />} onClick={handleClickOpen}>
         <h3>Add graph</h3>
       </Button>
       <div className="grid-container">
         {squares.map((square) => (
-          <div key={square} className="square" onClick={handleClickOpen}></div>
+          <div key={square.id} className="square" onClick={() => setOpen(true)}>
+            {square.name}
+          </div>
         ))}
       </div>
+      <NameModal
+        open={nameModalOpen}
+        onClose={handleNameModalClose}
+        onSave={handleSaveName}
+      />
       <Dialog
         fullScreen
         open={open}
@@ -55,11 +70,11 @@ const GraphPage: React.FC = () => {
             <Button autoFocus color="inherit" onClick={handleClose}>
               Back
             </Button>
-            <Button autoFocus color="inherit" >
+            <Button autoFocus color="inherit">
               Save
             </Button>
           </Toolbar>
-          <MainWhiteBoard/>
+          <MainWhiteBoard />
         </AppBar>
       </Dialog>
     </div>

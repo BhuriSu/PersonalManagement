@@ -5,6 +5,7 @@ import RedditIcon from '@mui/icons-material/Reddit';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 
+
 const socialMediaIcons = [
   { icon: <FacebookIcon fontSize="large" />, name: 'Facebook' },
   { icon: <RedditIcon fontSize="large" />, name: 'Reddit' },
@@ -36,7 +37,6 @@ export const SocialMediaBlock: React.FC<SocialMediaBlockProps> = ({ index, onLog
     <Paper elevation={8} className="social-media-block">
       {isLoggedIn ? (
         <Box sx={{ width: '100%', height: '100%' }}>
-          {/* Here, you would embed the social media feed iframe or component */}
           <iframe
             src={`https://www.${socialMedia?.toLowerCase()}.com`}
             title={socialMedia!}
@@ -67,7 +67,7 @@ export const SocialMediaBlock: React.FC<SocialMediaBlockProps> = ({ index, onLog
       <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
         <DialogTitle>Login to {socialMedia}</DialogTitle>
         <DialogContent>
-          {/* Add login form or functionality here */}
+
           <Box>Login/Signup form for {socialMedia}</Box>
         </DialogContent>
         <DialogActions>

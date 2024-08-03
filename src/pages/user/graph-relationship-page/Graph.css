@@ -13,8 +13,13 @@
 .square {
   width: 100px;
   height: 100px;
-  background-color: #90caf9;
+  background-color: #39FF14; 
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  font-weight: bold;
   border-radius: 8px;
   cursor: pointer;
-  margin-top: 10px;
+  text-align: center;
 }
