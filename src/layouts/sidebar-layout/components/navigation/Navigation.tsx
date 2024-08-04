@@ -3,7 +3,6 @@ import List from '@mui/material/List';
 import { NavigationItem } from './components/navigation-item/NavigationItem';
 import { NavigationItemType } from './components/navigation-item/types';
 import { routes } from '../../../../constants/routes';
-import { useNotifications } from '../../../../hooks/api/use-notifications/useNotifications';
 
 // Import the images
 import dashboard from '../../../../assets/dashboard.png';
@@ -14,7 +13,6 @@ import article from '../../../../assets/article.png';
 import authentication from '../../../../assets/authentication.png';
 
 export function Navigation() {
-  const { data: notifications } = useNotifications();
 
   const navigationItems: NavigationItemType[] = useMemo(
     () => [
@@ -106,7 +104,7 @@ export function Navigation() {
         icon: () => <img src={calendar} alt="Calendar" style={{ width: '30px', height: '30px' }} />,
       },
     ],
-    [notifications?.notifications?.length],
+    [],
   );
 
   const navigationItemsList = navigationItems.map((item) => {

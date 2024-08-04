@@ -8,9 +8,11 @@ import {
   FormGroup,
   Stack,
   Typography,
+  TextField,
 } from '@mui/material';
 import { Controller, useForm } from 'react-hook-form';
 import { useCallback } from 'react';
+import { useSnackbar } from 'notistack';
 
 const leftColumnSx = { maxWidth: '200px', width: '100%' };
 
@@ -29,19 +31,43 @@ const CheckboxWithForm = ({ control, name, label }: { control: any; name: string
   );
 };
 
+// Mock function to simulate sending email
+const sendEmail = (to: string, subject: string, body: string) => {
+  console.log(`Sending email to: ${to}`);
+  console.log(`Subject: ${subject}`);
+  console.log(`Body: ${body}`);
+};
+
 export const AccountSettingsForm = () => {
-  const { control, handleSubmit } = useForm({
+  const { control, handleSubmit, watch } = useForm({
     defaultValues: {
-      enableEmailNotifications: true,
-      enableSmsNotifications: false,
-      emailPublic: true,
-      profilePublic: false,
+      enableNewsletter: false,
+      feedback: '', // Add a field for feedback
     },
   });
 
-  const handleSave = useCallback((data: unknown) => {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const enableNewsletter = watch('enableNewsletter');
+  const feedback = watch('feedback');
+
+  const handleSave = useCallback((data: any) => {
     console.log(data);
-  }, []);
+
+    let message = '';
+    if (enableNewsletter) {
+      sendEmail('shonuvy@gmail.com', 'Newsletter Update', 'test newsletter');
+      message += 'Newsletter update sent. ';
+    }
+
+    if (feedback) {
+      sendEmail('shonuvy@gmail.com', 'User Feedback', `test feedback: ${feedback}`);
+      message += 'Feedback sent.';
+    }
+
+    // Show notification
+    enqueueSnackbar(message || 'No changes detected', { variant: 'success' });
+  }, [enableNewsletter, feedback, enqueueSnackbar]);
 
   return (
     <form onSubmit={handleSubmit(handleSave)}>
@@ -50,19 +76,19 @@ export const AccountSettingsForm = () => {
           <Stack spacing={6}>
             <Stack direction={'row'} spacing={2}>
               <Stack spacing={2} paddingY={1} sx={leftColumnSx}>
-                <Typography fontWeight={'fontWeightMedium'}>Notifications</Typography>
+                <Typography fontWeight={'fontWeightMedium'}>Newsletter to your email</Typography>
               </Stack>
               <Stack spacing={2}>
                 <FormGroup>
                   <CheckboxWithForm
                     control={control}
-                    name={'enableEmailNotifications'}
-                    label='Enable email notifications'
+                    name={'enableNewsletter'}
+                    label='Enable Newsletter'
                   />
                   <CheckboxWithForm
                     control={control}
-                    name={'enableSmsNotifications'}
-                    label='Enable SMS notifications'
+                    name={'unableNewsletter'}
+                    label='Unable Newsletter'
                   />
                 </FormGroup>
               </Stack>
@@ -70,28 +96,18 @@ export const AccountSettingsForm = () => {
 
             <Stack direction={'row'} spacing={2}>
               <Stack spacing={2} paddingY={1} sx={leftColumnSx}>
-                <Typography fontWeight={'fontWeightMedium'}>Privacy</Typography>
+                <Typography fontWeight={'fontWeightMedium'}>Send feedback to us</Typography>
               </Stack>
               <Stack spacing={2}>
-                <FormGroup>
-                  <CheckboxWithForm control={control} name={'emailPublic'} label='Email address is public' />
-                  <CheckboxWithForm control={control} name={'profilePublic'} label='Profile is public' />
-                </FormGroup>
-              </Stack>
-            </Stack>
-
-            <Stack direction={'row'} spacing={2}>
-              <Stack spacing={2} paddingY={1} sx={leftColumnSx}>
-                <Typography fontWeight={'fontWeightMedium'}>Adds</Typography>
-              </Stack>
-              <Stack spacing={2}>
-                <Typography variant={'body2'}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam sed ante sapien. Sed quis mattis mauris.
-                  Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Quisque vel
-                  mattis magna. Ut risus ipsum, consequat at est non, interdum consequat elit. Aenean non est interdum,
-                  sagittis elit sodales, tincidunt leo. Vivamus quis viverra est. Suspendisse potenti. Sed lobortis arcu
-                  in porttitor venenatis. In hac habitasse platea dictumst.{' '}
-                </Typography>
+                <TextField
+                  sx={{ m: 1, width: '80ch' }}
+                  label="Your Feedback"
+                  multiline
+                  rows={7}
+                  variant="outlined"
+                  fullWidth
+                  {...control.register('feedback')}
+                />
               </Stack>
             </Stack>
 

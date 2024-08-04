@@ -3,15 +3,17 @@ import {
   UserMenuIconButton,
   UserMenuInfo,
   UserMenuMenu,
-  UserMenuMenuItem,
   UserMenuMenuItemWithSeparator,
 } from './styled';
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { UserAvatar } from '../../../../components/user-avatar/UserAvatar';
+import { routes } from '../../../../constants/routes';
 
 export const UserMenu = ({ user }: any) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
 
   const handleClose = () => setAnchorEl(null);
@@ -37,10 +39,8 @@ export const UserMenu = ({ user }: any) => {
           <Typography fontSize={14} color={'text.secondary'}>
             {user.email}
           </Typography>
+        <UserMenuMenuItemWithSeparator onClick={() => navigate(routes.login)}>Logout</UserMenuMenuItemWithSeparator>
         </UserMenuInfo>
-        <UserMenuMenuItem onClick={handleClose}>Profile</UserMenuMenuItem>
-        <UserMenuMenuItem onClick={handleClose}>My account</UserMenuMenuItem>
-        <UserMenuMenuItemWithSeparator onClick={handleClose}>Logout</UserMenuMenuItemWithSeparator>
       </UserMenuMenu>
     </UserMenuContainer>
   );

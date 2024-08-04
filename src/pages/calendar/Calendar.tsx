@@ -57,7 +57,7 @@ export default function CalendarPage() {
                   cursor: 'pointer',
                   transition: 'all 0.1s ease-in-out',
                   ...(isHover && {
-                    backgroundColor: isMultiDayEvent ? 'primary.dark' : 'grey.200',
+                    backgroundColor: isMultiDayEvent ? 'primary.dark' : 'purple.800',
                   }),
                 }}
                 onMouseEnter={handleMouseOver}
