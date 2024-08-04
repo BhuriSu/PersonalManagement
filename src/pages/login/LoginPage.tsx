@@ -13,7 +13,7 @@ export default function LoginPage() {
       <WelcomeContent />
       <Stack spacing={2} sx={{ minWidth: '60%' }} alignItems={'center'}>
         <Typography variant={'h3'} component={'h1'}>
-          Heyyyloooo 
+          Keep your connection secret!
         </Typography>
         <Typography variant={'body1'}>Enter your credentials below</Typography>
         <FormControl fullWidth>
