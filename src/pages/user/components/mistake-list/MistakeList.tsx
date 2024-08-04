@@ -107,10 +107,11 @@ const initialRows: GridRowsProp = [
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setSearchQuery: (query: string) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, setSearchQuery } = props;
 
   const handleClick = () => {
     const id = randomId();
@@ -121,20 +122,25 @@ function EditToolbar(props: EditToolbarProps) {
     }));
   };
 
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
+  };
+
   return (
     <GridToolbarContainer>
       <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
         Add record
       </Button>
       <TextField
-      variant={'outlined'}
-      size={'small'}
-      placeholder={'Search...'}
-      InputProps={{
-        endAdornment: <Search sx={{ color: 'grey.500' }} />,
-      }}
-      sx={{ ml: 'auto' }}
-    />
+        variant={'outlined'}
+        size={'small'}
+        placeholder={'Search...'}
+        InputProps={{
+          endAdornment: <Search sx={{ color: 'grey.500' }} />,
+        }}
+        onChange={handleSearchChange}
+        sx={{ ml: 'auto' }}
+      />
     </GridToolbarContainer>
   );
 }
@@ -142,6 +148,7 @@ function EditToolbar(props: EditToolbarProps) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -183,6 +190,33 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel(newRowModesModel);
   };
 
+  
+  const filteredRows = rows.filter((row) => {
+    const lowerSearchQuery = searchQuery.toLowerCase();
+    
+    const rowMistakes = row.mistakes ? row.mistakes.toLowerCase() : '';
+    const rowCost = row.cost ? row.cost.toLowerCase() : '';
+    
+    const rowDate = row.date ? new Date(row.date) : null;
+    const day = rowDate ? rowDate.getDate().toString() : '';
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const year = rowDate ? rowDate.getFullYear().toString() : '';
+    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
+    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
+  
+    const rowPlace = row.place ? row.place.toLowerCase() : '';
+    const rowSolution =  row.solution ?  row.solution.toLowerCase() : '';
+  
+    return (
+      rowMistakes.includes(lowerSearchQuery) ||
+      rowCost.includes(lowerSearchQuery) ||
+      formattedDate.includes(lowerSearchQuery) ||
+      formattedDateString.includes(lowerSearchQuery) ||
+      rowPlace.includes(lowerSearchQuery) ||
+      rowSolution.includes(lowerSearchQuery)
+    );
+  });
+  
   const columns: GridColDef[] = [
     { field: 'mistake', headerName: 'Mistakes that I made', width: 280, editable: true },
     {
@@ -267,7 +301,7 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
@@ -278,7 +312,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
     </Box>

@@ -66,10 +66,11 @@ const initialRows: GridRowsProp = [
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setSearchQuery: (query: string) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, setSearchQuery } = props;
 
   const handleClick = () => {
     const id = randomId();
@@ -78,6 +79,10 @@ function EditToolbar(props: EditToolbarProps) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -89,6 +94,7 @@ function EditToolbar(props: EditToolbarProps) {
       variant={'outlined'}
       size={'small'}
       placeholder={'Search...'}
+      onChange={handleSearchChange}
       InputProps={{
         endAdornment: <Search sx={{ color: 'grey.500' }} />,
       }}
@@ -101,6 +107,7 @@ function EditToolbar(props: EditToolbarProps) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -141,6 +148,27 @@ export default function FullFeaturedCrudGrid() {
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
   };
+
+  const filteredRows = rows.filter((row) => {
+    const lowerSearchQuery = searchQuery.toLowerCase();
+    
+    const rowUrgency = row.urgency ? row.urgency.toLowerCase() : '';
+    const rowInformation = row.information ? row.information.toLowerCase() : '';
+    
+    const rowDate = row.date ? new Date(row.date) : null;
+    const day = rowDate ? rowDate.getDate().toString() : '';
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const year = rowDate ? rowDate.getFullYear().toString() : '';
+    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
+    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
+  
+    return (
+      rowUrgency.includes(lowerSearchQuery) ||
+      rowInformation.includes(lowerSearchQuery) ||
+      formattedDate.includes(lowerSearchQuery) ||
+      formattedDateString.includes(lowerSearchQuery) 
+    );
+  });
 
   const columns: GridColDef[] = [
     { field: 'urgency', headerName: 'Urgency', width: 400, editable: true },
@@ -208,7 +236,7 @@ export default function FullFeaturedCrudGrid() {
     >
       <PageHeader title={'Urgency List'} breadcrumbs={['Urgency', 'List']} />
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
@@ -219,7 +247,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
     </Box>

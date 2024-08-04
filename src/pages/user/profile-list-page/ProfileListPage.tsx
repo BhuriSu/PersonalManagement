@@ -75,61 +75,62 @@ const initialRows: GridRowsProp = [
     id: randomId(),
     name: randomTraderName(),
     age: 45,
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
-    mail: generateRandomEmail(),
+    email: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 36,
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
-    mail: generateRandomEmail(),
+    email: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 49,
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
-    mail: generateRandomEmail(),
+    email: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 38,
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
-    mail: generateRandomEmail(),
+    email: generateRandomEmail(),
   },
   {
     id: randomId(),
     name: randomTraderName(),
     age: 30,
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
-    mail: generateRandomEmail(),
+    email: generateRandomEmail(),
   },
 ];
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setSearchQuery: (query: string) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, setSearchQuery } = props;
 
   const handleClick = () => {
     const id = randomId();
@@ -138,6 +139,10 @@ function EditToolbar(props: EditToolbarProps) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -149,6 +154,7 @@ function EditToolbar(props: EditToolbarProps) {
       variant={'outlined'}
       size={'small'}
       placeholder={'Search...'}
+      onChange={handleSearchChange}
       InputProps={{
         endAdornment: <Search sx={{ color: 'grey.500' }} />,
       }}
@@ -161,6 +167,7 @@ function EditToolbar(props: EditToolbarProps) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -202,6 +209,36 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel(newRowModesModel);
   };
 
+  const filteredRows = rows.filter((row) => {
+    const lowerSearchQuery = searchQuery.toLowerCase();
+    
+    const rowName = row.name ? row.name.toLowerCase() : '';
+    const rowAge = row.age ? row.age.toString().toLowerCase() : '';
+    const rowRole = row.role ? row.role.toLowerCase() : '';
+    const rowPhone = row.phone ? row.phone.toLowerCase() : '';
+    
+    const rowDate = row.date ? new Date(row.date) : null;
+    const day = rowDate ? rowDate.getDate().toString() : '';
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const year = rowDate ? rowDate.getFullYear().toString() : '';
+    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
+    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
+  
+    const rowPlace = row.place ? row.place.toLowerCase() : '';
+    const rowEmail =  row.email ?  row.email.toLowerCase() : '';
+  
+    return (
+      rowName.includes(lowerSearchQuery) ||
+      rowAge.includes(lowerSearchQuery) ||
+      rowRole.includes(lowerSearchQuery) ||
+      rowPhone.includes(lowerSearchQuery) ||
+      formattedDate.includes(lowerSearchQuery) ||
+      formattedDateString.includes(lowerSearchQuery) ||
+      rowPlace.includes(lowerSearchQuery) ||
+      rowEmail.includes(lowerSearchQuery)
+    );
+  });
+
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', width: 200, editable: true },
     {
@@ -214,7 +251,7 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: 'joinDate',
+      field: 'date',
       headerName: 'Date you met',
       type: 'date',
       width: 100,
@@ -239,7 +276,7 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: 'mail',
+      field: 'email',
       headerName: 'E-Mail',
       width: 180,
       editable: true,
@@ -302,7 +339,7 @@ export default function FullFeaturedCrudGrid() {
     >
       <PageHeader title={'Profile List'} breadcrumbs={['Profile', 'List']} />
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
@@ -313,7 +350,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
     </Box>

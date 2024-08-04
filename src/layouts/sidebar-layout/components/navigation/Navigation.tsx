@@ -53,8 +53,8 @@ export function Navigation() {
         ],
       },
       {
-        label: 'Media',
-        icon: () => <img src={article} alt="Media" style={{ width: '30px', height: '30px' }} />,
+        label: 'Article',
+        icon: () => <img src={article} alt="Article" style={{ width: '30px', height: '30px' }} />,
         description: 'Article Management',
         items: [
           {

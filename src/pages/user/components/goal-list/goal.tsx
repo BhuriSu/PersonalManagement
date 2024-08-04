@@ -94,18 +94,23 @@ const initialRows: GridRowsProp = [
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setSearchQuery: (query: string) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, setSearchQuery } = props;
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, mistake: '', cost: '', date: '', place: '', solution: '', isNew: true }]);
+    setRows((oldRows) => [...oldRows, { id, goal: '', how: '', date: '', place: '', isNew: true }]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'mistake' },
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'goal' },
     }));
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -114,14 +119,15 @@ function EditToolbar(props: EditToolbarProps) {
         Add record
       </Button>
       <TextField
-      variant={'outlined'}
-      size={'small'}
-      placeholder={'Search...'}
-      InputProps={{
-        endAdornment: <Search sx={{ color: 'grey.500' }} />,
-      }}
-      sx={{ ml: 'auto' }}
-    />
+        variant='outlined'
+        size='small'
+        placeholder='Search...'
+        onChange={handleSearchChange}
+        InputProps={{
+          endAdornment: <Search sx={{ color: 'grey.500' }} />,
+        }}
+        sx={{ ml: 'auto' }}
+      />
     </GridToolbarContainer>
   );
 }
@@ -129,6 +135,7 @@ function EditToolbar(props: EditToolbarProps) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -170,11 +177,35 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel(newRowModesModel);
   };
 
+  const filteredRows = rows.filter((row) => {
+    const lowerSearchQuery = searchQuery.toLowerCase();
+    
+    const rowGoal = row.goal ? row.goal.toLowerCase() : '';
+    const rowHow = row.how ? row.how.toLowerCase() : '';
+    
+    const rowDate = row.date ? new Date(row.date) : null;
+    const day = rowDate ? rowDate.getDate().toString() : '';
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const year = rowDate ? rowDate.getFullYear().toString() : '';
+    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
+    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
+  
+    const rowPlace = row.place ? row.place.toLowerCase() : '';
+  
+    return (
+      rowGoal.includes(lowerSearchQuery) ||
+      rowHow.includes(lowerSearchQuery) ||
+      formattedDate.includes(lowerSearchQuery) ||
+      formattedDateString.includes(lowerSearchQuery) ||
+      rowPlace.includes(lowerSearchQuery)
+    );
+  });
+
   const columns: GridColDef[] = [
     { field: 'goal', headerName: 'Goal', width: 300, editable: true },
     {
       field: 'how',
-      headerName: 'how',
+      headerName: 'How',
       width: 300,
       editable: true,
     },
@@ -248,7 +279,7 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
@@ -260,7 +291,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
     </Box>

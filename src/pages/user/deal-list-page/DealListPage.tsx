@@ -79,7 +79,7 @@ const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),
     time: generateRandomTimeDuration(),
@@ -88,7 +88,7 @@ const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),
     time: generateRandomTimeDuration(),
@@ -97,7 +97,7 @@ const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),
     time: generateRandomTimeDuration(),
@@ -106,7 +106,7 @@ const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),
     time: generateRandomTimeDuration(),
@@ -115,7 +115,7 @@ const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),
-    joinDate: randomCreatedDate(),
+    date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),
     time: generateRandomTimeDuration(),
@@ -126,10 +126,11 @@ const initialRows: GridRowsProp = [
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
   setRowModesModel: (newModel: (oldModel: GridRowModesModel) => GridRowModesModel) => void;
+  setSearchQuery: (query: string) => void;
 }
 
 function EditToolbar(props: EditToolbarProps) {
-  const { setRows, setRowModesModel } = props;
+  const { setRows, setRowModesModel, setSearchQuery } = props;
 
   const handleClick = () => {
     const id = randomId();
@@ -138,6 +139,10 @@ function EditToolbar(props: EditToolbarProps) {
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
     }));
+  };
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
@@ -149,6 +154,7 @@ function EditToolbar(props: EditToolbarProps) {
       variant={'outlined'}
       size={'small'}
       placeholder={'Search...'}
+      onChange={handleSearchChange}
       InputProps={{
         endAdornment: <Search sx={{ color: 'grey.500' }} />,
       }}
@@ -161,6 +167,7 @@ function EditToolbar(props: EditToolbarProps) {
 export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -202,10 +209,40 @@ export default function FullFeaturedCrudGrid() {
     setRowModesModel(newRowModesModel);
   };
 
+  const filteredRows = rows.filter((row) => {
+    const lowerSearchQuery = searchQuery.toLowerCase();
+    
+    const rowName = row.name ? row.name.toLowerCase() : '';
+    const rowDeal = row.deal ? row.deal.toLowerCase() : '';
+    const rowTime = row.time ? row.time.toLowerCase() : '';
+    const rowMoney = row.money ? row.money.toLowerCase() : '';
+    
+    const rowDate = row.date ? new Date(row.date) : null;
+    const day = rowDate ? rowDate.getDate().toString() : '';
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const year = rowDate ? rowDate.getFullYear().toString() : '';
+    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
+    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
+  
+    const rowPlace = row.place ? row.place.toLowerCase() : '';
+    const rowSolution =  row.solution ?  row.solution.toLowerCase() : '';
+  
+    return (
+      rowName.includes(lowerSearchQuery) ||
+      rowDeal.includes(lowerSearchQuery) ||
+      rowTime.includes(lowerSearchQuery) ||
+      rowMoney.includes(lowerSearchQuery) ||
+      formattedDate.includes(lowerSearchQuery) ||
+      formattedDateString.includes(lowerSearchQuery) ||
+      rowPlace.includes(lowerSearchQuery) ||
+      rowSolution.includes(lowerSearchQuery)
+    );
+  });
+
   const columns: GridColDef[] = [
     { field: 'name', headerName: 'Name', width: 200, editable: true },
     {
-      field: 'joinDate',
+      field: 'date',
       headerName: 'Date you met',
       type: 'date',
       width: 100,
@@ -293,7 +330,7 @@ export default function FullFeaturedCrudGrid() {
     >
       <PageHeader title={'Deal List'} breadcrumbs={['Deal', 'List']} />
       <DataGrid
-        rows={rows}
+        rows={filteredRows}
         columns={columns}
         editMode='row'
         rowModesModel={rowModesModel}
@@ -304,7 +341,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: EditToolbar as GridSlots['toolbar'],
         }}
         slotProps={{
-          toolbar: { setRows, setRowModesModel },
+          toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
     </Box>
