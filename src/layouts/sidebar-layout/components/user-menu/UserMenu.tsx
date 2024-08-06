@@ -11,12 +11,12 @@ import { useNavigate } from 'react-router-dom';
 import { Typography } from '@mui/material';
 import { UserAvatar } from '../../../../components/user-avatar/UserAvatar';
 import { routes } from '../../../../constants/routes';
-import { auth } from '../../../../firebase'; // Import Firebase auth
-import { User } from 'firebase/auth'; // Correct import for User type
+import { auth } from '../../../../firebase'; 
+import { User } from 'firebase/auth'; 
 
 export const UserMenu = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [user, setUser] = useState<User | null>(null); // Use User type from 'firebase/auth'
+  const [user, setUser] = useState<User | null>(null); 
   const navigate = useNavigate();
   const open = Boolean(anchorEl);
 

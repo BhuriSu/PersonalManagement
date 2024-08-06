@@ -1,12 +1,28 @@
-import { Button, Divider, FormControl, Link, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Button, Divider, FormControl, Link, Stack, TextField, Typography, Alert } from '@mui/material';
 import { Facebook, Google } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants/routes';
 import { WelcomeContent } from '../../content/welcome-content/WelcomeContent';
 import { HalfLayout } from '../../layouts/half-layout/HalfLayout';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../../firebase'; 
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState<string | null>(null);
+
+  const handleLogin = async () => {
+    setError(null);
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      navigate(routes.dashboard);
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
 
   return (
     <HalfLayout>
@@ -16,14 +32,26 @@ export default function LoginPage() {
           Keep your connection secret!
         </Typography>
         <Typography variant={'body1'}>Enter your credentials below</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
         <FormControl fullWidth>
-          <TextField fullWidth placeholder={'Email'} />
+          <TextField 
+            fullWidth 
+            placeholder={'Email'} 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
         </FormControl>
         <FormControl fullWidth>
-          <TextField fullWidth placeholder={'Password'} type={'password'} />
+          <TextField 
+            fullWidth 
+            placeholder={'Password'} 
+            type={'password'} 
+            value={password} 
+            onChange={(e) => setPassword(e.target.value)} 
+          />
         </FormControl>
 
-        <Button variant={'contained'} fullWidth onClick={() => navigate(routes.dashboard)}>
+        <Button variant={'contained'} fullWidth onClick={handleLogin}>
           Login
         </Button>
         <Divider sx={{ width: '100%' }} />

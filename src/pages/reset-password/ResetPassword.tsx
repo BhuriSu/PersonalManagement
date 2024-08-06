@@ -1,11 +1,28 @@
-import { Button, Divider, FormControl, Link, Stack, TextField, Typography } from '@mui/material';
+import { useState } from 'react';
+import { Button, Divider, FormControl, Link, Stack, TextField, Typography, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants/routes';
 import { WelcomeContent } from '../../content/welcome-content/WelcomeContent';
 import { HalfLayout } from '../../layouts/half-layout/HalfLayout';
+import { sendPasswordResetEmail } from 'firebase/auth';
+import { auth } from '../../firebase';
 
 export default function ResetPassword() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState('');
+  const [error, setError] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+
+  const handleResetPassword = async () => {
+    setError(null);
+    setMessage(null);
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setMessage('Password reset email sent successfully. Please check your inbox.');
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
 
   return (
     <HalfLayout>
@@ -15,10 +32,17 @@ export default function ResetPassword() {
           Reset password
         </Typography>
         <Typography variant={'body1'}>Enter an email associated with your account.</Typography>
+        {error && <Alert severity="error">{error}</Alert>}
+        {message && <Alert severity="success">{message}</Alert>}
         <FormControl fullWidth>
-          <TextField fullWidth placeholder={'Email'} />
+          <TextField 
+            fullWidth 
+            placeholder={'Email'} 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+          />
         </FormControl>
-        <Button variant={'contained'} fullWidth onClick={() => navigate(routes.dashboard)}>
+        <Button variant={'contained'} fullWidth onClick={handleResetPassword}>
           Reset password
         </Button>
         <Divider sx={{ width: '100%' }} />

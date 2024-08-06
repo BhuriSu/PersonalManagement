@@ -1,7 +1,4 @@
 import { Box, Typography, useTheme } from '@mui/material';
-
-import { useNavigate } from 'react-router-dom';
-import { routes } from '../../constants/routes';
 import logo from '../../assets/logo.svg';
 
 interface Params {
@@ -9,7 +6,6 @@ interface Params {
 }
 
 export const Logo = ({ invertImage }: Params) => {
-  const navigate = useNavigate();
   const theme = useTheme();
 
   return (
@@ -22,7 +18,6 @@ export const Logo = ({ invertImage }: Params) => {
         cursor: 'pointer',
         '&:hover': { opacity: 0.8 },
       }}
-      onClick={() => navigate(routes.dashboard)}
       component={'a'}
     >
       <Box sx={{ filter: `invert(${invertImage ? '1' : '0'})` }}>
