@@ -24,6 +24,9 @@ import {
 } from '@mui/x-data-grid';
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 import { PageHeader } from '../../../components/page-header/PageHeader';
+import { useDispatch } from 'react-redux';
+import { addTransaction } from '../../../store/transaction/transactionSlice';
+import { addProfit } from '../../../store/profit/profitSlice';
 
 const deals = ['Selling Software', 'Buying Hotel Company', 'Selling Rare Material'];
 
@@ -44,12 +47,11 @@ function generateRandomTimeDuration() {
   return timeDuration.trim();
 }
 
-function generateRandomMoney() {
+function generateRandomMoney(): number {
   const minAmount = 1000000;
   const maxAmount = 10000000;
   const randomAmount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
-  const formattedAmount = randomAmount.toLocaleString();
-  return formattedAmount;
+  return randomAmount;
 }
 
 function generateRandomPlace() {
@@ -85,7 +87,6 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -96,7 +97,6 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -107,7 +107,6 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -118,7 +117,6 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -129,8 +127,6 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
-    
   },
 ];
 
@@ -142,15 +138,23 @@ interface EditToolbarProps {
 
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, setSearchQuery } = props;
+  const dispatch = useDispatch();
 
-  const handleClick = () => {
-    const id = randomId();
-    setRows((oldRows) => [{ id, name: '', age: '', isNew: true },...oldRows]);
-    setRowModesModel((oldModel) => ({
-      ...oldModel,
-      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-    }));
-  };
+ const handleClick = () => {
+  const id = randomId();
+  const newMoney = generateRandomMoney(); // Ensure this is a number
+  const newProfit = generateRandomMoney();
+  dispatch(addTransaction(newMoney)); // Pass number to the action
+  dispatch(addProfit(newProfit));
+  setRows((oldRows) => [
+    { id, name: '', date: '', place: '', deal: '', time: '', money: newMoney, profit: newProfit, isNew: true },
+    ...oldRows,
+  ]);
+  setRowModesModel((oldModel) => ({
+    ...oldModel,
+    [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+  }));
+};
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -180,6 +184,8 @@ export default function FullFeaturedCrudGrid() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
 
+  const dispatch = useDispatch();
+
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -195,6 +201,10 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
+    const deletedRow = rows.find((row) => row.id === id);
+    if (deletedRow) {
+      dispatch(addTransaction(-(parseFloat(deletedRow.money as unknown as string) || 0))); // Subtract the money from total
+    }
     setRows(rows.filter((row) => row.id !== id));
   };
 
@@ -211,10 +221,24 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
+    const previousRow = rows.find((row) => row.id === newRow.id);
+    const updatedRow = {
+      ...newRow,
+      isNew: false,
+      money: parseFloat(newRow.money as unknown as string) || 0,
+      profit: parseFloat(newRow.profit as unknown as string) || 0,
+    };
+
+    // Update total money in Redux
+    if (previousRow) {
+      dispatch(addTransaction(updatedRow.money - (parseFloat(previousRow.money as unknown as string) || 0)));
+      dispatch(addProfit(updatedRow.profit - (parseFloat(previousRow.profit as unknown as string) || 0)));
+    }
+
     setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
     return updatedRow;
   };
+
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -226,7 +250,8 @@ export default function FullFeaturedCrudGrid() {
     const rowName = row.name ? row.name.toLowerCase() : '';
     const rowDeal = row.deal ? row.deal.toLowerCase() : '';
     const rowTime = row.time ? row.time.toLowerCase() : '';
-    const rowMoney = row.money ? row.money.toLowerCase() : '';
+    const rowMoney = row.money ? row.money : '';
+    const rowProfit = row.profit ? row.profit: '';
     
     const rowDate = row.date ? new Date(row.date) : null;
     const day = rowDate ? rowDate.getDate().toString() : '';
@@ -243,6 +268,7 @@ export default function FullFeaturedCrudGrid() {
       rowDeal.includes(lowerSearchQuery) ||
       rowTime.includes(lowerSearchQuery) ||
       rowMoney.includes(lowerSearchQuery) ||
+      rowProfit.includes(lowerSearchQuery) ||
       formattedDate.includes(lowerSearchQuery) ||
       formattedDateString.includes(lowerSearchQuery) ||
       rowPlace.includes(lowerSearchQuery) ||
@@ -282,18 +308,14 @@ export default function FullFeaturedCrudGrid() {
       headerName: 'Money',
       width: 120,
       editable: true,
+      renderCell: (params) => params.value.toLocaleString(),
     },
     {
       field: 'profit',
       headerName: 'Profit',
       width: 120,
       editable: true,
-    },
-    {
-      field: 'totalDealTotalConnectionTotalTransaction',
-      headerName: 'TotalDeal/TotalConnection/TotalTransaction ',
-      width: 120,
-      editable: true,
+      renderCell: (params) => params.value.toLocaleString(),
     },
     {
       field: 'actions',

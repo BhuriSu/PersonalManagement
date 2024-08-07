@@ -24,6 +24,8 @@ import {
 } from '@mui/x-data-grid';
 import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
 import { PageHeader } from '../../../components/page-header/PageHeader';
+import { addConnection, removeConnection, setConnections } from '../../../store/profile/profileSlice';
+import { useDispatch } from 'react-redux';
 
 const roles = ['Business Owner', 'Politician', 'High-Ranking Official'];
 
@@ -131,9 +133,10 @@ interface EditToolbarProps {
 
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, setSearchQuery } = props;
-
+  const dispatch = useDispatch();
   const handleClick = () => {
     const id = randomId();
+    dispatch(addConnection());
     setRows((oldRows) => [{ id, name: '', age: '', isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
@@ -168,6 +171,11 @@ export default function FullFeaturedCrudGrid() {
   const [rows, setRows] = React.useState(initialRows);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
+  const dispatch = useDispatch();
+
+  React.useEffect(() => {
+    dispatch(setConnections(initialRows.length));
+  }, [dispatch]);
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -185,18 +193,16 @@ export default function FullFeaturedCrudGrid() {
 
   const handleDeleteClick = (id: GridRowId) => () => {
     setRows(rows.filter((row) => row.id !== id));
+    dispatch(removeConnection()); 
   };
 
-  const handleCancelClick = (id: GridRowId) => () => {
-    setRowModesModel({
-      ...rowModesModel,
-      [id]: { mode: GridRowModes.View, ignoreModifications: true },
-    });
-
-    const editedRow = rows.find((row) => row.id === id);
-    if (editedRow!.isNew) {
-      setRows(rows.filter((row) => row.id !== id));
-    }
+  const handleCancelClick = () => () => {
+    const id = randomId();
+    setRows((oldRows) => [{ id, name: '', age: '', isNew: true }, ...oldRows]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
   };
 
   const processRowUpdate = (newRow: GridRowModel) => {
@@ -304,7 +310,7 @@ export default function FullFeaturedCrudGrid() {
               icon={<CancelIcon />}
               label='Cancel'
               className='textPrimary'
-              onClick={handleCancelClick(id)}
+              onClick={handleCancelClick()}
               color='inherit'
             />,
           ];
@@ -353,6 +359,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
+      
     </Box>
   );
 }

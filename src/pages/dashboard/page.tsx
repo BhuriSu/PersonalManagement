@@ -1,8 +1,9 @@
 import * as React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
-
-import { TotalTransactions } from './components/transaction';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/store';
+import { TotalTransactions } from './components/total-transaction';
 import { LatestConnections } from './components/latest-connections';
 import { LatestDeals } from './components/latest-deals';
 import { Deals } from './components/sales';
@@ -11,21 +12,39 @@ import { TotalConnections } from './components/total-connections';
 import { TotalProfit } from './components/total-profit';
 import { Traffic } from './components/traffic';
 
+interface Transaction {
+  id: string;
+  money: number;
+}
+interface Profit {
+  id: string;
+  profit: number;
+}
+
 export default function DashBoardPage(): React.JSX.Element {
+  const transactions = useSelector((state: RootState) => state.transactions.transactions);
+  const profits = useSelector((state: RootState) => state.profits.profits);
+
+
+  const totalTransactions = transactions.reduce((total: number, transaction: Transaction) => total + transaction.money, 0);
+  const totalProfits = profits.reduce((total: number, profit: Profit) => total + profit.profit, 0);
+  const totalConnections = useSelector((state: RootState) => state.connections.totalConnections);
+
+
 
   return (
     <Grid container spacing={3}>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalTransactions diff={12} trend="up" sx={{ height: '100%' }} value="$24k" />
+        <TotalTransactions diff={12} trend="up" sx={{ height: '100%' }} value={totalTransactions} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalConnections diff={16} trend="down" sx={{ height: '100%' }} value="1.6k" />
+        <TotalConnections diff={16} trend="down" sx={{ height: '100%' }} value={totalConnections} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <GoalsProgress sx={{ height: '100%' }} value={1} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalProfit sx={{ height: '100%' }} value={"$15k"} />
+        <TotalProfit diff={7} trend="up" sx={{ height: '100%' }} value={totalProfits} />
       </Grid>
       <Grid lg={8} xs={12}>
         <Deals
@@ -37,7 +56,7 @@ export default function DashBoardPage(): React.JSX.Element {
         />
       </Grid> 
       <Grid lg={4} md={6} xs={12}>
-        <Traffic chartSeries={[63, 15, 22]} labels={['TotalDeal', 'TotalConnection', 'TotalTransaction']} sx={{ height: '100%' }} />
+        <Traffic chartSeries={[63, 15, 22]} labels={['Total Transactions', 'Total Connections', 'Total Profit From Dealing']} sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <LatestDeals

@@ -1,11 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { navigationReducer } from './sidebar/navigationSlice';
 import { calendarReducer } from './calendar/calendarSlice';
-import { appReducer } from './app/appSlice';
+import  transactionReducer from './transaction/transactionSlice';
+import  profitReducer from './profit/profitSlice';
+import connectionsReducer from './profile/profileSlice';
 
 export const store = configureStore({
   reducer: {
-    app: appReducer,
+    transactions: transactionReducer,
+    profits: profitReducer,
+    connections: connectionsReducer,
     navigation: navigationReducer,
     calendar: calendarReducer,
   },

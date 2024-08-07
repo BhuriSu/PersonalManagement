@@ -13,7 +13,7 @@ export interface TotalConnectionsProps {
   diff?: number;
   trend: 'up' | 'down';
   sx?: SxProps;
-  value: string;
+  value: string | number;
 }
 
 export function TotalConnections({ diff, trend, sx, value }: TotalConnectionsProps): React.JSX.Element {
@@ -23,7 +23,7 @@ export function TotalConnections({ diff, trend, sx, value }: TotalConnectionsPro
   return (
     <Card sx={sx}>
       <CardContent>
-        <Stack spacing={2}>
+        <Stack spacing={3}>
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
               <Typography color="text.secondary" variant="overline">
