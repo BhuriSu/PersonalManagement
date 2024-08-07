@@ -10,7 +10,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { getThemeByName } from './theme/theme.ts';
 import { SidebarLayout } from './layouts/sidebar-layout/SidebarLayout.tsx';
 
-const Dashboard = React.lazy(() => import('./pages/dashboard/Dashboard'));
+const Dashboard = React.lazy(() => import('./pages/dashboard'));
 const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/UserAccountPage'));
 const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage'));
 const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage'));

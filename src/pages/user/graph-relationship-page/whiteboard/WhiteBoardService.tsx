@@ -1,5 +1,4 @@
 import {
-  Suspense,
   lazy,
   useCallback,
   useRef,
