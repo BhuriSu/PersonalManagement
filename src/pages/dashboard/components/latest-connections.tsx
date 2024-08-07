@@ -14,6 +14,8 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../../constants/routes';
 
 const statusMap = {
   pending: { label: 'Pending', color: 'warning' },
@@ -29,15 +31,16 @@ export interface Order {
   createdAt: Date;
 }
 
-export interface LatestOrdersProps {
+export interface LatestConnectionsProps {
   orders?: Order[];
   sx?: SxProps;
 }
 
-export function LatestOrders({ orders = [], sx }: LatestOrdersProps): React.JSX.Element {
+export function LatestConnections({ orders = [], sx }: LatestConnectionsProps): React.JSX.Element {
+  const navigate = useNavigate();
   return (
     <Card sx={sx}>
-      <CardHeader title="Latest orders" />
+      <CardHeader title="Latest connections" />
       <Divider />
       <Box sx={{ overflowX: 'auto' }}>
         <Table sx={{ minWidth: 800 }}>
@@ -74,6 +77,7 @@ export function LatestOrders({ orders = [], sx }: LatestOrdersProps): React.JSX.
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
           variant="text"
+          onClick={() => { navigate(routes.userProfile) }}
         >
           View all
         </Button>

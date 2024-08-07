@@ -14,26 +14,29 @@ import type { SxProps } from '@mui/material/styles';
 import { ArrowRight as ArrowRightIcon } from '@phosphor-icons/react/dist/ssr/ArrowRight';
 import { DotsThreeVertical as DotsThreeVerticalIcon } from '@phosphor-icons/react/dist/ssr/DotsThreeVertical';
 import dayjs from 'dayjs';
+import { useNavigate } from 'react-router-dom';
+import { routes } from '../../../constants/routes';
 
-export interface Product {
+export interface Deal {
   id: string;
   name: string;
   updatedAt: Date;
 }
 
-export interface LatestProductsProps {
-  products?: Product[];
+export interface LatestDealsProps {
+  deals?: Deal[];
   sx?: SxProps;
 }
 
-export function LatestProducts({ products = [], sx }: LatestProductsProps): React.JSX.Element {
+export function LatestDeals({ deals = [], sx }: LatestDealsProps): React.JSX.Element {
+  const navigate = useNavigate();
   return (
     <Card sx={sx}>
-      <CardHeader title="Latest products" />
+      <CardHeader title="Latest deals" />
       <Divider />
       <List>
-        {products.map((product, index) => (
-          <ListItem divider={index < products.length - 1} key={product.id}>
+        {deals.map((deal, index) => (
+          <ListItem divider={index < deals.length - 1} key={deal.id}>
             <ListItemAvatar>
               {(
                 <Box
@@ -47,9 +50,9 @@ export function LatestProducts({ products = [], sx }: LatestProductsProps): Reac
               )}
             </ListItemAvatar>
             <ListItemText
-              primary={product.name}
+              primary={deal.name}
               primaryTypographyProps={{ variant: 'subtitle1' }}
-              secondary={`Updated ${dayjs(product.updatedAt).format('MMM D, YYYY')}`}
+              secondary={`Updated ${dayjs(deal.updatedAt).format('MMM D, YYYY')}`}
               secondaryTypographyProps={{ variant: 'body2' }}
             />
             <IconButton edge="end">
@@ -65,7 +68,8 @@ export function LatestProducts({ products = [], sx }: LatestProductsProps): Reac
           endIcon={<ArrowRightIcon fontSize="var(--icon-fontSize-md)" />}
           size="small"
           variant="text"
-        >
+          onClick={() => { navigate(routes.dealList) }}
+          >
           View all
         </Button>
       </CardActions>

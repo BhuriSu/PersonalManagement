@@ -1,7 +1,6 @@
 
 import DashBoardPage from './page';
 
-
 const MainDashBoard = () => {
   return (
     <div>

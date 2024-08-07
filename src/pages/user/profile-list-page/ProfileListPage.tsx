@@ -70,7 +70,7 @@ function generateRandomPlace() {
   return randomPlace;
 }
 
-const initialRows: GridRowsProp = [
+export const initialRows: GridRowsProp = [
   {
     id: randomId(),
     name: randomTraderName(),

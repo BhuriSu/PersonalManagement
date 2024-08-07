@@ -143,6 +143,7 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
+
   const handleEditClick = (id: GridRowId) => () => {
     setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
   };
