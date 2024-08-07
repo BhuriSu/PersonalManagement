@@ -2,7 +2,7 @@ import * as React from 'react';
 import Grid from '@mui/material/Unstable_Grid2';
 import dayjs from 'dayjs';
 
-import { Budget } from './components/budget';
+import { TotalTransactions } from './components/transaction';
 import { LatestConnections } from './components/latest-connections';
 import { LatestDeals } from './components/latest-deals';
 import { Deals } from './components/sales';
@@ -13,11 +13,10 @@ import { Traffic } from './components/traffic';
 
 export default function DashBoardPage(): React.JSX.Element {
 
-
   return (
     <Grid container spacing={3}>
       <Grid lg={3} sm={6} xs={12}>
-        <Budget diff={12} trend="up" sx={{ height: '100%' }} value="$24k" />
+        <TotalTransactions diff={12} trend="up" sx={{ height: '100%' }} value="$24k" />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <TotalConnections diff={16} trend="down" sx={{ height: '100%' }} value="1.6k" />
@@ -26,7 +25,7 @@ export default function DashBoardPage(): React.JSX.Element {
         <GoalsProgress sx={{ height: '100%' }} value={1} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <TotalProfit sx={{ height: '100%' }} value="$15k" />
+        <TotalProfit sx={{ height: '100%' }} value={"$15k"} />
       </Grid>
       <Grid lg={8} xs={12}>
         <Deals
@@ -36,9 +35,9 @@ export default function DashBoardPage(): React.JSX.Element {
           ]}
           sx={{ height: '100%' }}
         />
-      </Grid>
+      </Grid> 
       <Grid lg={4} md={6} xs={12}>
-        <Traffic chartSeries={[63, 15, 22]} labels={['Online', 'Offline', 'PhoneCall']} sx={{ height: '100%' }} />
+        <Traffic chartSeries={[63, 15, 22]} labels={['TotalDeal', 'TotalConnection', 'TotalTransaction']} sx={{ height: '100%' }} />
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <LatestDeals

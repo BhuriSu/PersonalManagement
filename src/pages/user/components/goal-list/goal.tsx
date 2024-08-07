@@ -102,7 +102,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, goal: '', how: '', date: '', place: '', isNew: true }]);
+    setRows((oldRows) => [{ id, goal: '', how: '', date: '', place: '', isNew: true }, ...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'goal' },

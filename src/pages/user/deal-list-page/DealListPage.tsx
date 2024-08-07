@@ -84,6 +84,8 @@ const initialRows: GridRowsProp = [
     deal: randomRole(),
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
+    profit: generateRandomMoney(),
+    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -93,6 +95,8 @@ const initialRows: GridRowsProp = [
     deal: randomRole(),
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
+    profit: generateRandomMoney(),
+    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -102,6 +106,8 @@ const initialRows: GridRowsProp = [
     deal: randomRole(),
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
+    profit: generateRandomMoney(),
+    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -111,6 +117,8 @@ const initialRows: GridRowsProp = [
     deal: randomRole(),
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
+    profit: generateRandomMoney(),
+    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
   },
   {
     id: randomId(),
@@ -120,6 +128,9 @@ const initialRows: GridRowsProp = [
     deal: randomRole(),
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
+    profit: generateRandomMoney(),
+    totalDealTotalConnectionTotalTransaction: 'TotalDeal'
+    
   },
 ];
 
@@ -134,7 +145,7 @@ function EditToolbar(props: EditToolbarProps) {
 
   const handleClick = () => {
     const id = randomId();
-    setRows((oldRows) => [...oldRows, { id, name: '', age: '', isNew: true }]);
+    setRows((oldRows) => [{ id, name: '', age: '', isNew: true },...oldRows]);
     setRowModesModel((oldModel) => ({
       ...oldModel,
       [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
@@ -240,12 +251,12 @@ export default function FullFeaturedCrudGrid() {
   });
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 200, editable: true },
+    { field: 'name', headerName: 'Name', width: 180, editable: true },
     {
       field: 'date',
       headerName: 'Date you met',
       type: 'date',
-      width: 100,
+      width: 80,
       editable: true,
     },
     {
@@ -257,7 +268,7 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'deal',
       headerName: 'What kind of deal',
-      width: 220,
+      width: 200,
       editable: true,
     },
     {
@@ -269,7 +280,19 @@ export default function FullFeaturedCrudGrid() {
     {
       field: 'money',
       headerName: 'Money',
-      width: 180,
+      width: 120,
+      editable: true,
+    },
+    {
+      field: 'profit',
+      headerName: 'Profit',
+      width: 120,
+      editable: true,
+    },
+    {
+      field: 'totalDealTotalConnectionTotalTransaction',
+      headerName: 'TotalDeal/TotalConnection/TotalTransaction ',
+      width: 120,
       editable: true,
     },
     {
