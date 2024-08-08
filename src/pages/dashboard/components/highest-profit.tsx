@@ -8,12 +8,12 @@ import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import { ListBullets as ListBulletsIcon } from '@phosphor-icons/react/dist/ssr/ListBullets';
 
-export interface GoalsProgressProps {
+export interface HighestProfitProps {
   sx?: SxProps;
   value: number;
 }
 
-export function GoalsProgress({ value, sx }: GoalsProgressProps): React.JSX.Element {
+export function HighestProfit({ value, sx }: HighestProfitProps): React.JSX.Element {
   return (
     <Card sx={sx}>
       <CardContent>
@@ -21,9 +21,9 @@ export function GoalsProgress({ value, sx }: GoalsProgressProps): React.JSX.Elem
           <Stack direction="row" sx={{ alignItems: 'flex-start', justifyContent: 'space-between' }} spacing={3}>
             <Stack spacing={1}>
               <Typography color="text.secondary" gutterBottom variant="overline">
-                Goal Progress
+                Highest Profit Of All Time
               </Typography>
-              <Typography variant="h4">{value}%</Typography>
+              <Typography variant="h4">{value}</Typography>
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-warning-main)', height: '56px', width: '56px' }}>
               <ListBulletsIcon fontSize="var(--icon-fontSize-lg)" />

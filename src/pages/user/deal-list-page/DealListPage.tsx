@@ -27,6 +27,7 @@ import { PageHeader } from '../../../components/page-header/PageHeader';
 import { useDispatch } from 'react-redux';
 import { addTransaction } from '../../../store/transaction/transactionSlice';
 import { addProfit } from '../../../store/profit/profitSlice';
+import { setHighestProfit } from '../../../store/highest-profit/highestProfitSlice';
 
 const deals = ['Selling Software', 'Buying Hotel Company', 'Selling Rare Material'];
 
@@ -220,25 +221,26 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
-    const previousRow = rows.find((row) => row.id === newRow.id);
-    const updatedRow = {
-      ...newRow,
-      isNew: false,
-      money: parseFloat(newRow.money as unknown as string) || 0,
-      profit: parseFloat(newRow.profit as unknown as string) || 0,
-    };
-
-    // Update total money in Redux
-    if (previousRow) {
-      dispatch(addTransaction(updatedRow.money - (parseFloat(previousRow.money as unknown as string) || 0)));
-      dispatch(addProfit(updatedRow.profit - (parseFloat(previousRow.profit as unknown as string) || 0)));
-    }
-
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-    return updatedRow;
+ const processRowUpdate = (newRow: GridRowModel) => {
+  const previousRow = rows.find((row) => row.id === newRow.id);
+  const updatedRow = {
+    ...newRow,
+    isNew: false,
+    money: parseFloat(newRow.money as unknown as string) || 0,
+    profit: parseFloat(newRow.profit as unknown as string) || 0,
   };
 
+  // Update total money and profit in Redux
+  if (previousRow) {
+    const newProfitValue = updatedRow.profit;
+    dispatch(addTransaction(updatedRow.money - (parseFloat(previousRow.money as unknown as string) || 0)));
+    dispatch(addProfit(updatedRow.profit - (parseFloat(previousRow.profit as unknown as string) || 0)));
+    dispatch(setHighestProfit(newProfitValue)); // Check and set the highest profit
+  }
+
+  setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  return updatedRow;
+};
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);

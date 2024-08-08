@@ -7,7 +7,7 @@ import { TotalTransactions } from './components/total-transaction';
 import { LatestConnections } from './components/latest-connections';
 import { LatestDeals } from './components/latest-deals';
 import { Deals } from './components/sales';
-import { GoalsProgress } from './components/goal-progress';
+import { HighestProfit } from './components/highest-profit';
 import { TotalConnections } from './components/total-connections';
 import { TotalProfit } from './components/total-profit';
 import { Traffic } from './components/traffic';
@@ -25,12 +25,11 @@ export default function DashBoardPage(): React.JSX.Element {
   const transactions = useSelector((state: RootState) => state.transactions.transactions);
   const profits = useSelector((state: RootState) => state.profits.profits);
 
-
   const totalTransactions = transactions.reduce((total: number, transaction: Transaction) => total + transaction.money, 0);
   const totalProfits = profits.reduce((total: number, profit: Profit) => total + profit.profit, 0);
   const totalConnections = useSelector((state: RootState) => state.connections.totalConnections);
 
-
+  const highestProfit = useSelector((state: RootState) => state.highestProfit.value);
 
   return (
     <Grid container spacing={3}>
@@ -41,7 +40,7 @@ export default function DashBoardPage(): React.JSX.Element {
         <TotalConnections diff={16} trend="down" sx={{ height: '100%' }} value={totalConnections} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
-        <GoalsProgress sx={{ height: '100%' }} value={1} />
+        <HighestProfit sx={{ height: '100%' }} value={highestProfit} />
       </Grid>
       <Grid lg={3} sm={6} xs={12}>
         <TotalProfit diff={7} trend="up" sx={{ height: '100%' }} value={totalProfits} />
@@ -56,7 +55,11 @@ export default function DashBoardPage(): React.JSX.Element {
         />
       </Grid> 
       <Grid lg={4} md={6} xs={12}>
-        <Traffic chartSeries={[63, 15, 22]} labels={['Total Transactions', 'Total Connections', 'Total Profit From Dealing']} sx={{ height: '100%' }} />
+        <Traffic 
+        chartSeries={[totalTransactions,  totalProfits]} 
+        labels={['Total Transactions', 'Total Profit From Dealing']} 
+        sx={{ height: '100%' }} 
+        />
       </Grid>
       <Grid lg={4} md={6} xs={12}>
         <LatestDeals

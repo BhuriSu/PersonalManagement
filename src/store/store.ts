@@ -4,11 +4,13 @@ import { calendarReducer } from './calendar/calendarSlice';
 import  transactionReducer from './transaction/transactionSlice';
 import  profitReducer from './profit/profitSlice';
 import connectionsReducer from './profile/profileSlice';
+import highestProfitReducer from './highest-profit/highestProfitSlice';
 
 export const store = configureStore({
   reducer: {
     transactions: transactionReducer,
     profits: profitReducer,
+    highestProfit: highestProfitReducer,
     connections: connectionsReducer,
     navigation: navigationReducer,
     calendar: calendarReducer,
