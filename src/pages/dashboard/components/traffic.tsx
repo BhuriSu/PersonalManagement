@@ -29,7 +29,7 @@ export function Traffic({ chartSeries, labels, sx }: TrafficProps): React.JSX.El
 
   return (
     <Card sx={sx}>
-      <CardHeader title="Total Transactions/Total Connections/Total Profit From Dealing" />
+      <CardHeader title="Total Transactions/Total Profit From Dealing" />
       <CardContent>
         <Stack spacing={2}>
           <Chart height={300} options={chartOptions} series={chartSeries} type="donut" width="100%" />
@@ -43,7 +43,7 @@ export function Traffic({ chartSeries, labels, sx }: TrafficProps): React.JSX.El
                   {Icon ? <Icon fontSize="var(--icon-fontSize-lg)" /> : null}
                   <Typography variant="h6">{label}</Typography>
                   <Typography color="text.secondary" variant="subtitle2">
-                    {item}%
+                    {item}
                   </Typography>
                 </Stack>
               );

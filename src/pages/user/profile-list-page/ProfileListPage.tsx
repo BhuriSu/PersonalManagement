@@ -174,7 +174,7 @@ export default function FullFeaturedCrudGrid() {
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    dispatch(setConnections(initialRows.length));
+    dispatch(setConnections(0));
   }, [dispatch]);
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
@@ -225,7 +225,7 @@ export default function FullFeaturedCrudGrid() {
     
     const rowDate = row.date ? new Date(row.date) : null;
     const day = rowDate ? rowDate.getDate().toString() : '';
-    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : '';
     const year = rowDate ? rowDate.getFullYear().toString() : '';
     const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
     const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';

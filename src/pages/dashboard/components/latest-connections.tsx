@@ -22,7 +22,7 @@ const statusMap = {
   refunded: { label: 'Refunded', color: 'error' },
 } as const;
 
-export interface Order {
+export interface Connection {
   id: string;
   customer: { name: string };
   amount: number;
@@ -31,11 +31,11 @@ export interface Order {
 }
 
 export interface LatestConnectionsProps {
-  orders?: Order[];
+  connections?: Connection[];
   sx?: SxProps;
 }
 
-export function LatestConnections({ orders = [], sx }: LatestConnectionsProps): React.JSX.Element {
+export function LatestConnections({ connections = [], sx }: LatestConnectionsProps): React.JSX.Element {
   const navigate = useNavigate();
   return (
     <Card sx={sx}>
@@ -52,13 +52,13 @@ export function LatestConnections({ orders = [], sx }: LatestConnectionsProps): 
             </TableRow>
           </TableHead>
           <TableBody>
-            {orders.map((order) => {
-              const { label, color } = statusMap[order.status] ?? { label: 'Unknown', color: 'default' };
+            {connections.map((connection) => {
+              const { label, color } = statusMap[connection.status] ?? { label: 'Unknown', color: 'default' };
               return (
-                <TableRow hover key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
-                  <TableCell>{order.customer.name}</TableCell>
+                <TableRow hover key={connection.id}>
+                  <TableCell>{connection.id}</TableCell>
+                  <TableCell>{connection.customer.name}</TableCell>
+                  <TableCell>{connection.customer.name}</TableCell>
                   <TableCell>
                     <Chip color={color} label={label} size="small" />
                   </TableCell>

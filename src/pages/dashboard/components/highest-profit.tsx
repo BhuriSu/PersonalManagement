@@ -14,6 +14,7 @@ export interface HighestProfitProps {
 }
 
 export function HighestProfit({ value, sx }: HighestProfitProps): React.JSX.Element {
+  const formattedValue = new Intl.NumberFormat().format(value);
   return (
     <Card sx={sx}>
       <CardContent>
@@ -23,7 +24,7 @@ export function HighestProfit({ value, sx }: HighestProfitProps): React.JSX.Elem
               <Typography color="text.secondary" gutterBottom variant="overline">
                 Highest Profit Of All Time
               </Typography>
-              <Typography variant="h4">{value}</Typography>
+              <Typography variant="h4" >{formattedValue}</Typography>
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-warning-main)', height: '56px', width: '56px' }}>
               <ListBulletsIcon fontSize="var(--icon-fontSize-lg)" />

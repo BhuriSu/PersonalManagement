@@ -30,6 +30,7 @@ export interface LatestDealsProps {
 
 export function LatestDeals({ deals = [], sx }: LatestDealsProps): React.JSX.Element {
   const navigate = useNavigate();
+  
   return (
     <Card sx={sx}>
       <CardHeader title="Latest deals" />

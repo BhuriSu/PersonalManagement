@@ -12,12 +12,13 @@ export interface TotalTransactionsProps {
   diff?: number;
   trend: 'up' | 'down';
   sx?: SxProps;
-  value: string | number;
+  value: number;
 }
 
 export function TotalTransactions({ diff, trend, sx, value }: TotalTransactionsProps): React.JSX.Element {
   const TrendIcon = trend === 'up' ? ArrowUpIcon : ArrowDownIcon;
   const trendColor = trend === 'up' ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-error-main)';
+  const formattedValue = new Intl.NumberFormat().format(value);
 
   return (
     <Card sx={sx}>
@@ -28,7 +29,7 @@ export function TotalTransactions({ diff, trend, sx, value }: TotalTransactionsP
               <Typography color="text.secondary" variant="overline">
                 Total Transactions
               </Typography>
-              <Typography variant="h4">{value}</Typography>
+              <Typography variant="h4">{formattedValue}</Typography>
             </Stack>
           </Stack>
           {diff ? (

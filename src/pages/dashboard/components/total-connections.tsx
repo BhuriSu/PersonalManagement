@@ -13,13 +13,13 @@ export interface TotalConnectionsProps {
   diff?: number;
   trend: 'up' | 'down';
   sx?: SxProps;
-  value: string | number;
+  value: number;
 }
 
 export function TotalConnections({ diff, trend, sx, value }: TotalConnectionsProps): React.JSX.Element {
   const TrendIcon = trend === 'up' ? ArrowUpIcon : ArrowDownIcon;
   const trendColor = trend === 'up' ? 'var(--mui-palette-success-main)' : 'var(--mui-palette-error-main)';
-
+  const formattedValue = new Intl.NumberFormat().format(value);
   return (
     <Card sx={sx}>
       <CardContent>
@@ -29,7 +29,7 @@ export function TotalConnections({ diff, trend, sx, value }: TotalConnectionsPro
               <Typography color="text.secondary" variant="overline">
                 Total Connections
               </Typography>
-              <Typography variant="h4">{value}</Typography>
+              <Typography variant="h4">{formattedValue}</Typography>
             </Stack>
             <Avatar sx={{ backgroundColor: 'var(--mui-palette-success-main)', height: '56px', width: '56px' }}>
               <UsersIcon fontSize="var(--icon-fontSize-lg)" />

@@ -235,7 +235,7 @@ export default function FullFeaturedCrudGrid() {
     const newProfitValue = updatedRow.profit;
     dispatch(addTransaction(updatedRow.money - (parseFloat(previousRow.money as unknown as string) || 0)));
     dispatch(addProfit(updatedRow.profit - (parseFloat(previousRow.profit as unknown as string) || 0)));
-    dispatch(setHighestProfit(newProfitValue)); // Check and set the highest profit
+    dispatch(setHighestProfit(newProfitValue)); 
   }
 
   setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
