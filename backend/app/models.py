@@ -14,6 +14,15 @@ class Goal(Base):
     date = Column(DateTime, default=datetime.datetime.utcnow)
     place = Column(String)
 
+class Mistake(Base):
+    __tablename__ = "mistakes"
+    id = Column(Integer, primary_key=True, index=True)
+    mistake = Column(String, index=True)
+    cost = Column(String)
+    date = Column(DateTime, default=datetime.datetime.utcnow)
+    place = Column(String)
+    solution = Column(String)
+
 DATABASE_URL = "postgresql://user:password@localhost/yourdatabase"
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
