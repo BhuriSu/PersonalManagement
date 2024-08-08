@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 import { ArrowDown as ArrowDownIcon } from '@phosphor-icons/react/dist/ssr/ArrowDown';
 import { ArrowUp as ArrowUpIcon } from '@phosphor-icons/react/dist/ssr/ArrowUp';
 
-
 export interface TotalTransactionsProps {
   diff?: number;
   trend: 'up' | 'down';
@@ -37,7 +36,7 @@ export function TotalTransactions({ diff, trend, sx, value }: TotalTransactionsP
               <Stack sx={{ alignItems: 'center' }} direction="row" spacing={0.5}>
                 <TrendIcon color={trendColor} fontSize="var(--icon-fontSize-md)" />
                 <Typography color={trendColor} variant="body2">
-                  {diff}%
+                  {diff}
                 </Typography>
               </Stack>
               <Typography color="text.secondary" variant="caption">

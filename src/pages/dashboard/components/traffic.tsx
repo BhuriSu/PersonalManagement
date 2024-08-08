@@ -1,5 +1,4 @@
 
-
 import * as React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -60,7 +59,7 @@ function useChartOptions(labels: string[]): ApexOptions {
 
   return {
     chart: { background: 'transparent' },
-    colors: [theme.palette.primary.main, theme.palette.success.main, theme.palette.warning.main],
+    colors: [theme.palette.secondary.main, theme.palette.error.main],
     dataLabels: { enabled: false },
     labels,
     legend: { show: false },
