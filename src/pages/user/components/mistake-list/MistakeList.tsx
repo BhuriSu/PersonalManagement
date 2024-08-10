@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -150,6 +151,12 @@ export default function FullFeaturedCrudGrid() {
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
 
+  React.useEffect(() => {
+    axios.get('http://localhost:8000/mistakes/')
+      .then(response => setRows(response.data))
+      .catch(error => console.log(error));
+  }, []);
+
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -165,7 +172,16 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    setRows(rows.filter((row) => row.id !== id));
+    // Call the async function within the synchronous wrapper
+    async function deleteRow() {
+      try {
+        await axios.delete(`http://localhost:8000/mistakes/${id}`);
+        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    deleteRow(); // Execute the async function
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -180,9 +196,19 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = (newRow: GridRowModel) => {
+  const processRowUpdate = async (newRow: GridRowModel) => {
     const updatedRow = { ...newRow, isNew: false };
-    setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    try {
+      if (newRow.isNew) {
+        const response = await axios.post('http://localhost:8000/mistakes/', updatedRow);
+        setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
+      } else {
+        await axios.put(`http://localhost:8000//mistakes/${newRow.id}`, updatedRow);
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      }
+    } catch (error) {
+      console.log(error);
+    }
     return updatedRow;
   };
 
