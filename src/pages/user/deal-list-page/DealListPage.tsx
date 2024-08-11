@@ -1,4 +1,5 @@
 import * as React from 'react';
+import axios from 'axios';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import AddIcon from '@mui/icons-material/Add';
@@ -187,6 +188,12 @@ export default function FullFeaturedCrudGrid() {
 
   const dispatch = useDispatch();
 
+  React.useEffect(() => {
+    axios.get('http://localhost:8000/deals/')
+      .then(response => setRows(response.data))
+      .catch(error => console.log(error));
+  }, []);
+
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
       event.defaultMuiPrevented = true;
@@ -202,11 +209,16 @@ export default function FullFeaturedCrudGrid() {
   };
 
   const handleDeleteClick = (id: GridRowId) => () => {
-    const deletedRow = rows.find((row) => row.id === id);
-    if (deletedRow) {
-      dispatch(addTransaction(-(parseFloat(deletedRow.money as unknown as string) || 0))); // Subtract the money from total
+    // Call the async function within the synchronous wrapper
+    async function deleteRow() {
+      try {
+        await axios.delete(`http://localhost:8000/deals/${id}`);
+        setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+      } catch (error) {
+        console.error(error);
+      }
     }
-    setRows(rows.filter((row) => row.id !== id));
+    deleteRow(); // Execute the async function
   };
 
   const handleCancelClick = (id: GridRowId) => () => {
@@ -221,7 +233,7 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
- const processRowUpdate = (newRow: GridRowModel) => {
+ const processRowUpdate = async (newRow: GridRowModel) => {
   const previousRow = rows.find((row) => row.id === newRow.id);
   const updatedRow = {
     ...newRow,
@@ -238,7 +250,17 @@ export default function FullFeaturedCrudGrid() {
     dispatch(setHighestProfit(newProfitValue)); 
   }
 
-  setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  try {
+    if (newRow.isNew) {
+      const response = await axios.post('http://localhost:8000/profiles/', updatedRow);
+      setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
+    } else {
+      await axios.put(`http://localhost:8000//profiles/${newRow.id}`, updatedRow);
+      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+    }
+  } catch (error) {
+    console.log(error);
+  }
   return updatedRow;
 };
 
