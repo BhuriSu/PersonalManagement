@@ -1,48 +1,58 @@
 import { useState } from 'react';
-import { Typography, Button } from '@mui/material';
-import { AddAPhoto } from '@mui/icons-material';
-import './ArticleBlock.css';
+import { Card, CardContent, Typography, IconButton, TextField, Button } from '@mui/material';
+import { Delete, Save } from '@mui/icons-material';
 
-interface ArticleBlockProps {
-  index: number;
-}
+type ArticleBlockProps = {
+  block: any;
+  updateBlock: (id: number, updatedBlock: any) => void;
+  deleteBlock: (id: number) => void;
+};
 
-const ArticleBlock: React.FC<ArticleBlockProps> = ({ index }) => {
-  const [pdfFile, setPdfFile] = useState<File | null>(null);
+export default function ArticleBlock({ block, updateBlock, deleteBlock }: ArticleBlockProps) {
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedBlock, setEditedBlock] = useState(block);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      setPdfFile(event.target.files[0]);
-    }
+  const handleSave = () => {
+    updateBlock(block.id, editedBlock);
+    setIsEditing(false);
   };
 
   return (
-    <div className="article-block" >
-      {!pdfFile && (
-        <div style={{ textAlign: 'center' }}>
-          <Typography variant="h6">Article {index + 1}</Typography>
-          <input
-            accept="application/pdf"
-            style={{ display: 'none' }}
-            id={`upload-button-${index}`}
-            type="file"
-            onChange={handleFileChange}
-          />
-          <label htmlFor={`upload-button-${index}`}>
-            <Button variant="contained" component="span" startIcon={<AddAPhoto />}>
-              Upload PDF
+    <Card>
+      <CardContent>
+        {isEditing ? (
+          <>
+            <TextField
+              fullWidth
+              label="Title"
+              value={editedBlock.title}
+              onChange={(e) => setEditedBlock({ ...editedBlock, title: e.target.value })}
+            />
+            <TextField
+              fullWidth
+              label="Content"
+              value={editedBlock.content}
+              onChange={(e) => setEditedBlock({ ...editedBlock, content: e.target.value })}
+            />
+            <Button onClick={handleSave} startIcon={<Save />} variant={'contained'}>
+              Save
             </Button>
-          </label>
-        </div>
-      )}
-      {pdfFile && (
-        <iframe
-          src={URL.createObjectURL(pdfFile)}
-          title={`pdf-${index}`}
-        />
-      )}
-    </div>
+          </>
+        ) : (
+          <>
+            <Typography variant="h6">{block.title}</Typography>
+            <Typography>{block.content}</Typography>
+          </>
+        )}
+        <IconButton onClick={() => setIsEditing(!isEditing)}>
+          {isEditing ? <Save /> : <Delete />}
+        </IconButton>
+        {!isEditing && (
+          <IconButton onClick={() => deleteBlock(block.id)}>
+            <Delete />
+          </IconButton>
+        )}
+      </CardContent>
+    </Card>
   );
-};
-
-export default ArticleBlock;
+}

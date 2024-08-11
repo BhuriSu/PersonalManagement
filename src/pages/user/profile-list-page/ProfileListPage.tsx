@@ -152,7 +152,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
     <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
-      Add record
+      Add Urgency
     </Button>
     <TextField
       variant={'outlined'}
@@ -202,7 +202,7 @@ export default function FullFeaturedCrudGrid() {
     // Call the async function within the synchronous wrapper
     async function deleteRow() {
       try {
-        await axios.delete(`http://localhost:8000/profiles/${id}`);
+        await axios.delete(`http://localhost:8000/profiles/delete/${id}`);
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
         dispatch(removeConnection()); 
       } catch (error) {
@@ -225,10 +225,10 @@ export default function FullFeaturedCrudGrid() {
     const updatedRow = { ...newRow, isNew: false };
     try {
       if (newRow.isNew) {
-        const response = await axios.post('http://localhost:8000/profiles/', updatedRow);
+        const response = await axios.post('http://localhost:8000/profiles/create/', updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
       } else {
-        await axios.put(`http://localhost:8000//profiles/${newRow.id}`, updatedRow);
+        await axios.put(`http://localhost:8000//profiles/update/${newRow.id}`, updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
       }
     } catch (error) {
@@ -371,6 +371,7 @@ export default function FullFeaturedCrudGrid() {
     >
       <PageHeader title={'Profile List'} breadcrumbs={['Profile', 'List']} />
       <DataGrid
+        autoHeight
         rows={filteredRows}
         columns={columns}
         editMode='row'

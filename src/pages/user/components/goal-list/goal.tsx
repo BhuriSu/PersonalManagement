@@ -117,7 +117,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer>
       <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
-        Add record
+        Add Goal
       </Button>
       <TextField
         variant='outlined'
@@ -305,6 +305,7 @@ export default function FullFeaturedCrudGrid() {
       }}
     >
       <DataGrid
+        autoHeight
         rows={filteredRows}
         columns={columns}
         editMode='row'

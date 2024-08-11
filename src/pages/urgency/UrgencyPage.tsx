@@ -134,7 +134,7 @@ export default function FullFeaturedCrudGrid() {
     // Call the async function within the synchronous wrapper
     async function deleteRow() {
       try {
-        await axios.delete(`http://localhost:8000/urgencies/${id}`);
+        await axios.delete(`http://localhost:8000/urgencies/delete/${id}`);
         setRows((prevRows) => prevRows.filter((row) => row.id !== id)); 
       } catch (error) {
         console.error(error);
@@ -161,7 +161,7 @@ export default function FullFeaturedCrudGrid() {
         const response = await axios.post('http://localhost:8000/urgencies/', updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
       } else {
-        await axios.put(`http://localhost:8000//urgencies/${newRow.id}`, updatedRow);
+        await axios.put(`http://localhost:8000//urgencies/update/${newRow.id}`, updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
       }
     } catch (error) {
@@ -261,6 +261,7 @@ export default function FullFeaturedCrudGrid() {
     >
       <PageHeader title={'Urgency List'} breadcrumbs={['Urgency', 'List']} />
       <DataGrid
+        autoHeight
         rows={filteredRows}
         columns={columns}
         editMode='row'
