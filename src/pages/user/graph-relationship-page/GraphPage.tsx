@@ -1,6 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { Button, Dialog, AppBar, Toolbar, IconButton, Typography, Slide, Snackbar, Alert, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import {
+  Button,
+  Dialog,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Slide,
+  Snackbar,
+  Alert,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from '@mui/material';
 import { Add as AddIcon, Close as CloseIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
 import './Graph.css';
@@ -14,18 +28,26 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+interface Graph {
+  id: number;
+  name: string;
+  created_at: string;
+  updated_at: string;
+}
+
 const GraphPage: React.FC = () => {
-  const [squares, setSquares] = useState<{ id: number; name: string }[]>([]);
+  const [squares, setSquares] = useState<Graph[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
-  const [selectedSquare, setSelectedSquare] = useState<{ id: number; name: string } | null>(null);
+  const [selectedSquare, setSelectedSquare] = useState<Graph | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
   const [deleteDialogOpen, setDeleteDialogOpen] = useState<boolean>(false);
 
-  React.useEffect(() => {
-    axios.get('http://localhost:8000/graphs/')
+  useEffect(() => {
+    axios
+      .get('http://localhost:8000/graphs/')
       .then(response => setSquares(response.data))
       .catch(error => console.log(error));
   }, []);
@@ -36,6 +58,7 @@ const GraphPage: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
+    setSelectedSquare(null); // Reset selected square when closing the dialog
   };
 
   const handleSnackbarClose = () => {
@@ -49,10 +72,12 @@ const GraphPage: React.FC = () => {
   const handleSaveName = async (name: string) => {
     try {
       const response = await axios.post('http://localhost:8000/graphs/create/', { name });
-      const newSquare = response.data;
-      setSquares((prev) => [...prev, newSquare]);
+      const newSquare: Graph = response.data;
+      setSquares(prev => [...prev, newSquare]);
       setNameModalOpen(false);
-      setOpen(true);
+      setSnackbarMessage('Square created successfully');
+      setSnackbarSeverity('success');
+      setSnackbarOpen(true);
     } catch (error) {
       console.error('Failed to create square:', error);
       setSnackbarMessage('Failed to create square');
@@ -61,7 +86,7 @@ const GraphPage: React.FC = () => {
     }
   };
 
-  const handleSquareClick = (square: { id: number; name: string }) => {
+  const handleSquareClick = (square: Graph) => {
     setSelectedSquare(square);
     setOpen(true);
   };
@@ -69,7 +94,9 @@ const GraphPage: React.FC = () => {
   const handleSaveClick = async () => {
     if (selectedSquare) {
       try {
-        await axios.put(`http://localhost:8000/graphs/update/${selectedSquare.id}`, selectedSquare);
+        const response = await axios.put(`http://localhost:8000/graphs/update/${selectedSquare.id}/`, selectedSquare);
+        const updatedSquare: Graph = response.data;
+        setSquares(squares.map(square => (square.id === updatedSquare.id ? updatedSquare : square)));
         setSnackbarMessage('Square updated successfully');
         setSnackbarSeverity('success');
         setSnackbarOpen(true);
@@ -92,7 +119,7 @@ const GraphPage: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (selectedSquare) {
       try {
-        await axios.delete(`http://localhost:8000/graphs/delete/${selectedSquare.id}`);
+        await axios.delete(`http://localhost:8000/graphs/delete/${selectedSquare.id}/`);
         setSquares(squares.filter(square => square.id !== selectedSquare.id));
         setSnackbarMessage('Square deleted successfully');
         setSnackbarSeverity('success');
@@ -114,28 +141,24 @@ const GraphPage: React.FC = () => {
 
   return (
     <div className="Graph">
-
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClickOpen}>
         <h3>Add Graph</h3>
       </Button>
       <div className="grid-container">
-        {squares.map((square) => (
+        {squares.map(square => (
           <div key={square.id} className="square" onClick={() => handleSquareClick(square)}>
-            {square.name}
+            <Typography variant="h6">{square.name}</Typography>
+            <Typography variant="body2" color="textSecondary">
+              Created: {new Date(square.created_at).toLocaleDateString()}
+            </Typography>
+            <Typography variant="body2" color="textSecondary">
+              Updated: {new Date(square.updated_at).toLocaleDateString()}
+            </Typography>
           </div>
         ))}
       </div>
-      <NameModal
-        open={nameModalOpen}
-        onClose={handleNameModalClose}
-        onSave={handleSaveName}
-      />
-      <Dialog
-        fullScreen
-        open={open}
-        onClose={handleClose}
-        TransitionComponent={Transition}
-      >
+      <NameModal open={nameModalOpen} onClose={handleNameModalClose} onSave={handleSaveName} />
+      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
         <AppBar sx={{ position: 'relative' }}>
           <Toolbar>
             <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -157,20 +180,13 @@ const GraphPage: React.FC = () => {
           <MainWhiteBoard />
         </AppBar>
       </Dialog>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={6000}
-        onClose={handleSnackbarClose}
-      >
+      <Snackbar open={snackbarOpen} autoHideDuration={6000} onClose={handleSnackbarClose}>
         <Alert onClose={handleSnackbarClose} severity={snackbarSeverity} sx={{ width: '100%' }}>
           {snackbarMessage}
         </Alert>
       </Snackbar>
-      <Dialog
-        open={deleteDialogOpen}
-        onClose={handleDeleteCancel}
-      >
-        <DialogTitle>{"Are you sure you want to delete this square?"}</DialogTitle>
+      <Dialog open={deleteDialogOpen} onClose={handleDeleteCancel}>
+        <DialogTitle>Are you sure you want to delete this square?</DialogTitle>
         <DialogContent>
           <DialogContentText>
             Deleting this square will remove it permanently. This action cannot be undone.
