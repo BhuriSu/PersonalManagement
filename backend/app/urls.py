@@ -17,18 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-try:
-    from api import urls
-    print("Imported api.urls successfully")
-except ImportError as e:
-    print(f"Error importing api.urls: {e}")
-
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('user/account/', include('api.urls')),
-    path('user/profile/', include('api.urls')),
-    path('user/deal/', include('api.urls')),
-    path('user/graph/', include('api.urls')),
-    path('blog/article/', include('api.urls')),
-    path('user/urgency/', include('api.urls')),
+    path('api/', include('api.urls')) 
 ]

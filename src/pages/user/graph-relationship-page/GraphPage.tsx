@@ -47,7 +47,7 @@ const GraphPage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/graphs/')
+      .get('http://localhost:8000/api/graphs/')
       .then(response => setSquares(response.data))
       .catch(error => console.log(error));
   }, []);
@@ -71,7 +71,7 @@ const GraphPage: React.FC = () => {
 
   const handleSaveName = async (name: string) => {
     try {
-      const response = await axios.post('http://localhost:8000/graphs/create/', { name });
+      const response = await axios.post('http://localhost:8000/api/graphs/create/', { name });
       const newSquare: Graph = response.data;
       setSquares(prev => [...prev, newSquare]);
       setNameModalOpen(false);
@@ -94,7 +94,7 @@ const GraphPage: React.FC = () => {
   const handleSaveClick = async () => {
     if (selectedSquare) {
       try {
-        const response = await axios.put(`http://localhost:8000/graphs/update/${selectedSquare.id}/`, selectedSquare);
+        const response = await axios.put(`http://localhost:8000/api/graphs/update/${selectedSquare.id}/`, selectedSquare);
         const updatedSquare: Graph = response.data;
         setSquares(squares.map(square => (square.id === updatedSquare.id ? updatedSquare : square)));
         setSnackbarMessage('Square updated successfully');
@@ -119,7 +119,7 @@ const GraphPage: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (selectedSquare) {
       try {
-        await axios.delete(`http://localhost:8000/graphs/delete/${selectedSquare.id}/`);
+        await axios.delete(`http://localhost:8000/api/graphs/delete/${selectedSquare.id}/`);
         setSquares(squares.filter(square => square.id !== selectedSquare.id));
         setSnackbarMessage('Square deleted successfully');
         setSnackbarSeverity('success');

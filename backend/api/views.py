@@ -2,8 +2,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Goal, Mistake, Profile, Deal, Graph, Article, Urgency
-from .serializers import GoalSerializer, MistakeSerializer, DealSerializer, GraphSerializer, ArticleSerializer, UrgencySerializer
-
+from .serializers import GoalSerializer, MistakeSerializer, ProfileSerializer, DealSerializer, GraphSerializer, ArticleSerializer, UrgencySerializer
+import logging
 ### Goal 
 
 @api_view(['GET'])
@@ -13,11 +13,14 @@ def get_goals(request):
     return Response(serializer)
 
 @api_view(['POST'])
+
 def create_goal(request):
+    logging.info(f'Request data: {request.data}')
     serializer = GoalSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    logging.error(f'Validation errors: {serializer.errors}')
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'DELETE'])
@@ -75,12 +78,12 @@ def mistake_update_and_delete(request, pk):
 @api_view(['GET'])
 def get_profiles(request):
     profiles =  Profile.objects.all()
-    serializer = MistakeSerializer(profiles, many=True).data
+    serializer = ProfileSerializer(profiles, many=True).data
     return Response(serializer)
 
 @api_view(['POST'])
 def create_profile(request):
-    serializer = MistakeSerializer(data=request.data)
+    serializer = ProfileSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
@@ -97,7 +100,7 @@ def profile_update_and_delete(request, pk):
         profiles.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
     elif request.method == 'PUT':
-        serializer = MistakeSerializer(profiles, data=request.data)
+        serializer = ProfileSerializer(profiles, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)    
@@ -155,8 +158,8 @@ def create_graph(request):
 @api_view(['PUT', 'DELETE'])
 def graph_update_and_delete(request, pk):
     try:
-        graphs = Deal.objects.get(pk=pk)
-    except Deal.DoesNotExist:
+        graphs = Graph.objects.get(pk=pk)
+    except Graph.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     if request.method == 'DELETE':

@@ -152,7 +152,7 @@ export default function FullFeaturedCrudGrid() {
   const [searchQuery, setSearchQuery] = React.useState('');
 
   React.useEffect(() => {
-    axios.get('http://localhost:8000/mistakes/')
+    axios.get('http://localhost:8000/api/mistakes/')
       .then(response => setRows(response.data))
       .catch(error => console.log(error));
   }, []);
@@ -175,7 +175,7 @@ export default function FullFeaturedCrudGrid() {
     // Call the async function within the synchronous wrapper
     async function deleteRow() {
       try {
-        await axios.delete(`http://localhost:8000/mistakes/delete/${id}`);
+        await axios.delete(`http://localhost:8000/api/mistakes/delete/${id}/`);
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
       } catch (error) {
         console.error(error);
@@ -200,10 +200,10 @@ export default function FullFeaturedCrudGrid() {
     const updatedRow = { ...newRow, isNew: false };
     try {
       if (newRow.isNew) {
-        const response = await axios.post('http://localhost:8000/mistakes/create/', updatedRow);
+        const response = await axios.post('http://localhost:8000/api/mistakes/create/', updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
       } else {
-        await axios.put(`http://localhost:8000//mistakes/update/${newRow.id}`, updatedRow);
+        await axios.put(`http://localhost:8000/api/mistakes/update/${newRow.id}/`, updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
       }
     } catch (error) {

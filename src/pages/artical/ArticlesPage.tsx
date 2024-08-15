@@ -10,7 +10,7 @@ export default function ArticlePage() {
 
   // Fetch all articles on component mount
   useEffect(() => {
-    axios.get('http://localhost:8000/articles/')
+    axios.get('http://localhost:8000/api/articles/')
       .then(response => setBlocks(response.data))
       .catch(error => console.log(error));
   }, []);
@@ -18,21 +18,21 @@ export default function ArticlePage() {
   // Function to add a new block
   const addBlock = () => {
     const newBlock = { title: '', content: '' }; // Example structure of a new article block
-    axios.post('http://localhost:8000/articles/create/', newBlock)
+    axios.post('http://localhost:8000/api/articles/create/', newBlock)
       .then(response => setBlocks(prev => [...prev, response.data]))
       .catch(error => console.log(error));
   };
 
   // Function to update a block (Assumes you have a way to edit blocks)
   const updateBlock = (id: number, updatedBlock: any) => {
-    axios.put(`http://localhost:8000/articles/update/${id}/`, updatedBlock)
+    axios.put(`http://localhost:8000/api/articles/update/${id}/`, updatedBlock)
       .then(response => setBlocks(prev => prev.map(block => block.id === id ? response.data : block)))
       .catch(error => console.log(error));
   };
 
   // Function to delete a block
   const deleteBlock = (id: number) => {
-    axios.delete(`http://localhost:8000/articles/delete/${id}/`)
+    axios.delete(`http://localhost:8000/api/articles/delete/${id}/`)
       .then(() => setBlocks(prev => prev.filter(block => block.id !== id)))
       .catch(error => console.log(error));
   };
