@@ -36,4 +36,5 @@ urlpatterns = [
     path('urgencies/', views.get_urgencies),
     path('urgencies/create/', views.create_urgency),
     path('urgencies/<int:pk>/', views.urgency_update_and_delete),  # Combined update and delete
+
 ]

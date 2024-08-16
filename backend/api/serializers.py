@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Goal, Mistake,  Profile, Deal, Graph, Article, Urgency
+from .models import *
 
 class GoalSerializer(serializers.ModelSerializer):
     class Meta:

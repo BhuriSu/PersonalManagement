@@ -1,9 +1,9 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .models import Goal, Mistake, Profile, Deal, Graph, Article, Urgency
-from .serializers import GoalSerializer, MistakeSerializer, ProfileSerializer, DealSerializer, GraphSerializer, ArticleSerializer, UrgencySerializer
-import logging
+from .models import *
+from .serializers import *
+
 ### Goal 
 
 @api_view(['GET'])
@@ -13,14 +13,11 @@ def get_goals(request):
     return Response(serializer)
 
 @api_view(['POST'])
-
 def create_goal(request):
-    logging.info(f'Request data: {request.data}')
     serializer = GoalSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    logging.error(f'Validation errors: {serializer.errors}')
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT', 'DELETE'])
@@ -40,6 +37,7 @@ def goal_update_and_delete(request, pk):
             return Response(serializer.data)    
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
+
 ### Mistake
 
 @api_view(['GET'])
@@ -206,6 +204,7 @@ def article_update_and_delete(request, pk):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 ### Urgency
+
 
 @api_view(['GET'])
 def get_urgencies(request):

@@ -1,6 +1,5 @@
 from django.contrib import admin
-from .models import Goal, Mistake, Profile, Deal, Graph, Article, Urgency
-# Register your models here.
+from .models import *
 
 admin.site.register(Goal)
 admin.site.register(Mistake)
