@@ -2,7 +2,6 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import type { SxProps } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
@@ -30,9 +29,6 @@ export function HighestProfit({ value, sx }: HighestProfitProps): React.JSX.Elem
               <ListBulletsIcon fontSize="var(--icon-fontSize-lg)" />
             </Avatar>
           </Stack>
-          <div>
-            <LinearProgress value={value} variant="determinate" />
-          </div>
         </Stack>
       </CardContent>
     </Card>

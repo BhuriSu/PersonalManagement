@@ -18,6 +18,7 @@ import {
 import { Add as AddIcon, Close as CloseIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
 import './Graph.css';
+import { PageHeader } from '../../../components/page-header/PageHeader';
 import MainWhiteBoard from './MainWhiteBoard';
 import NameModal from './NameModal';
 
@@ -141,6 +142,7 @@ const GraphPage: React.FC = () => {
 
   return (
     <div className="Graph">
+      <PageHeader title={'Graph List'} />
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClickOpen}>
         <h3>Add Graph</h3>
       </Button>
@@ -148,12 +150,6 @@ const GraphPage: React.FC = () => {
         {squares.map(square => (
           <div key={square.id} className="square" onClick={() => handleSquareClick(square)}>
             <Typography variant="h6">{square.name}</Typography>
-            <Typography variant="body2" color="textSecondary">
-              Created: {new Date(square.created_at).toLocaleDateString()}
-            </Typography>
-            <Typography variant="body2" color="textSecondary">
-              Updated: {new Date(square.updated_at).toLocaleDateString()}
-            </Typography>
           </div>
         ))}
       </div>

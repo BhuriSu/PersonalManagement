@@ -32,9 +32,6 @@ const places = [
   'Hospital',
   'Office',
   'Foreign Country',
-  'Museum',
-  'Shopping Mall',
-  'Public Transit',
 ];
 const goal = [
   'Meet New friend',
