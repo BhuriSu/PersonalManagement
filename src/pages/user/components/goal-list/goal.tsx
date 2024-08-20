@@ -31,7 +31,6 @@ const places = [
   'Condo',
   'Hospital',
   'Office',
-  'Airplane',
   'Foreign Country',
   'Museum',
   'Shopping Mall',
@@ -40,7 +39,6 @@ const places = [
 const goal = [
   'Meet New friend',
   'Practice new skill',
-  'Make money 100k usd per month',
   'Become millionaire',
   'Become Billionaire',
   'Disrupt the whole world',
@@ -49,40 +47,9 @@ const how = [
   'go to new place and start conversation',
   'take course online',
   'negotiate and make a deal',
-  'start business and exit',
-  'gain knowledge and set vision to execute',
-  'make client happy',
 ];
 
 const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    goal: randomArrayItem(goal),
-    how: randomArrayItem(how),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-  },
-  {
-    id: randomId(),
-    goal: randomArrayItem(goal),
-    how: randomArrayItem(how),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-  },
-  {
-    id: randomId(),
-    goal: randomArrayItem(goal),
-    how: randomArrayItem(how),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-  },
-  {
-    id: randomId(),
-    goal: randomArrayItem(goal),
-    how: randomArrayItem(how),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-  },
   {
     id: randomId(),
     goal: randomArrayItem(goal),
@@ -241,6 +208,9 @@ export default function FullFeaturedCrudGrid() {
       type: 'date',
       width: 120,
       editable: true,
+      valueFormatter: ({ value }) => new Intl.DateTimeFormat('fr-CA', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(value)
     },
     {
       field: 'place',

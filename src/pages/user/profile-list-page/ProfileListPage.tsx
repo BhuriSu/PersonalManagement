@@ -58,15 +58,6 @@ function generateRandomPlace() {
     'Tokyo',
     'Sydney',
     'Rome',
-    'Moscow',
-    'Dubai',
-    'Bangkok',
-    'Cape Town',
-    'Bali',
-    'Barcelona',
-    'Los Angeles',
-    'Berlin',
-    'Toronto',
   ];
 
   const randomPlace = randomArrayItem(places);
@@ -83,47 +74,7 @@ export const initialRows: GridRowsProp = [
     role: randomRole(),
     phone: generateRandomPhoneNumber(),
     email: generateRandomEmail(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 36,
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    role: randomRole(),
-    phone: generateRandomPhoneNumber(),
-    email: generateRandomEmail(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 49,
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    role: randomRole(),
-    phone: generateRandomPhoneNumber(),
-    email: generateRandomEmail(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 38,
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    role: randomRole(),
-    phone: generateRandomPhoneNumber(),
-    email: generateRandomEmail(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    age: 30,
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    role: randomRole(),
-    phone: generateRandomPhoneNumber(),
-    email: generateRandomEmail(),
-  },
+  }
 ];
 
 interface EditToolbarProps {

@@ -64,15 +64,6 @@ function generateRandomPlace() {
     'Tokyo',
     'Sydney',
     'Rome',
-    'Moscow',
-    'Dubai',
-    'Bangkok',
-    'Cape Town',
-    'Bali',
-    'Barcelona',
-    'Los Angeles',
-    'Berlin',
-    'Toronto',
   ];
 
   const randomPlace = randomArrayItem(places);
@@ -89,47 +80,7 @@ const initialRows: GridRowsProp = [
     time: generateRandomTimeDuration(),
     money: generateRandomMoney(),
     profit: generateRandomMoney(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    deal: randomRole(),
-    time: generateRandomTimeDuration(),
-    money: generateRandomMoney(),
-    profit: generateRandomMoney(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    deal: randomRole(),
-    time: generateRandomTimeDuration(),
-    money: generateRandomMoney(),
-    profit: generateRandomMoney(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    deal: randomRole(),
-    time: generateRandomTimeDuration(),
-    money: generateRandomMoney(),
-    profit: generateRandomMoney(),
-  },
-  {
-    id: randomId(),
-    name: randomTraderName(),
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    deal: randomRole(),
-    time: generateRandomTimeDuration(),
-    money: generateRandomMoney(),
-    profit: generateRandomMoney(),
-  },
+  }
 ];
 
 interface EditToolbarProps {

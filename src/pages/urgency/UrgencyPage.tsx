@@ -41,27 +41,7 @@ const initialRows: GridRowsProp = [
     id: randomId(),
     urgency: randomUrgency(),
     information: randomInformation(),
-  },
-  {
-    id: randomId(),
-    urgency: randomUrgency(),
-    information: randomInformation(),
-  },
-  {
-    id: randomId(),
-    urgency: randomUrgency(),
-    information: randomInformation(),
-  },
-  {
-    id: randomId(),
-    urgency: randomUrgency(),
-    information: randomInformation(),
-  },
-  {
-    id: randomId(),
-    urgency: randomUrgency(),
-    information: randomInformation(),
-  },
+  }
 ];
 
 interface EditToolbarProps {

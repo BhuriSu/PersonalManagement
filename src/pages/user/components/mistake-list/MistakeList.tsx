@@ -31,9 +31,6 @@ const places = [
   'Condo',
   'Hospital',
   'Office',
-  'Airplane',
-  'Foreign Country',
-  'Museum',
   'Shopping Mall',
   'Public Transit',
 ];
@@ -63,38 +60,6 @@ const solutions = [
 ];
 
 const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
-  },
-  {
-    id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
-  },
-  {
-    id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
-  },
-  {
-    id: randomId(),
-    mistake: randomArrayItem(mistakes),
-    cost: randomArrayItem(cost),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
-  },
   {
     id: randomId(),
     mistake: randomArrayItem(mistakes),
@@ -243,6 +208,7 @@ export default function FullFeaturedCrudGrid() {
     );
   });
   
+  
   const columns: GridColDef[] = [
     { field: 'mistake', headerName: 'Mistakes that I made', width: 280, editable: true },
     {
@@ -257,6 +223,9 @@ export default function FullFeaturedCrudGrid() {
       type: 'date',
       width: 120,
       editable: true,
+      valueFormatter: ({ value }) => new Intl.DateTimeFormat('fr-CA', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(value)
     },
     {
       field: 'place',

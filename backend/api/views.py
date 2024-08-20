@@ -20,22 +20,28 @@ def create_goal(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def goal_update_and_delete(request, pk):
+@api_view(['PUT'])
+def goal_update(request, pk):
     try:
-        goals = Goal.objects.get(pk=pk)
+        goal = Goal.objects.get(pk=pk)
     except Goal.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        goals.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = GoalSerializer(goals, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = GoalSerializer(goal, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)    
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def goal_delete(request, pk):
+    try:
+        goal = Goal.objects.get(pk=pk)
+    except Goal.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    goal.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
     
 
 ### Mistake
@@ -54,22 +60,28 @@ def create_mistake(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def mistake_update_and_delete(request, pk):
+@api_view(['PUT'])
+def mistake_update(request, pk):
     try:
-        mistakes = Mistake.objects.get(pk=pk)
+        mistake = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        mistakes.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = MistakeSerializer(mistakes, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = MistakeSerializer(mistake, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def mistake_delete(request, pk):
+    try:
+        mistake = Mistake.objects.get(pk=pk)
+    except Mistake.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    mistake.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
     
 ### Profile
 
@@ -87,22 +99,28 @@ def create_profile(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def profile_update_and_delete(request, pk):
+@api_view(['PUT'])
+def profile_update(request, pk):
     try:
-        profiles = Mistake.objects.get(pk=pk)
+        profile = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        profiles.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = ProfileSerializer(profiles, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ProfileSerializer(profile, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def profile_delete(request, pk):
+    try:
+        profile = Mistake.objects.get(pk=pk)
+    except Mistake.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    profile.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 ### Deal
 
@@ -120,22 +138,28 @@ def create_deal(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def deal_update_and_delete(request, pk):
+@api_view(['PUT'])
+def deal_update(request, pk):
     try:
-        deals = Deal.objects.get(pk=pk)
+        deal = Deal.objects.get(pk=pk)
     except Deal.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        deals.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = DealSerializer(deals, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = DealSerializer(deal, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def deal_delete(request, pk):
+    try:
+        deal = Deal.objects.get(pk=pk)
+    except Deal.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    deal.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
 
 ### Graph
 
@@ -153,22 +177,28 @@ def create_graph(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def graph_update_and_delete(request, pk):
+@api_view(['PUT'])
+def graph_update(request, pk):
     try:
-        graphs = Graph.objects.get(pk=pk)
+        graph = Graph.objects.get(pk=pk)
     except Graph.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        graphs.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = GraphSerializer(graphs, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = GraphSerializer(graph, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def graph_delete(request, pk):
+    try:
+        graph = Graph.objects.get(pk=pk)
+    except Graph.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    graph.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
     
 ### Article
 
@@ -186,22 +216,28 @@ def create_article(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def article_update_and_delete(request, pk):
+@api_view(['PUT'])
+def article_update(request, pk):
     try:
-        articles = Article.objects.get(pk=pk)
+        article = Article.objects.get(pk=pk)
     except Article.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        articles.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = ArticleSerializer(articles, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = ArticleSerializer(article, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def article_delete(request, pk):
+    try:
+        article = Article.objects.get(pk=pk)
+    except Article.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    article.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)
     
 ### Urgency
 
@@ -220,19 +256,25 @@ def create_urgency(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['PUT', 'DELETE'])
-def urgency_update_and_delete(request, pk):
+@api_view(['PUT'])
+def urgency_update(request, pk):
     try:
-        urgencies = Urgency.objects.get(pk=pk)
+        urgency = Urgency.objects.get(pk=pk)
     except Urgency.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    if request.method == 'DELETE':
-        urgencies.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
-    elif request.method == 'PUT':
-        serializer = UrgencySerializer(urgencies, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)    
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    serializer = UrgencySerializer(urgency, data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['DELETE'])
+def urgency_delete(request, pk):
+    try:
+        urgency = Urgency.objects.get(pk=pk)
+    except Urgency.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
+
+    urgency.delete()
+    return Response(status=status.HTTP_204_NO_CONTENT)

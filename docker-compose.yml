@@ -1,48 +1,38 @@
 services:
-  db:
-    image: postgres:12
-    restart: always
-    volumes:
-      - app-db-data:/var/lib/postgresql/data/pgdata
-    env_file:
-      - .env
-    environment:
-      - PGDATA=/var/lib/postgresql/data/pgdata
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_DB=${POSTGRES_DB?Variable not set}
-
-  backend:
-    image: '${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}'
-    restart: always
-    networks:
-      - default
-    depends_on:
-      - db
-    env_file:
-      - .env
-    environment:
-      - DOMAIN=${DOMAIN}
-      - ENVIRONMENT=${ENVIRONMENT}
-      - BACKEND_CORS_ORIGINS=${BACKEND_CORS_ORIGINS}
-      - POSTGRES_SERVER=db
-      - POSTGRES_PORT=${POSTGRES_PORT}
-      - POSTGRES_DB=${POSTGRES_DB}
-      - POSTGRES_USER=${POSTGRES_USER?Variable not set}
-      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD?Variable not set}
 
   frontend:
-    image: buildpack-deps:bullseye
-    restart: always
+    image: connection-management-frontend 
+    env_file: 
+      - ./env
+    ports: 
+      - "5173:3000"
     networks:
-      - default
-    build:
-      context: ./src
+      - frontend-management
+    volumes:
+      - ./client/:/usr/src/app
+      - /usr/src/app/node_modules
+
+  backend:
+    image: connection-management-backend
+    ports:
+      - "4000:5000"
+    networks:
+      - backend-management
+    depends_on:
+      - db
+
+  db:
+    image: postgres:12
+    volumes:
+      - app-db-data:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    networks:
+      - management-database
 
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus
-    restart: always
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
     command:
@@ -50,12 +40,11 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - default
+      - management-prometheus
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
-    restart: always
     depends_on:
       - prometheus
     ports:
@@ -63,13 +52,20 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
-      - default
+      - management-grafana
 
 volumes:
   app-db-data:
   grafana-data:
 
 networks:
-  default:
-  traefik-public:
-    external: true
+  frontend-management:   
+    driver: bridge
+  backend-management:   
+    driver: bridge
+  management-database:   
+    driver: bridge
+  management-prometheus:   
+    driver: bridge
+  management-grafana:   
+    driver: bridge
