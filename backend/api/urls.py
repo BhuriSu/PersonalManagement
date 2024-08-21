@@ -32,11 +32,11 @@ urlpatterns = [
     path('graphs/update/<int:pk>/', views.graph_update),
     path('graphs/delete/<int:pk>/', views.graph_delete),  
 
-    # Article URLs
-    path('articles/', views.get_articles),
-    path('articles/create/', views.create_article),
-    path('articles/update/<int:pk>/', views.article_update),
-    path('articles/delete/<int:pk>/', views.article_delete), 
+    # Conversation URLs 
+    path('conversations/', views.get_conversations),
+    path('conversations/create/', views.create_conversation),
+    path('conversations/update/<int:pk>/', views.conversation_update),
+    path('conversations/delete/<int:pk>/', views.conversation_delete), 
 
     # Urgency URLs
     path('urgencies/', views.get_urgencies),

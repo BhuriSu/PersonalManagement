@@ -200,43 +200,43 @@ def graph_delete(request, pk):
     graph.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
     
-### Article
+### Conversation
 
 @api_view(['GET'])
-def get_articles(request):
-    articles =  Article.objects.all()
-    serializer = ArticleSerializer(articles, many=True).data
+def get_conversations(request):
+    conversations =  Conversation.objects.all()
+    serializer = ConversationSerializer(conversations, many=True).data
     return Response(serializer)
 
 @api_view(['POST'])
-def create_article(request):
-    serializer = ArticleSerializer(data=request.data)
+def create_conversation(request):
+    serializer = ConversationSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def article_update(request, pk):
+def conversation_update(request, pk):
     try:
-        article = Article.objects.get(pk=pk)
-    except Article.DoesNotExist:
+        conversation = conversation.objects.get(pk=pk)
+    except conversation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = ArticleSerializer(article, data=request.data)
+    serializer = ConversationSerializer(conversation, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def article_delete(request, pk):
+def conversation_delete(request, pk):
     try:
-        article = Article.objects.get(pk=pk)
-    except Article.DoesNotExist:
+        conversation = conversation.objects.get(pk=pk)
+    except conversation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    article.delete()
+    conversation.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
     
 ### Urgency

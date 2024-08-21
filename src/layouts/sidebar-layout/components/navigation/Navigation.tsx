@@ -9,7 +9,7 @@ import dashboard from '../../../../assets/dashboard.png';
 import urgency from '../../../../assets/urgency.png';
 import calendar from '../../../../assets/calendar.png';
 import user from '../../../../assets/user.png';
-import article from '../../../../assets/article.png';
+import conversation from '../../../../assets/conversation.png';
 import authentication from '../../../../assets/authentication.png';
 
 export function Navigation() {
@@ -51,13 +51,13 @@ export function Navigation() {
         ],
       },
       {
-        label: 'Article',
-        icon: () => <img src={article} alt="Article" style={{ width: '30px', height: '30px' }} />,
-        description: 'Article Management',
+        label: 'Conversation',
+        icon: () => <img src={conversation} alt="Conversation" style={{ width: '30px', height: '30px' }} />,
+        description: 'Conversation Note',
         items: [
           {
-            path: routes.article,
-            label: 'Article List',
+            path: routes.conversation,
+            label: 'Conversation List',
           },
         ],
       },

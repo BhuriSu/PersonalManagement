@@ -26,9 +26,9 @@ class GraphSerializer(serializers.ModelSerializer):
         model = Graph
         fields = '__all__'
 
-class ArticleSerializer(serializers.ModelSerializer):
+class ConversationSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Article
+        model = Conversation
         fields = '__all__'
     
 class UrgencySerializer(serializers.ModelSerializer):
