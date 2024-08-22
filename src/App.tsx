@@ -14,7 +14,7 @@ const Dashboard = React.lazy(() => import('./pages/dashboard'));
 const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/UserAccountPage'));
 const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage'));
 const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage'));
-const GraphPage = React.lazy(() => import('./pages/user/graph-relationship-page/GraphPage'));
+const MapPage = React.lazy(() => import('./pages/user/map-relationship-page/MapPage.tsx'));
 const ConversationPage = React.lazy(() => import('./pages/conversation/ConversationPage.tsx'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
 const UrgencyPage = React.lazy(() => import('./pages/urgency/UrgencyPage'));
@@ -55,8 +55,8 @@ const router = createBrowserRouter([
         element: <DealListPage />,
       },
       {
-        path: routes.graph,
-        element: <GraphPage />,
+        path: routes.map,
+        element: <MapPage />,
       },
       {
         path: routes.conversation,

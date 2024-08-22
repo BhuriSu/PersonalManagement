@@ -21,9 +21,9 @@ class DealSerializer(serializers.ModelSerializer):
         model = Deal
         fields = '__all__'
 
-class GraphSerializer(serializers.ModelSerializer):
+class MapSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Graph
+        model = Map
         fields = '__all__'
 
 class ConversationSerializer(serializers.ModelSerializer):

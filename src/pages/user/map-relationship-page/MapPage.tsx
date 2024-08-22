@@ -17,7 +17,7 @@ import {
 } from '@mui/material';
 import { Add as AddIcon, Close as CloseIcon, Delete as DeleteIcon } from '@mui/icons-material';
 import { TransitionProps } from '@mui/material/transitions';
-import './Graph.css';
+import './Map.css';
 import { PageHeader } from '../../../components/page-header/PageHeader';
 import MainWhiteBoard from './MainWhiteBoard';
 import NameModal from './NameModal';
@@ -29,18 +29,18 @@ const Transition = React.forwardRef(function Transition(
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-interface Graph {
+interface Map {
   id: number;
   name: string;
   created_at: string;
   updated_at: string;
 }
 
-const GraphPage: React.FC = () => {
-  const [squares, setSquares] = useState<Graph[]>([]);
+const MapPage: React.FC = () => {
+  const [squares, setSquares] = useState<Map[]>([]);
   const [open, setOpen] = useState<boolean>(false);
   const [nameModalOpen, setNameModalOpen] = useState<boolean>(false);
-  const [selectedSquare, setSelectedSquare] = useState<Graph | null>(null);
+  const [selectedSquare, setSelectedSquare] = useState<Map | null>(null);
   const [snackbarOpen, setSnackbarOpen] = useState<boolean>(false);
   const [snackbarMessage, setSnackbarMessage] = useState<string>('');
   const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
@@ -48,7 +48,7 @@ const GraphPage: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get('http://localhost:8000/api/graphs/')
+      .get('http://localhost:8000/api/maps/')
       .then(response => setSquares(response.data))
       .catch(error => console.log(error));
   }, []);
@@ -72,8 +72,8 @@ const GraphPage: React.FC = () => {
 
   const handleSaveName = async (name: string) => {
     try {
-      const response = await axios.post('http://localhost:8000/api/graphs/create/', { name });
-      const newSquare: Graph = response.data;
+      const response = await axios.post('http://localhost:8000/api/maps/create/', { name });
+      const newSquare: Map = response.data;
       setSquares(prev => [...prev, newSquare]);
       setNameModalOpen(false);
       setSnackbarMessage('Square created successfully');
@@ -87,7 +87,7 @@ const GraphPage: React.FC = () => {
     }
   };
 
-  const handleSquareClick = (square: Graph) => {
+  const handleSquareClick = (square: Map) => {
     setSelectedSquare(square);
     setOpen(true);
   };
@@ -95,8 +95,8 @@ const GraphPage: React.FC = () => {
   const handleSaveClick = async () => {
     if (selectedSquare) {
       try {
-        const response = await axios.put(`http://localhost:8000/api/graphs/update/${selectedSquare.id}/`, selectedSquare);
-        const updatedSquare: Graph = response.data;
+        const response = await axios.put(`http://localhost:8000/api/maps/update/${selectedSquare.id}/`, selectedSquare);
+        const updatedSquare: Map = response.data;
         setSquares(squares.map(square => (square.id === updatedSquare.id ? updatedSquare : square)));
         setSnackbarMessage('Square updated successfully');
         setSnackbarSeverity('success');
@@ -120,7 +120,7 @@ const GraphPage: React.FC = () => {
   const handleDeleteConfirm = async () => {
     if (selectedSquare) {
       try {
-        await axios.delete(`http://localhost:8000/api/graphs/delete/${selectedSquare.id}/`);
+        await axios.delete(`http://localhost:8000/api/maps/delete/${selectedSquare.id}/`);
         setSquares(squares.filter(square => square.id !== selectedSquare.id));
         setSnackbarMessage('Square deleted successfully');
         setSnackbarSeverity('success');
@@ -141,10 +141,10 @@ const GraphPage: React.FC = () => {
   };
 
   return (
-    <div className="Graph">
-      <PageHeader title={'Graph List'} />
+    <div className="Map">
+      <PageHeader title={'Map List'} />
       <Button color="primary" startIcon={<AddIcon />} onClick={handleClickOpen}>
-        <h3>Add Graph</h3>
+        <h3>Add Map</h3>
       </Button>
       <div className="grid-container">
         {squares.map(square => (
@@ -161,7 +161,7 @@ const GraphPage: React.FC = () => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 75, flex: 1 }} variant="h6" component="div">
-              Graph Relationship Details
+            Map Relationship Details
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
               Back
@@ -201,4 +201,4 @@ const GraphPage: React.FC = () => {
   );
 };
 
-export default GraphPage;
+export default MapPage;

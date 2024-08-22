@@ -41,7 +41,7 @@ class Deal(models.Model):
     money = models.CharField(max_length=50)
     profit = models.CharField(max_length=50)
 
-class Graph(models.Model):
+class Map(models.Model):
     name = models.CharField(max_length=100)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

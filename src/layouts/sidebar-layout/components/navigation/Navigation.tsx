@@ -45,8 +45,8 @@ export function Navigation() {
             label: 'Deal List',
           },
           {
-            path: routes.graph,
-            label: 'Graph Relationship',
+            path: routes.map,
+            label: 'Map Relationship',
           },
         ],
       },

@@ -37,7 +37,6 @@ const places = [
 const mistakes = [
   'broke the deal',
   'forgot to close refrigerator',
-  'broke the things that is not belong to mine',
   'underperformed',
   'no discipline',
   'broke the law',
@@ -46,7 +45,6 @@ const cost = [
   'lose opportunity',
   'almost get throwing in jail',
   'got terminated',
-  'waste too much electricity cost',
   'waste too much time',
   'got charges a lot',
 ];
@@ -62,7 +60,7 @@ const solutions = [
 const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    mistake: randomArrayItem(mistakes),
+    mistake: randomArrayItem(mistakes)+ '(Example)',
     cost: randomArrayItem(cost),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
@@ -210,7 +208,7 @@ export default function FullFeaturedCrudGrid() {
   
   
   const columns: GridColDef[] = [
-    { field: 'mistake', headerName: 'Mistakes that I made', width: 280, editable: true },
+    { field: 'mistake', headerName: 'Mistakes that I made', width: 300, editable: true },
     {
       field: 'cost',
       headerName: 'Cost',

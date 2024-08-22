@@ -39,7 +39,7 @@ function randomInformation() {
 const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    urgency: randomUrgency(),
+    urgency: randomUrgency() + '(Example)',
     information: randomInformation(),
   }
 ];

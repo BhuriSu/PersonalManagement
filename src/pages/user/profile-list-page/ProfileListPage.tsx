@@ -67,7 +67,7 @@ function generateRandomPlace() {
 export const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    name: randomTraderName(),
+    name: randomTraderName() + '(Example)',
     age: 45,
     date: randomCreatedDate(),
     place: generateRandomPlace(),

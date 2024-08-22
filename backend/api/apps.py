@@ -5,3 +5,5 @@ class ApiConfig(AppConfig):
     name = 'api'
     
 # python manage.py runserver
+
+#when change something in backend and get error ... does not exist >>  python manage.py migrate

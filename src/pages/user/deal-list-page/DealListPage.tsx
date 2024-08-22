@@ -73,7 +73,7 @@ function generateRandomPlace() {
 const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    name: randomTraderName(),
+    name: randomTraderName() + '(Example)',
     date: randomCreatedDate(),
     place: generateRandomPlace(),
     deal: randomRole(),

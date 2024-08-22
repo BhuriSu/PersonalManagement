@@ -21,7 +21,7 @@ def create_goal(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def goal_update(request, pk):
+def update_goal(request, pk):
     try:
         goal = Goal.objects.get(pk=pk)
     except Goal.DoesNotExist:
@@ -34,7 +34,7 @@ def goal_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def goal_delete(request, pk):
+def delete_goal(request, pk):
     try:
         goal = Goal.objects.get(pk=pk)
     except Goal.DoesNotExist:
@@ -61,7 +61,7 @@ def create_mistake(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def mistake_update(request, pk):
+def update_mistake(request, pk):
     try:
         mistake = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
@@ -74,7 +74,7 @@ def mistake_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def mistake_delete(request, pk):
+def delete_mistake(request, pk):
     try:
         mistake = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
@@ -100,7 +100,7 @@ def create_profile(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def profile_update(request, pk):
+def update_profile(request, pk):
     try:
         profile = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
@@ -113,7 +113,7 @@ def profile_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def profile_delete(request, pk):
+def delete_profile(request, pk):
     try:
         profile = Mistake.objects.get(pk=pk)
     except Mistake.DoesNotExist:
@@ -139,7 +139,7 @@ def create_deal(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def deal_update(request, pk):
+def update_deal(request, pk):
     try:
         deal = Deal.objects.get(pk=pk)
     except Deal.DoesNotExist:
@@ -152,7 +152,7 @@ def deal_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def deal_delete(request, pk):
+def delete_deal(request, pk):
     try:
         deal = Deal.objects.get(pk=pk)
     except Deal.DoesNotExist:
@@ -161,43 +161,43 @@ def deal_delete(request, pk):
     deal.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-### Graph
+### Map
 
 @api_view(['GET'])
-def get_graphs(request):
-    graphs =  Graph.objects.all()
-    serializer = GraphSerializer(graphs, many=True).data
+def get_maps(request):
+    maps =  Map.objects.all()
+    serializer = MapSerializer(maps, many=True).data
     return Response(serializer)
 
 @api_view(['POST'])
-def create_graph(request):
-    serializer = GraphSerializer(data=request.data)
+def create_map(request):
+    serializer = MapSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def graph_update(request, pk):
+def update_map(request, pk):
     try:
-        graph = Graph.objects.get(pk=pk)
-    except Graph.DoesNotExist:
+        map = Map.objects.get(pk=pk)
+    except Map.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    serializer = GraphSerializer(graph, data=request.data)
+    serializer = MapSerializer(map, data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def graph_delete(request, pk):
+def delete_map(request, pk):
     try:
-        graph = Graph.objects.get(pk=pk)
-    except Graph.DoesNotExist:
+        map = Map.objects.get(pk=pk)
+    except Map.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
-    graph.delete()
+    map.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
     
 ### Conversation
@@ -217,7 +217,7 @@ def create_conversation(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def conversation_update(request, pk):
+def update_conversation(request, pk):
     try:
         conversation = conversation.objects.get(pk=pk)
     except conversation.DoesNotExist:
@@ -230,7 +230,7 @@ def conversation_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def conversation_delete(request, pk):
+def delete_conversation(request, pk):
     try:
         conversation = conversation.objects.get(pk=pk)
     except conversation.DoesNotExist:
@@ -257,7 +257,7 @@ def create_urgency(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['PUT'])
-def urgency_update(request, pk):
+def update_urgency(request, pk):
     try:
         urgency = Urgency.objects.get(pk=pk)
     except Urgency.DoesNotExist:
@@ -270,7 +270,7 @@ def urgency_update(request, pk):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['DELETE'])
-def urgency_delete(request, pk):
+def delete_urgency(request, pk):
     try:
         urgency = Urgency.objects.get(pk=pk)
     except Urgency.DoesNotExist:

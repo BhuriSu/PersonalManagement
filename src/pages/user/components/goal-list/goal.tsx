@@ -49,7 +49,7 @@ const how = [
 const initialRows: GridRowsProp = [
   {
     id: randomId(),
-    goal: randomArrayItem(goal),
+    goal: randomArrayItem(goal) + '(Example)',
     how: randomArrayItem(how),
     date: randomCreatedDate(),
     place: randomArrayItem(places),
