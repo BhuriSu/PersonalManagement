@@ -34,6 +34,7 @@ interface Map {
   name: string;
   created_at: string;
   updated_at: string;
+  components: any[]; // or a more specific type depending on the components
 }
 
 const MapPage: React.FC = () => {
@@ -73,7 +74,7 @@ const MapPage: React.FC = () => {
   const handleSaveName = async (name: string) => {
     try {
       const response = await axios.post('http://localhost:8000/api/maps/create/', { name });
-      const newSquare: Map = response.data;
+      const newSquare: Map = { ...response.data, components: [] }; 
       setSquares(prev => [...prev, newSquare]);
       setNameModalOpen(false);
       setSnackbarMessage('Square created successfully');
@@ -161,7 +162,7 @@ const MapPage: React.FC = () => {
               <CloseIcon />
             </IconButton>
             <Typography sx={{ ml: 75, flex: 1 }} variant="h6" component="div">
-            Map Relationship Details
+              Map Relationship Details
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
               Back

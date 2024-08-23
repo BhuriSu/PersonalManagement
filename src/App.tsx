@@ -12,8 +12,8 @@ import { SidebarLayout } from './layouts/sidebar-layout/SidebarLayout.tsx';
 
 const Dashboard = React.lazy(() => import('./pages/dashboard'));
 const UserAccountPage = React.lazy(() => import('./pages/user/user-account-page/UserAccountPage'));
-const ProfileListPage = React.lazy(() => import('./pages/user/profile-list-page/ProfileListPage'));
-const DealListPage = React.lazy(() => import('./pages/user/deal-list-page/DealListPage'));
+const ProfilePage = React.lazy(() => import('./pages/user/profile-list-page/ProfilePage.tsx'));
+const DealPage = React.lazy(() => import('./pages/user/deal-list-page/DealPage.tsx'));
 const MapPage = React.lazy(() => import('./pages/user/map-relationship-page/MapPage.tsx'));
 const ConversationPage = React.lazy(() => import('./pages/conversation/ConversationPage.tsx'));
 const CalendarPage = React.lazy(() => import('./pages/calendar/Calendar'));
@@ -48,11 +48,11 @@ const router = createBrowserRouter([
       },
       {
         path: routes.userProfile,
-        element: <ProfileListPage />,
+        element: <ProfilePage />,
       },
       {
         path: routes.dealList,
-        element: <DealListPage />,
+        element: <DealPage />,
       },
       {
         path: routes.map,

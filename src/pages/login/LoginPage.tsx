@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import { routes } from '../../constants/routes';
 import { WelcomeContent } from '../../content/welcome-content/WelcomeContent';
 import { HalfLayout } from '../../layouts/half-layout/HalfLayout';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 import { auth } from '../../firebase'; 
 
 export default function LoginPage() {
@@ -24,11 +24,22 @@ export default function LoginPage() {
     }
   };
 
+  const handleGoogleLogin = async () => {
+    setError(null);
+    const provider = new GoogleAuthProvider();
+    try {
+      await signInWithPopup(auth, provider);
+      navigate(routes.dashboard);
+    } catch (error: any) {
+      setError(error.message);
+    }
+  };
+
   return (
     <HalfLayout>
       <WelcomeContent />
       <Stack spacing={2} sx={{ minWidth: '60%' }} alignItems={'center'}>
-        <Typography variant={'h3'} component={'h1'}>
+        <Typography variant={'h4'} component={'h1'}>
           Keep your connection secret!
         </Typography>
         <Typography variant={'body1'}>Enter your credentials below</Typography>
@@ -57,7 +68,7 @@ export default function LoginPage() {
         <Divider sx={{ width: '100%' }} />
         <Typography variant={'body2'}>Or login with</Typography>
         <Stack direction={'row'} spacing={1}>
-          <Button variant={'outlined'} startIcon={<Google />}>
+          <Button variant={'outlined'} startIcon={<Google />} onClick={handleGoogleLogin}>
             Google
           </Button>
           <Button variant={'outlined'} startIcon={<Facebook />}>

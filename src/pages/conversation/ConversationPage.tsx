@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Container, Stack, Typography, Box, Modal, TextField, IconButton } from '@mui/material';
 import { Add, Delete } from '@mui/icons-material';
 import { PageHeader } from '../../components/page-header/PageHeader';
@@ -12,6 +12,19 @@ export default function ConversationPage() {
   const [open, setOpen] = useState(false);
   const [selectedBlockIndex, setSelectedBlockIndex] = useState<number | null>(null);
   const [note, setNote] = useState('');
+
+  useEffect(() => {
+    // Load blocks from localStorage when the component mounts
+    const savedBlocks = localStorage.getItem('conversationBlocks');
+    if (savedBlocks) {
+      setBlocks(JSON.parse(savedBlocks));
+    }
+  }, []);
+
+  useEffect(() => {
+    // Save blocks to localStorage whenever they are updated
+    localStorage.setItem('conversationBlocks', JSON.stringify(blocks));
+  }, [blocks]);
 
   const handleAddBlock = () => {
     setBlocks([...blocks, { note: '' }]);
@@ -37,7 +50,7 @@ export default function ConversationPage() {
       const updatedBlocks = blocks.filter((_, i) => i !== selectedBlockIndex);
       setBlocks(updatedBlocks);
       setOpen(false);
-      setSelectedBlockIndex(null); // Reset the selected block index
+      setSelectedBlockIndex(null);
     }
   };
 
@@ -78,13 +91,13 @@ export default function ConversationPage() {
               alignItems: 'center',
               justifyContent: 'center',
               height: 150,
-              border: '1px solid #999', // Lower weight of the border
+              border: '1px solid #999',
               borderRadius: 2,
               cursor: 'pointer',
               position: 'relative',
               padding: 2,
-              backgroundColor: '#000', // Black background for all squares
-              color: block.note ? '#fff' : '#000', // White text if note exists, otherwise black
+              backgroundColor: '#000',
+              color: block.note ? '#fff' : '#000',
             }}
             onClick={() => handleBlockClick(index)}
           >
@@ -93,7 +106,7 @@ export default function ConversationPage() {
                 {block.note}
               </Typography>
             ) : (
-              <Add sx={{ fontSize: 50, color: '#fff' }} /> // White "+" symbol
+              <Add sx={{ fontSize: 50, color: '#fff' }} />
             )}
           </Box>
         ))}

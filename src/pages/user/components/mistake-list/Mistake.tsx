@@ -19,54 +19,20 @@ import {
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
-  GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
 } from '@mui/x-data-grid';
-import { randomCreatedDate, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { randomId } from '@mui/x-data-grid-generator';
 
-const places = [
-  'University',
-  'Home',
-  'Condo',
-  'Hospital',
-  'Office',
-  'Shopping Mall',
-  'Public Transit',
-];
-const mistakes = [
-  'broke the deal',
-  'forgot to close refrigerator',
-  'underperformed',
-  'no discipline',
-  'broke the law',
-];
-const cost = [
-  'lose opportunity',
-  'almost get throwing in jail',
-  'got terminated',
-  'waste too much time',
-  'got charges a lot',
-];
-const solutions = [
-  'dealing more professional',
-  'follow the rules strictly',
-  'upskills',
-  'check 2 times',
-  'practice discipline',
-  'beware when traveling',
-];
-
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    mistake: randomArrayItem(mistakes)+ '(Example)',
-    cost: randomArrayItem(cost),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-    solution: randomArrayItem(solutions),
-  },
-];
+interface MistakeRow {
+  id: number;
+  mistake: string;
+  cost: string;
+  date: Date | string;
+  place: string;
+  solution: string;
+  isNew?: boolean;
+}
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -110,7 +76,7 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState<MistakeRow[]>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -159,8 +125,11 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = async (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
+  const processRowUpdate = async (newRow: MistakeRow) => {
+    const updatedRow: MistakeRow = { 
+      ...newRow, 
+      isNew: false, 
+    };
     try {
       if (newRow.isNew) {
         const response = await axios.post('http://localhost:8000/api/mistakes/create/', updatedRow);
@@ -183,7 +152,7 @@ export default function FullFeaturedCrudGrid() {
   const filteredRows = rows.filter((row) => {
     const lowerSearchQuery = searchQuery.toLowerCase();
     
-    const rowMistakes = row.mistakes ? row.mistakes.toLowerCase() : '';
+    const rowMistake = row.mistake ? row.mistake.toLowerCase() : '';
     const rowCost = row.cost ? row.cost.toLowerCase() : '';
     
     const rowDate = row.date ? new Date(row.date) : null;
@@ -197,7 +166,7 @@ export default function FullFeaturedCrudGrid() {
     const rowSolution =  row.solution ?  row.solution.toLowerCase() : '';
   
     return (
-      rowMistakes.includes(lowerSearchQuery) ||
+      rowMistake.includes(lowerSearchQuery) ||
       rowCost.includes(lowerSearchQuery) ||
       formattedDate.includes(lowerSearchQuery) ||
       formattedDateString.includes(lowerSearchQuery) ||

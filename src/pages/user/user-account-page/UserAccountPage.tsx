@@ -1,7 +1,7 @@
 import { Box, Container, Tab, TabProps, Tabs } from '@mui/material';
 import { PageHeader } from '../../../components/page-header/PageHeader';
 import React from 'react';
-import MistakeList from '../components/mistake-list/MistakeList';
+import MistakeList from '../components/mistake-list/Mistake';
 import { AccountSettingsForm } from '../components/account-settings-form/AccountSettingsForm';
 import GoalListPage from '../components/goal-list/goal';
 import { useCurrentUser } from '../../../hooks/api/use-current-user/useCurrentUser';

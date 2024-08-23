@@ -19,69 +19,23 @@ import {
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
-  GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
 } from '@mui/x-data-grid';
-import { randomCreatedDate, randomTraderName, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { randomId } from '@mui/x-data-grid-generator';
 import { PageHeader } from '../../../components/page-header/PageHeader';
+import { addConnection, removeConnection, setConnections } from '../../../store/profile/profileSlice';
 import { useDispatch } from 'react-redux';
-import { addTransaction } from '../../../store/transaction/transactionSlice';
-import { addProfit } from '../../../store/profit/profitSlice';
-import { setHighestProfit } from '../../../store/highest-profit/highestProfitSlice';
 
-const deals = ['Selling Software', 'Buying Hotel Company', 'Selling Rare Material'];
-
-const randomRole = () => {
-  return randomArrayItem(deals);
-};
-
-function generateRandomTimeDuration() {
-  const days = Math.floor(Math.random() * 30) + 1;
-  const hours = Math.floor(Math.random() * 24);
-  let timeDuration = '';
-  if (days > 0) {
-    timeDuration += `${days} days `;
-  }
-  if (hours > 0) {
-    timeDuration += `${hours} hours `;
-  }
-  return timeDuration.trim();
+interface ProfileRow {
+  id: number;
+  name: string;
+  age: number;
+  date: Date | string;
+  place: string;
+  about: string;
+  isNew?: boolean;
 }
-
-function generateRandomMoney(): number {
-  const minAmount = 1000000;
-  const maxAmount = 10000000;
-  const randomAmount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
-  return randomAmount;
-}
-
-function generateRandomPlace() {
-  const places = [
-    'Paris',
-    'London',
-    'New York',
-    'Tokyo',
-    'Sydney',
-    'Rome',
-  ];
-
-  const randomPlace = randomArrayItem(places);
-  return randomPlace;
-}
-
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    name: randomTraderName() + '(Example)',
-    date: randomCreatedDate(),
-    place: generateRandomPlace(),
-    deal: randomRole(),
-    time: generateRandomTimeDuration(),
-    money: generateRandomMoney(),
-    profit: generateRandomMoney(),
-  }
-];
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -92,22 +46,15 @@ interface EditToolbarProps {
 function EditToolbar(props: EditToolbarProps) {
   const { setRows, setRowModesModel, setSearchQuery } = props;
   const dispatch = useDispatch();
-
- const handleClick = () => {
-  const id = randomId();
-  const newMoney = generateRandomMoney(); // Ensure this is a number
-  const newProfit = generateRandomMoney();
-  dispatch(addTransaction(newMoney)); // Pass number to the action
-  dispatch(addProfit(newProfit));
-  setRows((oldRows) => [
-    { id, name: '', date: '', place: '', deal: '', time: '', money: newMoney, profit: newProfit, isNew: true },
-    ...oldRows,
-  ]);
-  setRowModesModel((oldModel) => ({
-    ...oldModel,
-    [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
-  }));
-};
+  const handleClick = () => {
+    const id = randomId();
+    dispatch(addConnection());
+    setRows((oldRows) => [{ id, name: '', age: '', date: '', place: '', about: '', isNew: true }, ...oldRows]);
+    setRowModesModel((oldModel) => ({
+      ...oldModel,
+      [id]: { mode: GridRowModes.Edit, fieldToFocus: 'name' },
+    }));
+  };
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(event.target.value);
@@ -116,7 +63,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
     <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
-      Add Deal
+      Add Profile
     </Button>
     <TextField
       variant={'outlined'}
@@ -133,17 +80,20 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState<ProfileRow[]>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
-
   const dispatch = useDispatch();
 
   React.useEffect(() => {
-    axios.get('http://localhost:8000/api/deals/')
+    axios.get('http://localhost:8000/api/profiles/')
       .then(response => setRows(response.data))
       .catch(error => console.log(error));
   }, []);
+
+  React.useEffect(() => {
+    dispatch(setConnections(0));
+  }, [dispatch]);
 
   const handleRowEditStop: GridEventListener<'rowEditStop'> = (params, event) => {
     if (params.reason === GridRowEditStopReasons.rowFocusOut) {
@@ -163,8 +113,9 @@ export default function FullFeaturedCrudGrid() {
     // Call the async function within the synchronous wrapper
     async function deleteRow() {
       try {
-        await axios.delete(`http://localhost:8000/api/deals/delete/${id}/`);
+        await axios.delete(`http://localhost:8000/api/profiles/delete/${id}/`);
         setRows((prevRows) => prevRows.filter((row) => row.id !== id));
+        dispatch(removeConnection()); 
       } catch (error) {
         console.error(error);
       }
@@ -184,36 +135,21 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
- const processRowUpdate = async (newRow: GridRowModel) => {
-  const previousRow = rows.find((row) => row.id === newRow.id);
-  const updatedRow = {
-    ...newRow,
-    isNew: false,
-    money: parseFloat(newRow.money as unknown as string) || 0,
-    profit: parseFloat(newRow.profit as unknown as string) || 0,
-  };
-
-  // Update total money and profit in Redux
-  if (previousRow) {
-    const newProfitValue = updatedRow.profit;
-    dispatch(addTransaction(updatedRow.money - (parseFloat(previousRow.money as unknown as string) || 0)));
-    dispatch(addProfit(updatedRow.profit - (parseFloat(previousRow.profit as unknown as string) || 0)));
-    dispatch(setHighestProfit(newProfitValue)); 
-  }
-
-  try {
-    if (newRow.isNew) {
-      const response = await axios.post('http://localhost:8000/api/profiles/create/', updatedRow);
-      setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
-    } else {
-      await axios.put(`http://localhost:8000/api/profiles/update/${newRow.id}/`, updatedRow);
-      setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+  const processRowUpdate = async (newRow: ProfileRow) => {
+    const updatedRow: ProfileRow = { ...newRow, isNew: false };
+    try {
+      if (newRow.isNew) {
+        const response = await axios.post('http://localhost:8000/api/profiles/create/', updatedRow);
+        setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
+      } else {
+        await axios.put(`http://localhost:8000/api/profiles/update/${newRow.id}/`, updatedRow);
+        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-  return updatedRow;
-};
+    return updatedRow;
+  };
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
@@ -223,42 +159,48 @@ export default function FullFeaturedCrudGrid() {
     const lowerSearchQuery = searchQuery.toLowerCase();
     
     const rowName = row.name ? row.name.toLowerCase() : '';
-    const rowDeal = row.deal ? row.deal.toLowerCase() : '';
-    const rowTime = row.time ? row.time.toLowerCase() : '';
-    const rowMoney = row.money ? row.money : '';
-    const rowProfit = row.profit ? row.profit: '';
+    const rowAge = row.age ? row.age.toString().toLowerCase() : '';
+    const rowAbout = row.about ? row.about.toLowerCase() : '';
     
     const rowDate = row.date ? new Date(row.date) : null;
     const day = rowDate ? rowDate.getDate().toString() : '';
-    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
+    const month = rowDate ? (rowDate.getMonth() + 1).toString() : '';
     const year = rowDate ? rowDate.getFullYear().toString() : '';
     const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
     const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
   
     const rowPlace = row.place ? row.place.toLowerCase() : '';
-    const rowSolution =  row.solution ?  row.solution.toLowerCase() : '';
   
     return (
       rowName.includes(lowerSearchQuery) ||
-      rowDeal.includes(lowerSearchQuery) ||
-      rowTime.includes(lowerSearchQuery) ||
-      rowMoney.includes(lowerSearchQuery) ||
-      rowProfit.includes(lowerSearchQuery) ||
+      rowAge.includes(lowerSearchQuery) ||
+      rowAbout.includes(lowerSearchQuery) ||
       formattedDate.includes(lowerSearchQuery) ||
       formattedDateString.includes(lowerSearchQuery) ||
-      rowPlace.includes(lowerSearchQuery) ||
-      rowSolution.includes(lowerSearchQuery)
+      rowPlace.includes(lowerSearchQuery) 
     );
   });
 
   const columns: GridColDef[] = [
-    { field: 'name', headerName: 'Name', width: 180, editable: true },
+    { field: 'name', headerName: 'Name', width: 200, editable: true },
+    {
+      field: 'age',
+      headerName: 'Age',
+      type: 'number',
+      width: 80,
+      align: 'left',
+      headerAlign: 'left',
+      editable: true,
+    },
     {
       field: 'date',
       headerName: 'Date you met',
       type: 'date',
-      width: 80,
+      width: 100,
       editable: true,
+      valueFormatter: ({ value }) => new Intl.DateTimeFormat('fr-CA', {
+        year: 'numeric', month: '2-digit', day: '2-digit'
+    }).format(value)
     },
     {
       field: 'place',
@@ -267,30 +209,10 @@ export default function FullFeaturedCrudGrid() {
       editable: true,
     },
     {
-      field: 'deal',
-      headerName: 'What kind of deal',
-      width: 200,
+      field: 'about',
+      headerName: 'About',
+      width: 400,
       editable: true,
-    },
-    {
-      field: 'time',
-      headerName: 'How long to close the deal',
-      width: 180,
-      editable: true,
-    },
-    {
-      field: 'money',
-      headerName: 'Money',
-      width: 120,
-      editable: true,
-      renderCell: (params) => params.value.toLocaleString(),
-    },
-    {
-      field: 'profit',
-      headerName: 'Profit',
-      width: 120,
-      editable: true,
-      renderCell: (params) => params.value.toLocaleString(),
     },
     {
       field: 'actions',
@@ -348,7 +270,7 @@ export default function FullFeaturedCrudGrid() {
         },
       }}
     >
-      <PageHeader title={'Deal List'} breadcrumbs={['Deal', 'List']} />
+      <PageHeader title={'Profile List'} breadcrumbs={['Profile', 'List']} />
       <DataGrid
         autoHeight
         rows={filteredRows}
@@ -365,6 +287,7 @@ export default function FullFeaturedCrudGrid() {
           toolbar: { setRows, setRowModesModel, setSearchQuery },
         }}
       />
+      
     </Box>
   );
 }

@@ -19,30 +19,18 @@ import {
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
-  GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
 } from '@mui/x-data-grid';
-import { randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { randomId } from '@mui/x-data-grid-generator';
 import { PageHeader } from '../../components/page-header/PageHeader';
 
-const urgencies = ['Urgent Phone Number in Australia', 'High Credit Law Firm','When your want to get some help quickly'];
-const information = [ '083-312-5831','KirkLand','Call this guy name David solomon 083-123-3122','Go to this place before 5 P.M.']
-const randomUrgency = () => {
-  return randomArrayItem(urgencies);
-};
-
-function randomInformation() {
-  return randomArrayItem(information);
+interface UrgencyRow {
+  id: number;
+  urgency: string;
+  information: string;
+  isNew?: boolean;
 }
-
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    urgency: randomUrgency() + '(Example)',
-    information: randomInformation(),
-  }
-];
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -69,7 +57,7 @@ function EditToolbar(props: EditToolbarProps) {
   return (
     <GridToolbarContainer sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
     <Button color='primary' startIcon={<AddIcon />} onClick={handleClick}>
-      Add record
+      Add Urgency
     </Button>
     <TextField
       variant={'outlined'}
@@ -86,7 +74,7 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState<UrgencyRow[]>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -134,11 +122,11 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = async (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
+  const processRowUpdate = async (newRow: UrgencyRow) => {
+    const updatedRow: UrgencyRow = { ...newRow, isNew: false };
     try {
       if (newRow.isNew) {
-        const response = await axios.post('http://localhost:8000/api/urgencies/', updatedRow);
+        const response = await axios.post('http://localhost:8000/api/urgencies/create/', updatedRow);
         setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
       } else {
         await axios.put(`http://localhost:8000/api/urgencies/update/${newRow.id}/`, updatedRow);
@@ -159,19 +147,10 @@ export default function FullFeaturedCrudGrid() {
     
     const rowUrgency = row.urgency ? row.urgency.toLowerCase() : '';
     const rowInformation = row.information ? row.information.toLowerCase() : '';
-    
-    const rowDate = row.date ? new Date(row.date) : null;
-    const day = rowDate ? rowDate.getDate().toString() : '';
-    const month = rowDate ? (rowDate.getMonth() + 1).toString() : ''; // Months are 0-based, so add 1
-    const year = rowDate ? rowDate.getFullYear().toString() : '';
-    const formattedDate = rowDate ? `${day}/${month}/${year}` : '';
-    const formattedDateString = rowDate ? rowDate.toDateString().toLowerCase() : '';
   
     return (
       rowUrgency.includes(lowerSearchQuery) ||
-      rowInformation.includes(lowerSearchQuery) ||
-      formattedDate.includes(lowerSearchQuery) ||
-      formattedDateString.includes(lowerSearchQuery) 
+      rowInformation.includes(lowerSearchQuery) 
     );
   });
 

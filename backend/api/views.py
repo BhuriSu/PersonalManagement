@@ -102,8 +102,8 @@ def create_profile(request):
 @api_view(['PUT'])
 def update_profile(request, pk):
     try:
-        profile = Mistake.objects.get(pk=pk)
-    except Mistake.DoesNotExist:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     serializer = ProfileSerializer(profile, data=request.data)
@@ -115,8 +115,8 @@ def update_profile(request, pk):
 @api_view(['DELETE'])
 def delete_profile(request, pk):
     try:
-        profile = Mistake.objects.get(pk=pk)
-    except Mistake.DoesNotExist:
+        profile = Profile.objects.get(pk=pk)
+    except Profile.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
     profile.delete()
@@ -126,7 +126,7 @@ def delete_profile(request, pk):
 
 @api_view(['GET'])
 def get_deals(request):
-    deals =  Profile.objects.all()
+    deals =  Deal.objects.all()
     serializer = DealSerializer(deals, many=True).data
     return Response(serializer)
 
@@ -219,7 +219,7 @@ def create_conversation(request):
 @api_view(['PUT'])
 def update_conversation(request, pk):
     try:
-        conversation = conversation.objects.get(pk=pk)
+        conversation = Conversation.objects.get(pk=pk)
     except conversation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 
@@ -232,7 +232,7 @@ def update_conversation(request, pk):
 @api_view(['DELETE'])
 def delete_conversation(request, pk):
     try:
-        conversation = conversation.objects.get(pk=pk)
+        conversation = Conversation.objects.get(pk=pk)
     except conversation.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
 

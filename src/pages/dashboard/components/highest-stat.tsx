@@ -1,23 +1,27 @@
-
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
+import { ArrowClockwise as ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { alpha, useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
-import { ArrowClockwise as ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
-import type { ApexOptions } from 'apexcharts';
 import { Chart } from './chart';
+import type { ApexOptions } from 'apexcharts';
 
-export interface DealsProps {
+export interface HighestStatProps {
   chartSeries: { name: string; data: number[] }[];
   sx?: SxProps;
 }
 
-export function Deals({ chartSeries, sx }: DealsProps): React.JSX.Element {
+export function HighestStat({ chartSeries, sx }: HighestStatProps): React.JSX.Element {
   const chartOptions = useChartOptions();
+  
+  // Limit to the last 10 data points
+  const limitedSeries = chartSeries.map(series => ({
+    ...series,
+    data: series.data.slice(-10)
+  }));
 
   return (
     <Card sx={sx}>
@@ -27,10 +31,10 @@ export function Deals({ chartSeries, sx }: DealsProps): React.JSX.Element {
             Sync
           </Button>
         }
-        title="Deals"
+        title="Highest Stats"
       />
       <CardContent>
-        <Chart height={350} options={chartOptions} series={chartSeries} type="bar" width="100%" />
+        <Chart height={350} options={chartOptions} series={limitedSeries} type="bar" width="100%" />
       </CardContent>
     </Card>
   );
@@ -40,7 +44,11 @@ function useChartOptions(): ApexOptions {
   const theme = useTheme();
 
   return {
-    chart: { background: 'transparent', stacked: false, toolbar: { show: false } },
+    chart: {
+      background: 'transparent',
+      stacked: false,
+      toolbar: { show: false },
+    },
     colors: [theme.palette.primary.main, alpha(theme.palette.primary.main, 0.25)],
     dataLabels: { enabled: false },
     fill: { opacity: 1, type: 'solid' },
@@ -57,7 +65,7 @@ function useChartOptions(): ApexOptions {
     xaxis: {
       axisBorder: { color: theme.palette.divider, show: true },
       axisTicks: { color: theme.palette.divider, show: true },
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+      categories: Array.from({ length: 10 }, (_, index) => `Data ${index + 1}`), // Dynamic labels for up to 10 items
       labels: { offsetY: 5, style: { colors: theme.palette.text.secondary } },
     },
     yaxis: {

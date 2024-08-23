@@ -19,42 +19,19 @@ import {
   GridActionsCellItem,
   GridEventListener,
   GridRowId,
-  GridRowModel,
   GridRowEditStopReasons,
   GridSlots,
 } from '@mui/x-data-grid';
-import { randomCreatedDate, randomId, randomArrayItem } from '@mui/x-data-grid-generator';
+import { randomId } from '@mui/x-data-grid-generator';
 
-const places = [
-  'University',
-  'Home',
-  'Condo',
-  'Hospital',
-  'Office',
-  'Foreign Country',
-];
-const goal = [
-  'Meet New friend',
-  'Practice new skill',
-  'Become millionaire',
-  'Become Billionaire',
-  'Disrupt the whole world',
-];
-const how = [
-  'go to new place and start conversation',
-  'take course online',
-  'negotiate and make a deal',
-];
-
-const initialRows: GridRowsProp = [
-  {
-    id: randomId(),
-    goal: randomArrayItem(goal) + '(Example)',
-    how: randomArrayItem(how),
-    date: randomCreatedDate(),
-    place: randomArrayItem(places),
-  },
-];
+interface GoalRow {
+  id: number;
+  goal: string;
+  how: string;
+  date: Date | string;
+  place: string;
+  isNew?: boolean;
+}
 
 interface EditToolbarProps {
   setRows: (newRows: (oldRows: GridRowsProp) => GridRowsProp) => void;
@@ -98,7 +75,7 @@ function EditToolbar(props: EditToolbarProps) {
 }
 
 export default function FullFeaturedCrudGrid() {
-  const [rows, setRows] = React.useState(initialRows);
+  const [rows, setRows] = React.useState<GoalRow[]>([]);
   const [rowModesModel, setRowModesModel] = React.useState<GridRowModesModel>({});
   const [searchQuery, setSearchQuery] = React.useState('');
 
@@ -147,21 +124,30 @@ export default function FullFeaturedCrudGrid() {
     }
   };
 
-  const processRowUpdate = async (newRow: GridRowModel) => {
-    const updatedRow = { ...newRow, isNew: false };
-    try {
-      if (newRow.isNew) {
-        const response = await axios.post('http://localhost:8000/api/goals/create/', updatedRow);
-        setRows(rows.map((row) => (row.id === newRow.id ? response.data : row)));
-      } else {
-        await axios.put(`http://localhost:8000/api/goals/update/${newRow.id}/`, updatedRow);
-        setRows(rows.map((row) => (row.id === newRow.id ? updatedRow : row)));
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return updatedRow;
+  const processRowUpdate = async (newRow: GoalRow) => {
+  const updatedRow: GoalRow = {
+    ...newRow, // Spread all properties from newRow
+    isNew: false, // Override isNew property
   };
+
+  try {
+    if (newRow.isNew) {
+      const response = await axios.post<GoalRow>('http://localhost:8000/api/goals/create/', updatedRow);
+      setRows((prevRows) =>
+        prevRows.map((row) => (row.id === newRow.id ? response.data : row))
+      );
+    } else {
+      await axios.put<GoalRow>(`http://localhost:8000/api/goals/update/${newRow.id}/`, updatedRow);
+      setRows((prevRows) =>
+        prevRows.map((row) => (row.id === newRow.id ? updatedRow : row))
+      );
+    }
+  } catch (error) {
+    console.error(error);
+  }
+
+  return updatedRow;
+};
 
   const handleRowModesModelChange = (newRowModesModel: GridRowModesModel) => {
     setRowModesModel(newRowModesModel);
