@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { navigationReducer } from './sidebar/navigationSlice';
 import { calendarReducer } from './calendar/calendarSlice';
-import  transactionReducer from './transaction/transactionSlice';
-import  profitReducer from './profit/profitSlice';
+import transactionReducer from './transaction/transactionSlice';
+import profitReducer from './profit/profitSlice';
 import connectionsReducer from './profile/profileSlice';
 import highestProfitReducer from './highest-profit/highestProfitSlice';
 

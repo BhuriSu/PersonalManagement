@@ -29,7 +29,6 @@ urlpatterns = [
     # Map URLs
     path('maps/', views.get_maps),
     path('maps/create/', views.create_map),
-    path('maps/update/<int:pk>/', views.update_map),
     path('maps/delete/<int:pk>/', views.delete_map),  
 
     # Conversation URLs 

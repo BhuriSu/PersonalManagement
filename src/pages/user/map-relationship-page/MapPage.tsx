@@ -60,7 +60,7 @@ const MapPage: React.FC = () => {
 
   const handleClose = () => {
     setOpen(false);
-    setSelectedSquare(null); // Reset selected square when closing the dialog
+    setSelectedSquare(null); 
   };
 
   const handleSnackbarClose = () => {
@@ -91,25 +91,6 @@ const MapPage: React.FC = () => {
   const handleSquareClick = (square: Map) => {
     setSelectedSquare(square);
     setOpen(true);
-  };
-
-  const handleSaveClick = async () => {
-    if (selectedSquare) {
-      try {
-        const response = await axios.put(`http://localhost:8000/api/maps/update/${selectedSquare.id}/`, selectedSquare);
-        const updatedSquare: Map = response.data;
-        setSquares(squares.map(square => (square.id === updatedSquare.id ? updatedSquare : square)));
-        setSnackbarMessage('Square updated successfully');
-        setSnackbarSeverity('success');
-        setSnackbarOpen(true);
-        setOpen(false);
-      } catch (error) {
-        console.error('Failed to update square:', error);
-        setSnackbarMessage('Failed to update square');
-        setSnackbarSeverity('error');
-        setSnackbarOpen(true);
-      }
-    }
   };
 
   const handleDeleteClick = () => {
@@ -166,9 +147,6 @@ const MapPage: React.FC = () => {
             </Typography>
             <Button autoFocus color="inherit" onClick={handleClose}>
               Back
-            </Button>
-            <Button autoFocus color="inherit" onClick={handleSaveClick}>
-              Save
             </Button>
             <IconButton color="inherit" onClick={handleDeleteClick}>
               <DeleteIcon />
