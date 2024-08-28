@@ -1,9 +1,7 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import { ArrowClockwise as ArrowClockwiseIcon } from '@phosphor-icons/react/dist/ssr/ArrowClockwise';
 import { alpha, useTheme } from '@mui/material/styles';
 import type { SxProps } from '@mui/material/styles';
 import { Chart } from './chart';
@@ -14,7 +12,7 @@ export interface HighestStatProps {
   sx?: SxProps;
 }
 
-export function HighestStat({ chartSeries, sx }: HighestStatProps): React.JSX.Element {
+export function ProfitStat({ chartSeries, sx }: HighestStatProps): React.JSX.Element {
   const chartOptions = useChartOptions();
   
   // Limit to the last 10 data points
@@ -26,12 +24,7 @@ export function HighestStat({ chartSeries, sx }: HighestStatProps): React.JSX.El
   return (
     <Card sx={sx}>
       <CardHeader
-        action={
-          <Button color="inherit" size="small" startIcon={<ArrowClockwiseIcon fontSize="var(--icon-fontSize-md)" />}>
-            Sync
-          </Button>
-        }
-        title="Highest Stats"
+        title="Dealing Profit Statistics"
       />
       <CardContent>
         <Chart height={350} options={chartOptions} series={limitedSeries} type="bar" width="100%" />
@@ -70,7 +63,7 @@ function useChartOptions(): ApexOptions {
     },
     yaxis: {
       labels: {
-        formatter: (value) => (value > 0 ? `${value}K` : `${value}`),
+        formatter: (value) => (value > 0 ? `${value}` : `${value}`),
         offsetX: -10,
         style: { colors: theme.palette.text.secondary },
       },

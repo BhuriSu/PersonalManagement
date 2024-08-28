@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { TotalTransactions } from './components/total-transaction';
 import { YourAIAssistant } from './components/AIAssistant';
-import { HighestStat } from './components/highest-stat';
+import { ProfitStat } from './components/profit-stat';
 import { HighestProfit } from './components/highest-profit';
 import { TotalConnections } from './components/total-connections';
 import { TotalProfit } from './components/total-profit';
@@ -23,12 +23,13 @@ export default function DashBoardPage(): React.JSX.Element {
   const transactions = useSelector((state: RootState) => state.transactions.transactions);
   const profits = useSelector((state: RootState) => state.profits.profits);
   const highestProfit = useSelector((state: RootState) => state.highestProfit.value);
+  const allProfits = useSelector((state: RootState) => state.highestProfit.allProfits);
 
   const totalTransactions = transactions.reduce((total: number, transaction: Transaction) => total + transaction.money, 0);
   const totalProfits = profits.reduce((total: number, profit: Profit) => total + profit.profit, 0);
   const totalConnections = useSelector((state: RootState) => state.connections.totalConnections);
 
-  const highestProfitData = profits.map(profit => profit.profit).slice(-10);
+  const highestProfitData = allProfits.slice(-10);
 
   return (
     <Grid container spacing={3}>
@@ -45,7 +46,7 @@ export default function DashBoardPage(): React.JSX.Element {
         <TotalProfit sx={{ height: '100%' }} value={totalProfits} />
       </Grid>
       <Grid lg={8} xs={12}>
-        <HighestStat
+        <ProfitStat
           sx={{ height: '100%' }}
           chartSeries={[
             {

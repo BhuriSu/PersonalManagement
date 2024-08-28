@@ -30,8 +30,8 @@ import { addProfit } from '../../../store/profit/profitSlice';
 import { setHighestProfit } from '../../../store/highest-profit/highestProfitSlice';
 
 function generateRandomMoney(): number {
-  const minAmount = 1000000;
-  const maxAmount = 10000000;
+  const minAmount = 1000;
+  const maxAmount = 1000;
   const randomAmount = Math.floor(Math.random() * (maxAmount - minAmount + 1)) + minAmount;
   return randomAmount;
 }
