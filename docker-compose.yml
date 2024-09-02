@@ -1,23 +1,25 @@
 services:
 
   frontend:
-    image: connection-management-frontend 
+    image: frontend
     env_file: 
-      - ./env
+      - .env
     ports: 
-      - "5173:3000"
+      - "5173:5173"
     networks:
       - frontend-management
+      - management-prometheus
     volumes:
       - ./client/:/usr/src/app
       - /usr/src/app/node_modules
 
   backend:
-    image: connection-management-backend
+    image: backend
     ports:
-      - "4000:5000"
+      - "8000:8000"
     networks:
       - backend-management
+      - management-prometheus
     depends_on:
       - db
 

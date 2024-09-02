@@ -9,7 +9,7 @@ scrape_configs:
 
   - job_name: 'backend'
     static_configs:
-      - targets: ['backend:8080']  # Replace with the actual backend service port
+      - targets: ['backend:8000']  # Replace with the actual backend service port
 
   - job_name: 'db'
     static_configs:
