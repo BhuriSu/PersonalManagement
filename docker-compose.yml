@@ -1,36 +1,42 @@
-services:
+version: '3.8'
 
+services:
   frontend:
     image: frontend
-    env_file: 
-      - .env
+    env_file: .env
     ports: 
       - "5173:5173"
     networks:
-      - frontend-management
-      - management-prometheus
+      - management-network
     volumes:
       - ./client/:/usr/src/app
       - /usr/src/app/node_modules
 
   backend:
     image: backend
+    environment:
+      DEBUG: ${DEBUG}
+      DATABASE_URL: ${DATABASE_URL}
     ports:
       - "8000:8000"
     networks:
-      - backend-management
-      - management-prometheus
+      - management-network
     depends_on:
       - db
 
   db:
     image: postgres:12
+    environment:
+      DEBUG: ${DEBUG}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_NAME: ${POSTGRES_NAME}
     volumes:
       - app-db-data:/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
     networks:
-      - management-database
+      - management-network
 
   prometheus:
     image: prom/prometheus:latest
@@ -42,7 +48,7 @@ services:
     ports:
       - "9090:9090"
     networks:
-      - management-prometheus
+      - management-network
 
   grafana:
     image: grafana/grafana:latest
@@ -54,20 +60,41 @@ services:
     volumes:
       - grafana-data:/var/lib/grafana
     networks:
-      - management-grafana
+      - management-network
+
+  loki:
+    container_name: loki
+    image: grafana/loki:2.3.0
+    restart: unless-stopped
+    ports:
+      - "3100:3100"
+    volumes:
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml  # Make sure loki-config.yaml is at the correct path
+      - loki-data:/loki
+    command:
+      -config.file=/etc/loki/loki-config.yaml
+    networks:
+      - management-network
+
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.3.0
+    restart: unless-stopped
+    volumes:
+      - /var/lib/docker/containers:/var/lib/docker/containers:ro
+      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml  # Make sure promtail-config.yaml is at the correct path
+    command:
+      -config.file=/etc/promtail/promtail-config.yaml
+    depends_on:
+      - loki
+    networks:
+      - management-network
 
 volumes:
   app-db-data:
   grafana-data:
+  loki-data:
 
 networks:
-  frontend-management:   
-    driver: bridge
-  backend-management:   
-    driver: bridge
-  management-database:   
-    driver: bridge
-  management-prometheus:   
-    driver: bridge
-  management-grafana:   
+  management-network:
     driver: bridge

@@ -5,10 +5,9 @@
 2. Track user connections on the dashboard to summarize total transactions, total connections, and total profit, displaying the information through specific bars on the dashboard.
 3. Users can save numerous conversations about their connections, hidden strategies that few others know.
 
-### `npm run dev` for frontend 
-
-cd backend and `python manage.py runserver` for backend
-
-docker-compose up for running docker to use Grafana and Prometheus 
+### How to run it locally 
+### 1. `npm run dev` for frontend and cd backend then run `python manage.py runserver` for backend
+### 2. run docker image both frontend and backend 
+### 3. docker-compose up for running docker to use Grafana, Prometheus, loki and promtail 
 
 
