@@ -28,7 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -59,7 +58,8 @@ MIDDLEWARE = [
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5174", # Example frontend URL
+    "http://localhost:5173",
+      # Example frontend URL
     # Add other allowed origins here
 ]
 
@@ -94,7 +94,7 @@ DATABASES = {
         'NAME': config('POSTGRES_NAME'),
         'USER': config('POSTGRES_USER'),
         'PASSWORD': config('POSTGRES_PASSWORD'),
-        'HOST': 'db',  # This should match the database service name in Docker Compose
+        'HOST': 'localhost',  # This should match the database service name in Docker Compose
         'PORT': '5432',
     }
 }

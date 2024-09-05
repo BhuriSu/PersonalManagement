@@ -42,6 +42,7 @@ services:
     container_name: prometheus
     volumes:
       - ./prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus_data:/prometheus
     command:
       - --config.file=/etc/prometheus/prometheus.yml
     ports:
@@ -93,6 +94,7 @@ volumes:
   app-db-data:
   grafana-data:
   loki-data:
+  prometheus_data:
 
 networks:
   management-network:
