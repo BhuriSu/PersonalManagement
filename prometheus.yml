@@ -7,10 +7,6 @@ scrape_configs:
     static_configs:
       - targets: ['localhost:9090']
 
-  - job_name: 'backend'
-    static_configs:
-      - targets: ['backend:8000']  # Replace with the actual backend service port
-
   - job_name: 'database'
     static_configs:
       - targets: ['postgres_exporter:9187']

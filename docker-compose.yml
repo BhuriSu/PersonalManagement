@@ -22,7 +22,7 @@ services:
     depends_on:
       - database
 
-  database: #this line have to be the same like HOST in backend to connect database
+  database: 
     image: postgres:latest
     container_name: database
     environment:
@@ -78,7 +78,7 @@ services:
     ports:
       - "3100:3100"
     volumes:
-      - ./loki-config.yaml:/etc/loki/loki-config.yaml  # Make sure loki-config.yaml is at the correct path
+      - ./loki-config.yaml:/etc/loki/loki-config.yaml  
       - loki-data:/loki
     command:
       -config.file=/etc/loki/loki-config.yaml
@@ -91,7 +91,7 @@ services:
     restart: unless-stopped
     volumes:
       - /var/lib/docker/containers:/var/lib/docker/containers:ro
-      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml  # Make sure promtail-config.yaml is at the correct path
+      - ./promtail-config.yaml:/etc/promtail/promtail-config.yaml  
     command:
       -config.file=/etc/promtail/promtail-config.yaml
     depends_on:
