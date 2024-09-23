@@ -215,7 +215,7 @@ export default function FullFeaturedCrudGrid() {
     { field: 'name', headerName: 'Name', width: 200, editable: true },
     {
       field: 'date',
-      headerName: 'Date you met',
+      headerName: 'Date you meet',
       type: 'date',
       width: 100,
       editable: true,
