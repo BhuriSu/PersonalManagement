@@ -246,34 +246,35 @@ export default function FullFeaturedCrudGrid() {
 
   return (
     <Box
-      sx={{
-        height: 700,
-        width: '100%',
-        '& .actions': {
-          color: 'text.secondary',
-        },
-        '& .textPrimary': {
-          color: 'text.primary',
-        },
-      }}
-    >
-      <DataGrid
-        autoHeight
-        rows={filteredRows}
-        columns={columns}
-        editMode='row'
-        rowModesModel={rowModesModel}
-        checkboxSelection
-        onRowModesModelChange={handleRowModesModelChange}
-        onRowEditStop={handleRowEditStop}
-        processRowUpdate={processRowUpdate}
-        slots={{
-          toolbar: EditToolbar as GridSlots['toolbar'],
-        }}
-        slotProps={{
-          toolbar: { setRows, setRowModesModel, setSearchQuery },
-        }}
-      />
-    </Box>
+  sx={{
+    height: 700, // Ensure height is provided.
+    width: '100%', // Ensure width is 100% of the parent container.
+    minWidth: 500, // Set a minimum width to ensure the grid has some space.
+    '& .actions': {
+      color: 'text.secondary',
+    },
+    '& .textPrimary': {
+      color: 'text.primary',
+    },
+  }}
+>
+  <DataGrid
+    autoHeight
+    rows={filteredRows}
+    columns={columns}
+    editMode="row"
+    rowModesModel={rowModesModel}
+    checkboxSelection
+    onRowModesModelChange={handleRowModesModelChange}
+    onRowEditStop={handleRowEditStop}
+    processRowUpdate={processRowUpdate}
+    slots={{
+      toolbar: EditToolbar as GridSlots['toolbar'],
+    }}
+    slotProps={{
+      toolbar: { setRows, setRowModesModel, setSearchQuery },
+    }}
+  />
+</Box>
   );
 }

@@ -10,4 +10,27 @@
 ### 2. run docker image both frontend and backend 
 ### 3. docker-compose up for running docker to use Grafana, Prometheus, loki and promtail 
 
+![When it processes](./images/mainpage.png)
+
+![When it processes](./images/goal.png)
+
+![When it processes](./images/settings.png)
+
+![When it processes](./images/profile.png)
+
+![When it processes](./images/map.png)
+
+![When it processes](./images/insidemap.png)
+
+![When it processes](./images/conversation_overview.png)
+
+![When it processes](./images/conversation.png)
+
+![When it processes](./images/prometheus.png)
+
+![When it processes](./images/login.png)
+
+![When it processes](./images/dashboard.png)
+
+![When it processes](./images/grafana.png)
 
