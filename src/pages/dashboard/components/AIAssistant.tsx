@@ -93,9 +93,6 @@ export function YourAIAssistant({ sx }: YourAIAssistantProps): React.JSX.Element
           </div>
         )}
       </div>
-
-      {/* Input area for the question */}
-      <Divider />
       <div style={{ display: 'flex', padding: '20px' }}>
         <TextField
           fullWidth
