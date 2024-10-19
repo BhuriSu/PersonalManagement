@@ -3,6 +3,9 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
+from django.http import JsonResponse
+from .scraper import run_scraper
+import json
 
 ### Goal 
 
@@ -265,3 +268,19 @@ def delete_urgency(request, pk):
 
     urgency.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
+
+def scrape_view(request):
+    if request.method == 'POST':
+        # Parse the question from the POST request
+        data = json.loads(request.body)
+        question = data.get('question', '')
+
+        # Call your existing scraper or AI function and pass the question if needed
+        # Assuming 'run_scraper' can be adapted to take the question as input
+        result = run_scraper(question)  # Modify this function to process the question if necessary
+
+        # Return the result in JSON format
+        return JsonResponse({'answer': result})
+    else:
+        # If it's not a POST request, return a method not allowed response
+        return JsonResponse({'error': 'Method not allowed'}, status=405)
