@@ -25,19 +25,15 @@ export function YourAIAssistant({ sx }: YourAIAssistantProps): React.JSX.Element
   const [error, setError] = useState<string | null>(null);
 
   const handleQuestionSubmit = async () => {
-    if (question.trim() === '') return; // Don't allow empty questions
-
+    if (question.trim() === '') return; 
     // Add user question to chat
     setChatMessages(prevMessages => [...prevMessages, { message: question, isUser: true }]);
     setLoading(true);
     setError(null);
 
     try {
-      // Call the backend scrape endpoint
-      const response = await axios.post('/scrape/', { question }); // Send the question to the backend
-
-      // Add AI response to chat
-      setChatMessages(prevMessages => [...prevMessages, { message: response.data.answer, isUser: false }]);
+      const response = await axios.post('http://localhost:8000/api/scrape/', { question });
+      setChatMessages(prevMessages => [...prevMessages, { message: response.data.response, isUser: false }]); 
     } catch (error) {
       setError('Error fetching data from AI');
     } finally {
