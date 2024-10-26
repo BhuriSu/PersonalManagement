@@ -3,9 +3,17 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
-from django.http import JsonResponse
-from .scraper import run_scraper
-import json
+import uuid
+import logging
+from django.core.cache import cache
+from langchain_core.messages import AIMessage, HumanMessage
+from langchain_community.document_loaders import WebBaseLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import Chroma
+from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
+from langchain.chains import create_history_aware_retriever, create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
 
 ### Goal 
 
@@ -269,18 +277,126 @@ def delete_urgency(request, pk):
     urgency.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-def scrape_view(request):
-    if request.method == 'POST':
-        # Parse the question from the POST request
-        data = json.loads(request.body)
-        question = data.get('question', '')
 
-        # Call your existing scraper or AI function and pass the question if needed
-        # Assuming 'run_scraper' can be adapted to take the question as input
-        result = run_scraper(question)  # Modify this function to process the question if necessary
+logger = logging.getLogger(__name__)
 
-        # Return the result in JSON format
-        return JsonResponse({'answer': result})
-    else:
-        # If it's not a POST request, return a method not allowed response
-        return JsonResponse({'error': 'Method not allowed'}, status=405)
+def get_vectorstore_from_url(url):
+    # Get the text in document form
+    loader = WebBaseLoader(url)
+    document = loader.load()
+    
+    # Split the document into chunks
+    text_splitter = RecursiveCharacterTextSplitter()
+    document_chunks = text_splitter.split_documents(document)
+    
+    # Create a vector store from the chunks
+    vector_store = Chroma.from_documents(document_chunks, OpenAIEmbeddings())
+    
+    return vector_store
+
+def get_context_retriever_chain(vector_store):
+    llm = ChatOpenAI()
+    
+    retriever = vector_store.as_retriever()
+    
+    prompt = ChatPromptTemplate.from_messages([
+        MessagesPlaceholder(variable_name="chat_history"),
+        ("user", "{input}"),
+        ("user", "Given the above conversation, generate a search query to look up in order to get information relevant to the conversation")
+    ])
+    
+    retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
+    
+    return retriever_chain
+
+def get_conversational_rag_chain(retriever_chain):
+    llm = ChatOpenAI()
+    
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "Answer the user's questions based on the below context:\n\n{context}"),
+        MessagesPlaceholder(variable_name="chat_history"),
+        ("user", "{input}"),
+    ])
+    
+    stuff_documents_chain = create_stuff_documents_chain(llm, prompt)
+    
+    return create_retrieval_chain(retriever_chain, stuff_documents_chain)
+
+@api_view(['POST'])
+def initialize_chat(request):
+    try:
+        data = request.data
+        website_url = data.get('website_url')
+        
+        if not website_url:
+            return Response({'error': 'Please provide a website URL'}, status=400)
+        
+        # Generate a unique session ID
+        session_id = str(uuid.uuid4())
+        
+        # Initialize vector store and handle potential errors
+        try:
+            vector_store = get_vectorstore_from_url(website_url)
+        except Exception as e:
+            return Response({'error': f'Failed to load vector store: {str(e)}'}, status=500)
+        
+        # Store in cache with session ID
+        cache.set(f'vector_store_{session_id}', vector_store, timeout=3600)  # 1 hour timeout
+        cache.set(f'chat_history_{session_id}', [], timeout=3600)
+        
+        return Response({
+            'session_id': session_id,
+            'message': 'Chat initialized successfully'
+        })
+    except Exception as e:
+        return Response({'error': f'Unexpected error: {str(e)}'}, status=500)
+
+@api_view(['POST'])
+def chat_message(request):
+    logger.debug(f"Request data: {request.data}")  # Log the incoming request data
+    try:
+        data = request.data
+        message = data.get('message')
+        session_id = data.get('session_id')
+        
+        if not message or not session_id:
+            logger.warning("Missing message or session_id")
+            return Response({'error': 'Please provide message and session_id'}, status=400)
+        
+        # Retrieve vector store and chat history from cache
+        vector_store = cache.get(f'vector_store_{session_id}')
+        chat_history = cache.get(f'chat_history_{session_id}', [])
+        
+        if not vector_store:
+            logger.warning("Chat session expired or not initialized")
+            return Response({'error': 'Chat session expired or not initialized'}, status=400)
+        
+        # Convert chat history to LangChain format
+        langchain_history = []
+        for msg in chat_history:
+            if msg['isUser']:
+                langchain_history.append(HumanMessage(content=msg['message']))
+            else:
+                langchain_history.append(AIMessage(content=msg['message']))
+        
+        # Get response using RAG chain
+        retriever_chain = get_context_retriever_chain(vector_store)
+        conversation_chain = get_conversational_rag_chain(retriever_chain)
+        
+        response = conversation_chain.invoke({
+            "chat_history": langchain_history,
+            "input": message
+        })
+        
+        # Update chat history
+        chat_history.append({'message': message, 'isUser': True})
+        chat_history.append({'message': response['answer'], 'isUser': False})
+        cache.set(f'chat_history_{session_id}', chat_history, timeout=3600)
+        
+        return Response({
+            'response': response['answer'],
+            'chat_history': chat_history
+        })
+    except Exception as e:
+        logger.exception("An error occurred in chat_message")  # Log the exception with a traceback
+        return Response({'error': str(e)}, status=500)

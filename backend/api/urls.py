@@ -43,5 +43,6 @@ urlpatterns = [
     path('urgencies/update/<int:pk>/', views.update_urgency),
     path('urgencies/delete/<int:pk>/', views.delete_urgency),  
    
-    path('scrape/', views.scrape_view),
+    path('chat/initialize/', views.initialize_chat),
+    path('chat/message/', views.chat_message),
 ]
