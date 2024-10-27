@@ -99,8 +99,8 @@ DATABASES = {
     }
 }
 
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-os.environ['USER_AGENT'] = 'myagent'
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 

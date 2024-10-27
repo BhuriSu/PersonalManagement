@@ -177,7 +177,7 @@ export default function FullFeaturedCrudGrid() {
   
   
   const columns: GridColDef[] = [
-    { field: 'mistake', headerName: 'Mistakes that I made', width: 300, editable: true },
+    { field: 'mistake', headerName: 'Mistake', width: 300, editable: true },
     {
       field: 'cost',
       headerName: 'Cost',
