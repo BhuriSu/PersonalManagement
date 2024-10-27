@@ -3,7 +3,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { TotalTransactions } from './components/total-transaction';
-import { YourAIAssistant } from './components/AIAssistant';
+import { AIAssistant } from './components/AIAssistant';
 import { ProfitStat } from './components/profit-stat';
 import { HighestProfit } from './components/highest-profit';
 import { TotalConnections } from './components/total-connections';
@@ -64,7 +64,7 @@ export default function DashBoardPage(): React.JSX.Element {
         />
       </Grid>
       <Grid lg={12} md={12} xs={12}>
-        <YourAIAssistant />
+        <AIAssistant />
       </Grid>
     </Grid>
   );

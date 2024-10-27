@@ -42,8 +42,7 @@ urlpatterns = [
     path('urgencies/create/', views.create_urgency),
     path('urgencies/update/<int:pk>/', views.update_urgency),
     path('urgencies/delete/<int:pk>/', views.delete_urgency),  
-    
-    path('rag/initialize/', views.initialize_rag),
-    path('rag/query/', views.query_rag),
-
+   
+    # chat 
+    path('ws/chat/', views.ChatConsumer.as_asgi()), 
 ]

@@ -3,7 +3,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import *
 from .serializers import *
-from .rag_utils import WebsiteDataIndexer, RAGPipeline
+
+from langchain_openai import ChatOpenAI
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from channels.generic.websocket import AsyncWebsocketConsumer
+import json
+from dotenv import load_dotenv
+
 
 ### Goal 
 
@@ -266,49 +273,39 @@ def delete_urgency(request, pk):
     urgency.delete()
     return Response(status=status.HTTP_204_NO_CONTENT)
 
-rag_pipeline = None
 
-@api_view(['POST'])
-def initialize_rag(request):
-    global rag_pipeline
-    try:
-        indexer = WebsiteDataIndexer()
-        num_docs = indexer.index_data()
-        rag_pipeline = RAGPipeline()
-        return Response({
-            'status': 'success',
-            'message': f'Initialized RAG pipeline with {num_docs} documents'
-        })
-    except Exception as e:
-        return Response({
-            'status': 'error',
-            'message': str(e)
-        }, status=400)
+load_dotenv('.env')
 
-@api_view(['POST'])
-def query_rag(request):
-    if not rag_pipeline:
-        return Response({
-            'status': 'error',
-            'message': 'RAG pipeline not initialized'
-        }, status=400)
-    
-    question = request.data.get('question')
-    if not question:
-        return Response({
-            'status': 'error',
-            'message': 'No question provided'
-        }, status=400)
-        
-    try:
-        response = rag_pipeline.query(question)
-        return Response({
-            'status': 'success',
-            'response': response
-        })
-    except Exception as e:
-        return Response({
-            'status': 'error',
-            'message': str(e)
-        }, status=400)
+prompt = ChatPromptTemplate.from_messages([
+    ("system", "You are a helpful assistant."),
+    ("user", "{input}")
+])
+
+llm = ChatOpenAI(model="gpt-3.5-turbo-0125")
+
+output_parser = StrOutputParser()
+# Chain
+chain = prompt | llm.with_config({"run_name": "model"}) | output_parser.with_config({"run_name": "Assistant"})
+
+
+class ChatConsumer(AsyncWebsocketConsumer):
+
+    async def connect(self):
+        await self.accept()
+
+    async def disconnect(self, close_code):
+        pass
+
+    async def receive(self, text_data):
+        text_data_json = json.loads(text_data)
+        message = text_data_json["message"]
+
+        try:
+            # Stream the response
+            async for chunk in chain.astream_events({'input': message}, version="v1", include_names=["Assistant"]):
+                if chunk["event"] in ["on_parser_start", "on_parser_stream"]:
+                    await self.send(text_data=json.dumps(chunk))
+
+        except Exception as e:
+            print(e)
 

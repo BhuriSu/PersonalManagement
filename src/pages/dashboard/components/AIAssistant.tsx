@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useState, useEffect, useRef } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
@@ -20,89 +19,96 @@ interface ChatMessage {
   isUser: boolean;
 }
 
-interface InitializeResponse {
-  status: string;
-  message: string;
-}
-
-interface QueryResponse {
-  status: string;
-  response: string;
-}
-
-export function RAGAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
+export function AIAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
   const [question, setQuestion] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [systemStatus, setSystemStatus] = useState<'initializing' | 'ready' | 'error'>('initializing');
+  const [systemStatus, setSystemStatus] = useState<'connecting' | 'ready' | 'error'>('connecting');
+  const websocket = useRef<WebSocket | null>(null);
+  const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    initializeRAG();
+    // Initialize WebSocket connection
+    connectWebSocket();
+
+    // Cleanup on unmount
+    return () => {
+      if (websocket.current) {
+        websocket.current.close();
+      }
+    };
   }, []);
 
-  const initializeRAG = async () => {
-    setSystemStatus('initializing');
+  const connectWebSocket = () => {
+    setSystemStatus('connecting');
     setError(null);
 
     try {
-      const { data } = await axios.post<InitializeResponse>('http://localhost:8000/api/rag/initialize/');
-      
-      if (data.status === 'success') {
+      websocket.current = new WebSocket('ws://localhost:8000/ws/chat/');
+
+      websocket.current.onopen = () => {
         setSystemStatus('ready');
-        setChatMessages([{ 
-          message: 'Hello! I can help you find information about your goals and other data. What would you like to know?', 
-          isUser: false 
-        }]);
-      } else {
-        throw new Error(data.message || 'Initialization failed');
-      }
+      };
+
+      websocket.current.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        if (data.error) {
+          setError(data.error);
+        } else if (data.message) {
+          setChatMessages(prev => [...prev, { message: data.message, isUser: false }]);
+        }
+        setLoading(false);
+      };
+
+      websocket.current.onerror = (error) => {
+        console.error('WebSocket error:', error);
+        setSystemStatus('error');
+        setError('Failed to connect to chat service');
+        setLoading(false);
+      };
+
+      websocket.current.onclose = () => {
+        // Attempt to reconnect after a delay if the connection was established before
+        if (systemStatus === 'ready') {
+          setTimeout(connectWebSocket, 3000);
+        }
+      };
+
     } catch (error) {
+      console.error('WebSocket connection error:', error);
       setSystemStatus('error');
-      if (axios.isAxiosError(error) && error.response?.data) {
-        setError(error.response.data.message || 'Failed to initialize RAG system');
-      } else {
-        setError('Failed to initialize RAG system');
-      }
+      setError('Failed to establish WebSocket connection');
     }
   };
 
-  const handleQuestionSubmit = async () => {
-    if (question.trim() === '' || systemStatus !== 'ready') return;
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [chatMessages]);
+
+  const handleQuestionSubmit = () => {
+    if (question.trim() === '' || systemStatus !== 'ready' || !websocket.current) return;
 
     setChatMessages(prev => [...prev, { message: question, isUser: true }]);
     setLoading(true);
     setError(null);
 
     try {
-      const { data } = await axios.post<QueryResponse>('http://localhost:8000/api/rag/query/', {
-        question: question
-      });
-
-      if (data.status === 'success' && data.response) {
-        setChatMessages(prev => [...prev, { message: data.response, isUser: false }]);
-      } else {
-        throw new Error('Invalid response from server');
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.data) {
-        setError(error.response.data.message || 'Error getting response');
-      } else {
-        setError('Error getting response from RAG system');
-      }
-    } finally {
-      setLoading(false);
+      websocket.current.send(JSON.stringify({ message: question }));
       setQuestion('');
+    } catch (error) {
+      setError('Failed to send message');
+      setLoading(false);
     }
   };
 
   const renderContent = () => {
     switch (systemStatus) {
-      case 'initializing':
+      case 'connecting':
         return (
           <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 4 }}>
             <CircularProgress />
-            <Box sx={{ ml: 2 }}>Initializing RAG system...</Box>
+            <Box sx={{ ml: 2 }}>Connecting to chat service...</Box>
           </Box>
         );
 
@@ -112,12 +118,12 @@ export function RAGAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
             <Alert 
               severity="error" 
               action={
-                <Button color="inherit" size="small" onClick={initializeRAG}>
+                <Button color="inherit" size="small" onClick={connectWebSocket}>
                   Retry
                 </Button>
               }
             >
-              {error || 'Failed to initialize RAG system. Please try again.'}
+              {error || 'Failed to connect to chat service. Please try again.'}
             </Alert>
           </Box>
         );
@@ -162,12 +168,14 @@ export function RAGAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
                   {error}
                 </Alert>
               )}
+
+              <div ref={messagesEndRef} />
             </div>
 
             <div style={{ display: 'flex', padding: '20px' }}>
               <TextField
                 fullWidth
-                label="Ask about your goals, mistakes, or other data..."
+                label="Ask about your data..."
                 variant="outlined"
                 value={question}
                 onChange={(e) => setQuestion(e.target.value)}
@@ -201,7 +209,7 @@ export function RAGAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
       <CardHeader 
         title="Ask About Your Data" 
         subheader={`System Status: ${systemStatus === 'ready' ? 'Ready' : 
-                    systemStatus === 'initializing' ? 'Initializing...' : 'Error'}`}
+                    systemStatus === 'connecting' ? 'Connecting...' : 'Error'}`}
       />
       <Divider />
       {renderContent()}

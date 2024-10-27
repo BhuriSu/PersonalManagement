@@ -57,7 +57,3 @@ class Urgency(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     information = models.CharField(max_length=500)
 
-class Document(models.Model):
-    content = models.TextField()
-    title = models.CharField(max_length=200)
-    created_at = models.DateTimeField(auto_now_add=True)
