@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect, useRef } from 'react';
+import axios from 'axios';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
@@ -24,101 +25,60 @@ export function AIAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const [systemStatus, setSystemStatus] = useState<'connecting' | 'ready' | 'error'>('connecting');
-  const websocket = useRef<WebSocket | null>(null);
+  const [systemStatus, setSystemStatus] = useState<'connecting' | 'ready' | 'error'>('ready');
   const messagesEndRef = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    // Initialize WebSocket connection
-    connectWebSocket();
-
-    // Cleanup on unmount
-    return () => {
-      if (websocket.current) {
-        websocket.current.close();
-      }
-    };
-  }, []);
-
-  const connectWebSocket = () => {
-    setSystemStatus('connecting');
-    setError(null);
-
-    try {
-      websocket.current = new WebSocket('ws://localhost:8000/ws/chat/');
-
-      websocket.current.onopen = () => {
-        setSystemStatus('ready');
-      };
-
-      websocket.current.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.error) {
-          setError(data.error);
-        } else if (data.message) {
-          setChatMessages(prev => [...prev, { message: data.message, isUser: false }]);
-        }
-        setLoading(false);
-      };
-
-      websocket.current.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        setSystemStatus('error');
-        setError('Failed to connect to chat service');
-        setLoading(false);
-      };
-
-      websocket.current.onclose = () => {
-        // Attempt to reconnect after a delay if the connection was established before
-        if (systemStatus === 'ready') {
-          setTimeout(connectWebSocket, 3000);
-        }
-      };
-
-    } catch (error) {
-      console.error('WebSocket connection error:', error);
-      setSystemStatus('error');
-      setError('Failed to establish WebSocket connection');
-    }
-  };
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [chatMessages]);
 
-  const handleQuestionSubmit = () => {
-    if (question.trim() === '' || systemStatus !== 'ready' || !websocket.current) return;
-
-    setChatMessages(prev => [...prev, { message: question, isUser: true }]);
-    setLoading(true);
-    setError(null);
+  const handleQuestionSubmit = async () => {
+    if (question.trim() === '' || systemStatus !== 'ready') return;
 
     try {
-      websocket.current.send(JSON.stringify({ message: question }));
-      setQuestion('');
+      // Add user message to chat
+      setChatMessages(prev => [...prev, { message: question, isUser: true }]);
+      setLoading(true);
+      setError(null);
+
+      // Make API call
+      const response = await axios.post('http://localhost:8000/chat/', 
+        { message: question },
+        { 
+          headers: { 
+            'Content-Type': 'application/json' 
+          },
+          timeout: 10000 // 10 second timeout
+        }
+      );
+
+      // Add AI response to chat
+      setChatMessages(prev => [...prev, { message: response.data.message, isUser: false }]);
     } catch (error) {
-      setError('Failed to send message');
+      // Handle different types of errors
+      if (axios.isAxiosError(error)) {
+        const errorMsg = error.response?.data?.error || 
+                         error.message || 
+                         'Failed to send message';
+        setError(errorMsg);
+      } else {
+        setError('An unexpected error occurred');
+      }
+    } finally {
       setLoading(false);
+      setQuestion('');
     }
   };
 
   const renderContent = () => {
     switch (systemStatus) {
-      case 'connecting':
-        return (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 4 }}>
-            <CircularProgress />
-            <Box sx={{ ml: 2 }}>Connecting to chat service...</Box>
-          </Box>
-        );
-
       case 'error':
         return (
           <Box sx={{ p: 4 }}>
             <Alert 
               severity="error" 
               action={
-                <Button color="inherit" size="small" onClick={connectWebSocket}>
+                <Button color="inherit" size="small" onClick={() => setSystemStatus('ready')}>
                   Retry
                 </Button>
               }
@@ -208,8 +168,7 @@ export function AIAssistant({ sx }: RAGAssistantProps): React.JSX.Element {
     <Card sx={sx}>
       <CardHeader 
         title="Ask About Your Data" 
-        subheader={`System Status: ${systemStatus === 'ready' ? 'Ready' : 
-                    systemStatus === 'connecting' ? 'Connecting...' : 'Error'}`}
+        subheader={`System Status: ${systemStatus === 'ready' ? 'Ready' : 'Error'}`}
       />
       <Divider />
       {renderContent()}

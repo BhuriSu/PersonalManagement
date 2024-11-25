@@ -1,5 +1,6 @@
 from django.urls import path
 from api import views
+from .rag_view import rag_chat_view
 
 urlpatterns = [
     # Goal URLs
@@ -42,7 +43,6 @@ urlpatterns = [
     path('urgencies/create/', views.create_urgency),
     path('urgencies/update/<int:pk>/', views.update_urgency),
     path('urgencies/delete/<int:pk>/', views.delete_urgency),  
-   
-    # chat 
-    path('ws/chat/', views.ChatConsumer.as_asgi()), 
+ 
+    path('chat/', rag_chat_view, name='rag_chat'),
 ]
