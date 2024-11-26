@@ -5,7 +5,7 @@ from transformers import pipeline
 from django.http import JsonResponse
 
 # Example models representing your private data
-from .models import UserDocument, Project, UserNote
+from .models import Goal, Mistake, Profile, Deal, Urgency
 
 @csrf_exempt
 @login_required
@@ -39,26 +39,37 @@ def retrieve_relevant_documents(user, query, top_k=3):
     """
     # Use semantic search across different models
     documents = []
-    
-    # Search UserDocuments
-    doc_matches = UserDocument.objects.filter(
+
+    goal_matches = Goal.objects.filter(
         user=user
     ).search(query).order_by('-relevance')[:top_k]
     
-    # Search Projects
-    project_matches = Project.objects.filter(
+
+    mistake_matches = Mistake.objects.filter(
         owner=user
     ).search(query).order_by('-relevance')[:top_k]
     
-    # Search User Notes
-    note_matches = UserNote.objects.filter(
+
+    profile_matches = Profile.objects.filter(
+        user=user
+    ).search(query).order_by('-relevance')[:top_k]
+
+
+    deal_matches = Deal.objects.filter(
+        user=user
+    ).search(query).order_by('-relevance')[:top_k]
+
+
+    urgency_matches = Urgency.objects.filter(
         user=user
     ).search(query).order_by('-relevance')[:top_k]
     
-    documents.extend(doc_matches)
-    documents.extend(project_matches)
-    documents.extend(note_matches)
-    
+    documents.extend(goal_matches)
+    documents.extend(mistake_matches)
+    documents.extend(profile_matches)
+    documents.extend(deal_matches)
+    documents.extend(urgency_matches)
+
     return documents[:top_k]
 
 def prepare_context(documents):
@@ -76,7 +87,7 @@ def generate_rag_response(query, context):
     """
     qa_pipeline = pipeline(
         "text-generation", 
-        model="facebook/opt-350m",
+        model="impira/layoutlm-document-qa",
         max_new_tokens=150
     )
     
