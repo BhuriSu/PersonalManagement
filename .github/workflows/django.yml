@@ -1,55 +1,74 @@
-name: Django CI
+name: "CI Pipeline"
+
+# This CI workflow triggers on new PR or push on main branch.
 on:
+  pull_request:
+    branches:
+      - main
   push:
-    branches: ["main"]
+    branches:
+      - main
 
 jobs:
-  test-django-app:
+  test:
+    # Testing project
+    name: "Test"
+    defaults:
+      run:
+        shell: bash
     runs-on: ubuntu-latest
-    services:
-      postgres:
-        image: postgres:latest
-        env:
-          POSTGRES_DB: testpostgres
-          POSTGRES_PASSWORD: postgres
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    strategy:
-      fail-fast: false
-      matrix:
-        python-version: ["3.12.4"]
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v3
-        with:
-          python-version: ${{ matrix.python-version }}
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-      - uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-
-      - name: Install dependencies
+      - name: Create .env file from GitHub Secrets
         run: |
-          python -m pip install --upgrade pip
-          pip install -r backend/requirements.txt
-          pip install coverage
+          echo 'SECRET_KEY=${{ secrets.SECRET_KEY }}' >> .env
+          echo 'IS_DEV=${{ secrets.IS_DEV }}' >> .env
+          echo 'DEV_DB_NAME=${{ secrets.DEV_DB_NAME }}' >> .env
+          echo 'DEV_DB_USER=${{ secrets.DEV_DB_USER }}' >> .env
+          echo 'DEV_DB_PASSWORD=${{ secrets.DEV_DB_PASSWORD }}' >> .env
+          echo 'DEV_DB_HOST=${{ secrets.DEV_DB_HOST }}' >> .env
+          echo 'DEV_DB_PORT=${{ secrets.DEV_DB_PORT }}' >> .env
 
-      - name: Run Django Tests
+      - name: Build and bring up services
         run: |
-          cd backend
-          python -m coverage run manage.py test
-          python -m coverage report
+          docker compose -f docker-compose.yaml up -d --build
+      - name: Print Docker logs for django_gunicorn
+        run: |
+          docker compose -f docker-compose.yaml logs django_gunicorn
+
+      # Unit Test
+      - name: Run tests with pytest
+        run: |
+          docker compose -f docker-compose.yaml exec django_gunicorn pytest
+
+      # Lint Test
+      - name: Run Linting
+        run: |
+          docker compose -f docker-compose.yaml exec django_gunicorn flake8 .
+
+  # GitHub Security Scanning using CodeQL.This checks security vulnerabilities
+  security_scan:
+    name: "Security Scanning"
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      security-events: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v2
+        with:
+          languages: python
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v2
+
+  
