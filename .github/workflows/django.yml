@@ -6,6 +6,20 @@ on:
 jobs:
   test-django-app:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: testpostgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
     strategy:
       fail-fast: false
       matrix:
@@ -37,7 +51,7 @@ jobs:
       - name: Run Django Tests
         env:
           DJANGO_SETTINGS_MODULE: app.settings
-          
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testpostgres
         run: |
           cd backend
           python -m coverage run manage.py test
