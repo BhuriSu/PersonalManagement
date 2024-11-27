@@ -19,7 +19,7 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          
+
     strategy:
       fail-fast: false
       matrix:
@@ -49,9 +49,6 @@ jobs:
           pip install coverage
 
       - name: Run Django Tests
-        env:
-          DJANGO_SETTINGS_MODULE: app.settings
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testpostgres
         run: |
           cd backend
           python -m coverage run manage.py test
