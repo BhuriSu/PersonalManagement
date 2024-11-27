@@ -9,7 +9,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12.4"]
+        python-version: ["3.12.4"]
 
     steps:
       - uses: actions/checkout@v3
@@ -36,9 +36,9 @@ jobs:
 
       - name: Run Django Tests
         env:
-          DJANGO_SETTINGS_MODULE: project.settings.test
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testdb
+          DJANGO_SETTINGS_MODULE: app.settings
+          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testpostgres
         run: |
-          cd project
+          cd backend
           python -m coverage run manage.py test
           python -m coverage report
