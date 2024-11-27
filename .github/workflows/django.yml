@@ -37,7 +37,7 @@ jobs:
       - name: Run Django Tests
         env:
           DJANGO_SETTINGS_MODULE: app.settings
-          DATABASE_URL: postgres://postgres:postgres@localhost:5432/testpostgres
+          
         run: |
           cd backend
           python -m coverage run manage.py test
